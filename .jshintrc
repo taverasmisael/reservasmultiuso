@@ -1,0 +1,31 @@
+{
+    "node": true,
+    "browser": true,
+    "esnext": true,
+    "bitwise": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "freeze": true,
+    "immed": true,
+    "indent": 4,
+    "latedef": false,
+    "newcap": true,
+    "noarg": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": true,
+    "strict": true,
+    "trailing": true,
+    "smarttabs": true,
+    "jquery": true,
+    "plusplus": true,
+    "devel": true,
+    "nomen": true,
+    "maxerr": 50,
+    "globals": {
+        "angular": true,
+        "Firebase": true,
+        "Materialize": true
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "name": "Reservaciones Multiuso",
+  "launch_path": "/index.html",
+  "description": "Una aplicacion para el manejo de centros multiusos y los recursos disponibles",
+  "icons": {
+    "128": "/images/touch/icon-128x128.png"
+  },
+  "developer": {
+    "name": "Misael Taveras",
+    "url": "http://github.com/taverasmisael"
+  },
+  "installs_allowed_from": [
+    "*"
+  ],
+  "default_locale": "es",
+  "permissions": {
+  },
+  "locales": {
+    "es": {
+      "name": "Reservaciones Multiuso",
+      "description": "Una aplicacion para el manejo de centros multiusos y los recursos disponibles"
+    },
+    "en": {
+      "name": "Auditoroum Reservetion",
+      "description": "An app for multimedia resources managment."
+    }
+  }
+}
