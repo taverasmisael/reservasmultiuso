@@ -1,4 +1,4 @@
-# Reservaciones Multiusi
+# Reservaciones Multiuso
 ## Una mejora al sistema de reservaciones [para los CEC](https://github.com/taverasmisael/reservasionesCEC)
 
 Este sistema es una puerta que se abre a quienes rentan/prestan locales y recursos
