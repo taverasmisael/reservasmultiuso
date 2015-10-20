@@ -131,5 +131,5 @@ gulp.task('html', function (){
 
 
 gulp.task('default', function(cb) {
-    runSequence('styles', ['wiredep', 'inject'], ['jshint', 'watch'], 'server', cb);
+    runSequence('styles', ['wiredep', 'inject', 'jshint'], 'watch', cb);
 });
