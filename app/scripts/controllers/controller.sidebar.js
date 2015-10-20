@@ -3,11 +3,13 @@
     angular.module('reservacionesMulti')
             .controller('SidebarController', SidebarController);
 
-    SidebarController.$inject = ['$scope'];
+    SidebarController.$inject = ['$mdDialog'];
 
-    function SidebarController ($scope) {
+    function SidebarController ($mdDialog) {
       var vm = this;
-      console.log($scope);
+
+      vm.openMenu = openMenu;
+
       vm.options = [
         {
           displayName: 'Buscar',
@@ -22,5 +24,9 @@
           icon: 'help'
         }
       ];
+
+      function openMenu ($mdOpenMenu, ev) {
+        $mdOpenMenu(ev);
+      };
     }
 })();
