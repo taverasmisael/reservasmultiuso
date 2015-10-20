@@ -31,10 +31,14 @@
         <meta name="msapplication-TileColor" content="#03345D">
         <!-- build:css css/vendor.css -->
           <!-- bower:css -->
+          <link rel="stylesheet" href="vendor/angular-material/angular-material.css" />
+          <link rel="stylesheet" href="vendor/animate.css/animate.css" />
+          <link rel="stylesheet" href="vendor/materialize/bin/materialize.css" />
           <!-- endbower -->
         <!-- endbuild -->
         <!-- build:css styles/main.css -->
           <!-- inject:css -->
+          <link rel="stylesheet" href="/styles/style.css">
           <!-- endinject -->
         <!-- endbuild -->
     </head>
@@ -45,10 +49,24 @@
 
         <!-- build:js js/vendor.js -->
           <!-- bower:js -->
+          <script src="vendor/jquery/dist/jquery.js"></script>
+          <script src="vendor/angular/angular.js"></script>
+          <script src="vendor/angular-animate/angular-animate.js"></script>
+          <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
+          <script src="vendor/angular-aria/angular-aria.js"></script>
+          <script src="vendor/angular-material/angular-material.js"></script>
+          <script src="vendor/firebase/firebase.js"></script>
+          <script src="vendor/angularfire/dist/angularfire.js"></script>
+          <script src="vendor/materialize/bin/materialize.js"></script>
           <!-- endbower -->
         <!-- endbuild -->
         <!-- build:js scripts/main.js -->
           <!-- inject:js -->
+          <script src="/scripts/app.config.js"></script>
+          <script src="/scripts/app.js"></script>
+          <script src="/scripts/functions.js"></script>
+          <script src="/scripts/controllers/controller.home.js"></script>
+          <script src="/scripts/services/service.reservas.js"></script>
           <!-- endinject -->
         <!-- endbuild -->
     </body>

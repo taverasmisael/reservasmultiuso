@@ -81,17 +81,12 @@ gulp.task('styles', function() {
 
 // My Own Wiredep Task for Bower Options
 gulp.task('wiredep', function() {
-  gulp.src('app/styles/*.{sass,scss}')
+  gulp.src('./app/index.html')
       .pipe(wiredep({
           ignorePath: /^(\.\.\/)+/
-        }))
-      .pipe(gulp.dest('app/styles'));
-    gulp.src('app/*.html')
-        .pipe(wiredep({
-            ignorePath: /^(\.\.\/)+/
-        }))
-        .pipe(gulp.dest('app'))
-        .pipe($.livereload());
+      }))
+      .pipe(gulp.dest('./app'))
+      .pipe($.livereload());
 });
 
 gulp.task('inject', function (){
