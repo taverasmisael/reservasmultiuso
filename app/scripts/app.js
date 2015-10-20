@@ -1,4 +1,4 @@
 (function(){
     'use strict';
-    // Main declaration of Angular Aplication
+    angular.module('reservacionesMulti', ['ngAnimate', 'ngAria', 'ngMaterial', 'ngMdIcons', 'ui.router', 'firebase']);
 })();
