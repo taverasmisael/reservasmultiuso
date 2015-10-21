@@ -36,9 +36,6 @@ var runSequence = require('run-sequence');
 
 var del = require('del');
 var wiredep = require('wiredep').stream;
-// Server Things
-var http = require('http'),
-    st = require('st');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -59,7 +56,7 @@ gulp.task('jshint', 'Lints All Js with "JSHINT"', function() {
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.jshint.reporter('fail'))
-        .pipe($.livereload());
+        .pipe($.connect.reload());
 });
 
 // Compile and automatically prefix stylesheets
@@ -88,7 +85,7 @@ gulp.task('styles','Compile all .sass, .scss files' , function() {
         .pipe($.size({
             title: 'styles'
         }))
-        .pipe($.livereload());
+        .pipe($.connect.reload());
 });
 
 // My Own Wiredep Task for Bower Options
@@ -99,7 +96,7 @@ gulp.task('wiredep', 'Load Bower components to "index.html"', function() {
       }))
       .pipe(gulp.dest('./app'))
       .pipe($.plumber())
-      .pipe($.livereload());
+      .pipe($.connect.reload());
 });
 
 gulp.task('inject', 'Injects your files into your "index.html"', function (){
@@ -108,7 +105,7 @@ gulp.task('inject', 'Injects your files into your "index.html"', function (){
               .pipe($.plumber())
               .pipe($.inject(sources))
               .pipe(gulp.dest('./app'))
-              .pipe($.livereload());
+              .pipe($.connect.reload());
 });
 
 gulp.task('watch', 'Watch your files and do his tasks with livereload', function() {
@@ -122,15 +119,15 @@ gulp.task('watch', 'Watch your files and do his tasks with livereload', function
 gulp.task('views', 'Reload server on "*.html" change', function (){
   return gulp.src(['./app/index.html', './app/templates/**/*.html'])
           .pipe($.plumber())
-          .pipe($.livereload());
+          .pipe($.connect.reload());
 });
 
 gulp.task('server', 'Start a HTTP server with livereload on "./app"', function() {
-  http.createServer(
-    st({ path: __dirname + '/app', index: 'index.html', cache: false})
-  ).listen(8080, function () {
-    console.log('Serving files on localhost:8080');
-  });
+  $.connect.server({
+      root: './app',
+      livereload: true,
+      fallback: "./app/index.html"
+    });
 });
 
 // Clean output directory
