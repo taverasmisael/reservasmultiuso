@@ -50,70 +50,23 @@
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <main layout="column" ng-cloak>
+    <main layout="column" ng-cloak layout-align="center center">
       <md-toolbar ng-controller="NavbarController as NavbarCtrl">
           <div class="md-toolbar-tools">
               <md-button class="md-icon-button" aria-label="Menu" ng-click="NavbarCtrl.showSidebar()" hide-gt-sm>
                   <ng-md-icon icon="menu"></ng-md-icon>
               </md-button>
               <h2>
-                <span>Reservaciones Multiuso  </span>
+                <a ui-sref="home">Reservaciones Multiuso  </a>
               </h2>
               <span flex></span>
           </div>
       </md-toolbar>
       <md-content flex layout="row">
-        <div ng-controller="SidebarController as SidebarCtrl">
-          <md-sidenav flex md-component-id="left" class="md-sidenav-left md-whiteframe-z2" md-is-locked-open="$mdMedia('gt-sm')">
-            <!-- Inicio del toolbar con la informacion del usuario -->
-            <md-toolbar layout="row" layout-align="start end" class="md-tall">
-              <div class="md-toolbar-tools-bottom inset user" flex layout="row" layout-align="start center">
-                <ng-md-icon icon="account_circle" size="48" class="user-icon"></ng-md-icon>
-                <div layout="column">
-                  <span class="user-name">Misael Taveras</span>
-                  <small class="user-mail">misael@taveras.com</small>
-                </div>
-                 <md-menu md-position-mode="target-right target">
-                 <md-button aria-label="Abrir menu de Opciones de Usuario" class="md-icon-button" ng-click="SidebarCtrl.openMenu($mdOpenMenu, $event)">
-                   <ng-md-icon icon="keyboard_arrow_down"></ng-md-icon>
-                 </md-button>
-                 <md-menu-content width="4">
-                   <md-menu-item>
-                     <md-button aria-label="Configuracion" md-no-ink="true" md-ripple-size="full">
-                       <ng-md-icon icon="settings"></ng-md-icon>
-                       Configuracion
-                     </md-button>
-                   </md-menu-item>
-                   <md-menu-item>
-                     <md-button aria-label="Cerrar Sesion" md-no-ink="true" md-ripple-size="full">
-                       <ng-md-icon icon="logout"></ng-md-icon>
-                       Salir
-                     </md-button>
-                   </md-menu-item>
-                 </md-menu-content>
-                </md-menu>
-              </div>
-            </md-toolbar>
-            <!-- Fin del toolbar con la informacion del usuario -->
-            <!-- Inicio de la lista de opciones disponibles -->
-            <md-list>
-                <md-subheader class="md-no-sticky">Acciones</md-subheader>
-                <md-list-item class="md-1-line" ng-repeat="option in SidebarCtrl.options">
-                    <a href="#" class="md-list-item-text" md-ink-ripple flex layout="row" ng-class="{'md-offset': $index == 2 }">
-                        <ng-md-icon icon="{{ option.icon }}"></ng-md-icon>
-                        <p flex style="padding-left: 2rem;">{{ option.displayName }}</p>
-                    </a>
-                </md-list-item>
-            </md-list>
-          </md-sidenav>
+        <div ng-controller="SidebarController as SidebarCtrl" ng-include="'views/partials/partial.sidebar.html'">
         </div>
-        <md-content flex layout-padding layout="row" layout-align="center start">
-            <div flex>
-              <md-subheader><h3>Hoy</h3></md-subheader><!--You can use md-no-sticky class-->
-              <md-whiteframe class="md-whiteframe-2dp" flex="90" layout layout-align="center center">
-                <span>Contenido basico :3</span>
-              </md-whiteframe>
-            </div>
+        <md-content flex layout-padding layout="row" layout-align="center start" ui-view>
+          <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" md-diameter="60"></md-progress-circular>
         </md-content>
       </md-content>
     </main>
@@ -136,8 +89,11 @@
     <script src="/scripts/app.js"></script>
     <script src="/scripts/config.js"></script>
     <script src="/scripts/functions.js"></script>
+    <script src="/scripts/controllers/controller.admin.js"></script>
+    <script src="/scripts/controllers/controller.help.js"></script>
     <script src="/scripts/controllers/controller.home.js"></script>
     <script src="/scripts/controllers/controller.navbar.js"></script>
+    <script src="/scripts/controllers/controller.search.js"></script>
     <script src="/scripts/controllers/controller.sidebar.js"></script>
     <script src="/scripts/services/service.reservas.js"></script>
     <!-- endinject -->
