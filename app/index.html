@@ -34,9 +34,9 @@
     <!-- build:css css/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="vendor/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="vendor/angular-material-icons/angular-material-icons.css">
     <link rel="stylesheet" href="vendor/animate.css/animate.css" />
     <link rel="stylesheet" href="vendor/materialize/bin/materialize.css" />
+    <link rel="stylesheet" href="vendor/angular-material-icons/angular-material-icons.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
@@ -50,64 +50,73 @@
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <div layout="column">
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <md-button class="md-icon-button" aria-label="Menu" hide-gt-sm>
-                    <ng-md-icon icon="menu"></ng-md-icon>
-                </md-button>
-                <h2>
-                  <span>Reservaciones Multiuso  </span>
-                </h2>
-                <span flex></span>
+    <main layout="column" ng-cloak>
+      <md-toolbar ng-controller="NavbarController as NavbarCtrl">
+          <div class="md-toolbar-tools">
+              <md-button class="md-icon-button" aria-label="Menu" ng-click="NavbarCtrl.showSidebar()" hide-gt-sm>
+                  <ng-md-icon icon="menu"></ng-md-icon>
+              </md-button>
+              <h2>
+                <span>Reservaciones Multiuso  </span>
+              </h2>
+              <span flex></span>
+          </div>
+      </md-toolbar>
+      <md-content flex layout="row">
+        <div ng-controller="SidebarController as SidebarCtrl">
+          <md-sidenav flex md-component-id="left" class="md-sidenav-left md-whiteframe-z2" md-is-locked-open="$mdMedia('gt-sm')">
+            <!-- Inicio del toolbar con la informacion del usuario -->
+            <md-toolbar layout="row" layout-align="start end" class="md-tall">
+              <div class="md-toolbar-tools-bottom inset user" flex layout="row" layout-align="start center">
+                <ng-md-icon icon="account_circle" size="48" class="user-icon"></ng-md-icon>
+                <div layout="column">
+                  <span class="user-name">Misael Taveras</span>
+                  <small class="user-mail">misael@taveras.com</small>
+                </div>
+                 <md-menu md-position-mode="target-right target">
+                 <md-button aria-label="Abrir menu de Opciones de Usuario" class="md-icon-button" ng-click="SidebarCtrl.openMenu($mdOpenMenu, $event)">
+                   <ng-md-icon icon="keyboard_arrow_down"></ng-md-icon>
+                 </md-button>
+                 <md-menu-content width="4">
+                   <md-menu-item>
+                     <md-button aria-label="Configuracion" md-no-ink="true" md-ripple-size="full">
+                       <ng-md-icon icon="settings"></ng-md-icon>
+                       Configuracion
+                     </md-button>
+                   </md-menu-item>
+                   <md-menu-item>
+                     <md-button aria-label="Cerrar Sesion" md-no-ink="true" md-ripple-size="full">
+                       <ng-md-icon icon="logout"></ng-md-icon>
+                       Salir
+                     </md-button>
+                   </md-menu-item>
+                 </md-menu-content>
+                </md-menu>
+              </div>
+            </md-toolbar>
+            <!-- Fin del toolbar con la informacion del usuario -->
+            <!-- Inicio de la lista de opciones disponibles -->
+            <md-list>
+                <md-subheader class="md-no-sticky">Acciones</md-subheader>
+                <md-list-item class="md-1-line" ng-repeat="option in SidebarCtrl.options">
+                    <a href="#" class="md-list-item-text" md-ink-ripple flex layout="row" ng-class="{'md-offset': $index == 2 }">
+                        <ng-md-icon icon="{{ option.icon }}"></ng-md-icon>
+                        <p flex style="padding-left: 2rem;">{{ option.displayName }}</p>
+                    </a>
+                </md-list-item>
+            </md-list>
+          </md-sidenav>
+        </div>
+        <md-content flex layout-padding layout="row" layout-align="center start">
+            <div flex>
+              <md-subheader><h3>Hoy</h3></md-subheader><!--You can use md-no-sticky class-->
+              <md-whiteframe class="md-whiteframe-2dp" flex="90" layout layout-align="center center">
+                <span>Contenido basico :3</span>
+              </md-whiteframe>
             </div>
-        </md-toolbar>
-        <!--Note: for scrollShrink to work, the toolbar must be a sibling of a md-content element, placed before it.-->
-        <md-content flex layout="row">
-            <div ng-controller="SidebarController as SidebarCtrl">
-                <md-sidenav flex md-component-id="left" class="md-sidenav-left" md-is-locked-open="$mdMedia('gt-sm')">
-                    <md-toolbar layout="row" layout-align="start end" class="md-tall">
-                      <div class="md-toolbar-tools-bottom inset user" flex layout="row" layout-align="start center">
-                        <ng-md-icon icon="account_circle" size="48" class="user-icon"></ng-md-icon>
-                        <div layout="column">
-                          <span class="user-name">Misael Taveras</span>
-                          <small class="user-mail">misael@taveras.com</small>
-                        </div>
-                         <md-menu md-position-mode="target-right target">
-                         <md-button aria-label="Abrir menu de Opciones de Usuario" class="md-icon-button" ng-click="SidebarCtrl.openMenu($mdOpenMenu, $event)">
-                           <ng-md-icon icon="keyboard_arrow_down"></ng-md-icon>
-                         </md-button>
-                         <md-menu-content width="4">
-                           <md-menu-item>
-                             <md-button aria-label="Configuracion" md-no-ink="true" md-ripple-size="full">
-                               <ng-md-icon icon="settings"></ng-md-icon>
-                               Configuracion
-                             </md-button>
-                           </md-menu-item>
-                           <md-menu-item>
-                             <md-button aria-label="Cerrar Sesion" md-no-ink="true" md-ripple-size="full">
-                               <ng-md-icon icon="logout"></ng-md-icon>
-                               Salir
-                             </md-button>
-                           </md-menu-item>
-                         </md-menu-content>
-                        </md-menu>
-                      </div>
-                    </md-toolbar>
-                    <md-list>
-                        <md-subheader class="md-no-sticky">Acciones</md-subheader>
-                        <md-list-item class="md-1-line" ng-repeat="option in SidebarCtrl.options">
-                            <a href="#" class="md-list-item-text" md-ink-ripple flex layout="row" ng-class="{'md-offset': $index == 2 }">
-                                <ng-md-icon icon="{{ option.icon }}"></ng-md-icon>
-                                <p flex style="padding-left: 2rem;">{{ option.displayName }}</p>
-                            </a>
-                        </md-list-item>
-                    </md-list>
-                </md-sidenav>
-            </div>
-            <h2>Lorem ipsum a sit amet, consectetur adipisicing elit. Consectetur, placeat, veritatis. Saepe molestiae reprehenderit in ut sapiente debitis ipsum velit earum. Hic incidunt fugit, consectetur. Dolores molestias nostrum, id blanditiis, unde aperiam dicta eaque distinctio libero recusandae hic ullam, dignissimos obcaecati doloribus accusamus corrupti voluptate quam! Ratione labore unde amet quisquam assumenda, doloribus maxime reprehenderit, similique qui libero itaque consectetur! Adipisci atque, quam vel incidunt. Autem repudiandae neque quis quae et labore iste maxime rerum ipsam id ut laudantium, temporibus tempore necessitatibus quos molestias mollitia dolorem quidem suscipit modi? Minima reiciendis voluptas, vitae quaerat amet ab, necessitatibus suscipit aliquam aliquid error pariatur illum incidunt, dolor nesciunt. Eveniet, aliquam porro corporis iste velit minima debitis harum, ea illum aliquid repellendus, eos aut a aperiam mollitia ullam rem quidem numquam. Cum totam, reprehenderit ipsam tempora recusandae, quis illum, quam odio dolor, pariatur perspiciatis! Illo obcaecati quis placeat, quisquam a expedita. Sunt harum repellat aspernatur laborum consectetur sit ea vero impedit temporibus, est fugiat aut distinctio aliquid, dolorem saepe minima. Molestias tempore dicta, neque, vitae quas quidem sapiente non dolores et distinctio est, nihil qui animi, libero quia consectetur quos suscipit. Accusantium aliquid dolores, sint assumenda, laboriosam sed odit. Suscipit laborum, incidunt est nobis, expedita quisquam laudantium illum rem assumenda deserunt eveniet. Fugiat repellendus architecto delectus cumque debitis perferendis possimus fuga modi consequuntur beatae. Dignissimos, eveniet minima ab inventore impedit. Praesentium aspernatur dolorem architecto commodi, tempora obcaecati earum ipsam soluta quod, molestiae fugit deleniti ratione beatae maxime numquam vitae odit! Voluptatem hic fugiat ducimus consequuntur, dicta explicabo debitis culpa asperiores natus ipsam expedita deleniti obcaecati aliquam ad minus mollitia illum cum ipsa facere in dolores. Distinctio corrupti consectetur, veritatis doloremque aperiam provident et, similique eos odit est sapiente cumque deserunt dignissimos enim quaerat minima debitis ad recusandae fuga ea iste nulla suscipit quos facere repellat. Quo quia numquam adipisci architecto, iure modi odit dolor facere ut repellat totam. Repellat corporis voluptatem impedit veniam, facere minima officiis quos voluptas. Hic assumenda fuga quisquam deserunt. Perferendis obcaecati nihil maxime modi, harum autem ab reprehenderit blanditiis corrupti consequuntur fuga iste, ut ipsam aperiam. Excepturi, officia tempora tempore perspiciatis. Tenetur sapiente nemo deleniti debitis. Cupiditate incidunt, fugit alias iure deleniti, beatae magnam, optio id necessitatibus ipsum amet neque earum pariatur laboriosam itaque. Aliquid illum commodi, vero eos nobis architecto! Delectus dicta, recusandae voluptatem fuga optio perspiciatis explicabo. Ratione mollitia quibusdam blanditiis earum debitis deleniti facilis nemo recusandae vitae, doloribus repudiandae, esse aperiam! Quis libero sint quisquam est asperiores dolor, distinctio neque nihil ducimus error nesciunt officiis molestias, alias harum ullam accusantium sunt quasi fugiat fuga consequuntur eos reprehenderit magni voluptatum eligendi in? Ex possimus, officia, quod, necessitatibus ipsam quam quisquam soluta ipsum cumque debitis cum. Reiciendis laudantium illum repellendus tenetur illo optio laborum, ipsam accusamus in, ducimus adipisci voluptate natus neque blanditiis. Nam consectetur rem, recusandae aperiam magni numquam ducimus reprehenderit dolores nisi, magnam ipsam quidem vitae quasi ipsa beatae sequi tempora deleniti distinctio unde autem eligendi pariatur. Harum vitae, cum voluptas rerum adipisci optio nesciunt, ab.</h2>
         </md-content>
-    </div>
+      </md-content>
+    </main>
     <!-- build:js js/vendor.js -->
     <!-- bower:js -->
     <script src="vendor/jquery/dist/jquery.js"></script>
@@ -116,10 +125,10 @@
     <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="vendor/angular-aria/angular-aria.js"></script>
     <script src="vendor/angular-material/angular-material.js"></script>
-    <script src="vendor/angular-material-icons/angular-material-icons.js"></script>
     <script src="vendor/firebase/firebase.js"></script>
     <script src="vendor/angularfire/dist/angularfire.js"></script>
     <script src="vendor/materialize/bin/materialize.js"></script>
+    <script src="vendor/angular-material-icons/angular-material-icons.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->
@@ -128,6 +137,7 @@
     <script src="/scripts/config.js"></script>
     <script src="/scripts/functions.js"></script>
     <script src="/scripts/controllers/controller.home.js"></script>
+    <script src="/scripts/controllers/controller.navbar.js"></script>
     <script src="/scripts/controllers/controller.sidebar.js"></script>
     <script src="/scripts/services/service.reservas.js"></script>
     <!-- endinject -->
