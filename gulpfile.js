@@ -25,7 +25,6 @@ var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 
 var wiredep = require('wiredep').stream;
-
 // Server Things
 var http = require('http'),
     st = require('st');
@@ -45,6 +44,7 @@ var AUTOPREFIXER_BROWSERS = [
 // Lint JavaScript
 gulp.task('jshint', function() {
     return gulp.src(['app/scripts/**/*.js'])
+        .pipe($.plumber())
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.jshint.reporter('fail'))
@@ -59,6 +59,7 @@ gulp.task('styles', function() {
             'app/styles/**/*.css',
             'app/styles/**/*.sass'
         ])
+        .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.changed('app/styles', {
             extension: '.css'
@@ -86,12 +87,14 @@ gulp.task('wiredep', function() {
           ignorePath: /^(\.\.\/)+/
       }))
       .pipe(gulp.dest('./app'))
+      .pipe($.plumber())
       .pipe($.livereload());
 });
 
 gulp.task('inject', function (){
   var sources = gulp.src(['scripts/**/*.js', 'styles/**/*.css'], {read: false, cwd: './app'});
   return gulp.src('./app/index.html')
+              .pipe($.plumber())
               .pipe($.inject(sources))
               .pipe(gulp.dest('./app'))
               .pipe($.livereload());
@@ -101,12 +104,13 @@ gulp.task('watch', function() {
     $.livereload.listen({basePath: 'app'});
     gulp.watch(['./app/styles/**/*.sass', './app/styles/**/*.scss'], ['styles']);
     gulp.watch(['./app/scripts/**/*.js'], ['jshint']);
-    gulp.watch(['./app/**/*.html'],  ['views']);
+    gulp.watch(['./app/index.html', './app/templates/**/*.html'], ['views']);
 });
 
 gulp.task('views', function (){
-  return gulp.src('app/**/*.html')
-              .pipe($.livereload());
+  return gulp.src(['./app/index.html', './app/templates/**/*.html'])
+          .pipe($.plumber())
+          .pipe($.livereload());
 });
 
 gulp.task('server', function() {
@@ -131,5 +135,10 @@ gulp.task('html', function (){
 
 
 gulp.task('default', function(cb) {
-    runSequence('styles', ['wiredep', 'inject', 'jshint'], 'watch', cb);
+    runSequence('styles', ['wiredep', 'inject', 'jshint'], 'watch', 'server', cb);
 });
+
+function cb (taskname) {
+  console.log('Calling: ', taskname);
+  gulp.start(taskname);
+}
