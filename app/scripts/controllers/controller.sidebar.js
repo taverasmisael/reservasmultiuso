@@ -13,20 +13,23 @@
       vm.options = [
         {
           displayName: 'Buscar',
-          icon: 'search'
+          icon: 'search',
+          state: 'search'
         },
         {
           displayName: 'Crear',
-          icon: 'add'
+          icon: 'add',
+          state: 'create'
         },
         {
           displayName: 'Ayuda',
-          icon: 'help'
+          icon: 'help',
+          state: 'help'
         }
       ];
 
       function openMenu ($mdOpenMenu, ev) {
         $mdOpenMenu(ev);
-      };
+      }
     }
 })();
