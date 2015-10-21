@@ -3,6 +3,8 @@
  *
  *  Misael Taveras Starter GULPFILE (ECMACS5)
  *
+ * See More at: https://github.com/taverasmisael/Angular-MaterialDesign-Boilerplate
+ *
  *  Based on (With several Modifications):
  *  Web Starter Kit
  *  Copyright 2014 Google Inc. All rights reserved.
@@ -114,6 +116,7 @@ gulp.task('watch', 'Watch your files and do his tasks with livereload', function
     gulp.watch(['./app/styles/**/*.sass', './app/styles/**/*.scss'], ['styles']);
     gulp.watch(['./app/scripts/**/*.js'], ['jshint']);
     gulp.watch(['./app/index.html', './app/templates/**/*.html'], ['views']);
+    gulp.watch(['./bower.json', './.bowerrc'], ['wiredep']);
 });
 
 gulp.task('views', 'Reload server on "*.html" change', function (){
