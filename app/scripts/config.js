@@ -3,10 +3,12 @@
     angular.module('reservacionesMulti')
             .constant('FURL', 'https://reservasmultiuso.firebaseio.com/')
             .constant('TMPDIR', 'views/')
-            .config(configFunction);
+            .config(configRoutes)
+            .config(configPalette);
 
-    configFunction.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'TMPDIR'];
-    function configFunction ($stateProvider, $urlRouterProvider, $locationProvider, TMPDIR) {
+    configRoutes.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'TMPDIR'];
+    configPalette.$inject = ['$mdThemingProvider'];
+    function configRoutes ($stateProvider, $urlRouterProvider, $locationProvider, TMPDIR) {
       $locationProvider.html5Mode(true);
       $urlRouterProvider.otherwise('');
 
@@ -41,5 +43,12 @@
           controller: 'AdminController',
           controllerAs: 'AdminCtrl'
         });
+    }
+
+    function configPalette ($mdThemingProvider) {
+      $mdThemingProvider
+        .theme('default')
+        .primaryPalette('blue')
+        .accentPalette('teal');
     }
 })();
