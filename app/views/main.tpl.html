@@ -1,6 +1,40 @@
-<div flex>
-  <md-subheader><h3>Hoy</h3></md-subheader><!--You can use md-no-sticky class-->
-  <md-whiteframe class="md-whiteframe-2dp" flex="90" layout layout-align="center center">
-    <span>Contenido basico :3</span>
-  </md-whiteframe>
-</div>
+<md-content id="section-today" class="reservaciones" flex layout-padding layout="row" layout-align="center start">
+  <section flex>
+    <md-subheader><h5>Hoy <small><time datetime="{{ HomeCtrl.todayDate.toJSON() }}">{{HomeCtrl.todayDate | date: 'shortDate'}}</time></small></h5></md-subheader>
+    <md-list id="list-today">
+      <md-list-item class="md-2-line flex" ng-repeat="item in HomeCtrl.reservaciones.today">
+        <ng-md-icon icon="school"></ng-md-icon>
+        <div class="md-list-item-text" layout="row">
+          <div class="profesor" layout="column" flex>
+            <h3>{{ item.who }}</h3>
+            <h4>{{ item.what }}</h4>
+          </div>
+          <div class="fecha" layout="column">
+            <time>{{ item.date.starts | date:'shortTime'}}</time>
+            <time>{{ item.date.ends | date:'shortTime'}}</time>
+          </div>
+        </div>
+      </md-list-item>
+    </md-list>
+  </section>
+</md-content>
+<md-content id="section-tomorrow" class="reservaciones" flex layout-padding layout="row" layout-align="center start">
+  <section flex>
+    <md-subheader><h5>Mañana</h5></md-subheader>
+    <md-list id="list-tomorrow">
+      <md-list-item class="md-2-line flex" ng-repeat="item in HomeCtrl.reservaciones.tomorrow">
+        <ng-md-icon icon="school"></ng-md-icon>
+        <div class="md-list-item-text" layout="row">
+          <div class="profesor" layout="column" flex>
+            <h3>{{ item.who }}</h3>
+            <h4>{{ item.what }}</h4>
+          </div>
+          <div class="fecha" layout="column">
+            <time>{{ item.date.starts | date:'shortTime'}}</time>
+            <time>{{ item.date.ends | date:'shortTime'}}</time>
+          </div>
+        </div>
+      </md-list-item>
+    </md-list>
+  </section>
+</md-content>
