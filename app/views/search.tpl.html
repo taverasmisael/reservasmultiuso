@@ -1,16 +1,77 @@
-<md-content class="view-search" layout-padding>
-    <md-tabs md-dynamic-height md-border-bottom>
-          <md-tab label="Por Fecha">
-            <md-content class="md-padding">
-              <h1 class="md-display-2">Busqueda Por fecha</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
-            </md-content>
-          </md-tab>
-          <md-tab label="Por Profesor">
-            <md-content class="md-padding">
-              <h1 class="md-display-2">Busqueda Por Profesor</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam consequat aliquam cursus. In sodales pretium ultrices. Maecenas lectus est, sollicitudin consectetur felis nec, feugiat ultricies mi.</p>
-            </md-content>
-          </md-tab>
-    </md-tabs>
-</md-content>
+<div layout="column" layout-align="start center">
+    <md-content class="view-search" layout-padding flex="80">
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="Por Fecha">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Busqueda Por fecha</h1>
+                    <form layout="column" layout-padding ng-submit="SearchCtrl.searchByDate(SearchCtrl.byDate.starts, SearchCtrl.byDate.ends)">
+                        <div layout="row" layout-align="center start">
+                            <div class="md-padding" flex layout="column">
+                                <h5>Fecha de Inicio</h5>
+                                <md-datepicker ng-model="SearchCtrl.byDate.starts" md-placeholder="Ingrese la Fecha" required></md-datepicker>
+                            </div>
+                            <div class="md-padding" flex layout="column">
+                                <h5>Fecha de Fin</h5>
+                                <md-datepicker ng-model="SearchCtrl.byDate.ends" md-placeholder="Ingrese la Fecha" required></md-datepicker>
+                            </div>
+                        </div>
+                        <div layout="row" layout-align="center end">
+                            <span flex></span>
+                            <md-button type="submit" class="md-primary">Buscar</md-button>
+                        </div>
+                    </form>
+                </md-content>
+            </md-tab>
+            <md-tab label="Por Mes">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Busqueda por mes</h1>
+                    <form layout="column" layout-padding ng-submit="SearchCtrl.searchByMonth(SearchCtrl.byMonth.starts, SearchCtrl.byMonth.ends)">
+                        <div layout="row" layout-padding layout-align="start center">
+                            <md-input-container class="md-padding" flex layout="column" layout-align="center start">
+                                <h5>Mes de Inicio</h5>
+                                <label>Desde el Mes:</label>
+                                <md-select ng-model="SearchCtrl.byMonth.starts">
+                                    <md-option ng-repeat="month in SearchCtrl.months" value="{{month.index}}">
+                                        {{month.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container class="md-padding" flex layout="column" layout-align="center start">
+                                <h5>Mes de Fin</h5>
+                                <label>Hasta el Mes:</label>
+                                <md-select ng-model="SearchCtrl.byMonth.ends">
+                                    <md-option ng-repeat="month in SearchCtrl.months" value="{{month.index}}">
+                                        {{month.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div layout="row" layout-align="center end">
+                            <span flex></span>
+                            <md-button type="submit" class="md-primary">Buscar</md-button>
+                        </div>
+                    </form>
+                </md-content>
+            </md-tab>
+            <md-tab label="Por Profesor">
+                <md-content class="md-padding">
+                    <h1 class="md-display-2">Busqueda por Profesor</h1>
+                    <form layout="column" layout-padding ng-submit="SearchCtrl.searchByProf(SearchCtrl.profesor)">
+                        <div layout="row" layout-padding layout-align="start center">
+                            <ng-md-icon icon="person" size="48" class="ng-md-icon-special"></ng-md-icon>
+                            <md-autocomplete flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="SearchCtrl.selectedProfe.name" md-search-text="SearchCtrl.selectedProfesor" md-items="item in SearchCtrl.querySearch(SearchCtrl.selectedProfesor)" md-item-text="item.name" md-floating-label="Lista de Profesores" ng-model-options="{debounce: 350}">
+                                <md-item-template>
+                                    <span md-highlight-text="SearchCtrl.selectedProfesor.value">{{item.name}}</span>
+                                </md-item-template>
+                            </md-autocomplete>
+                        </div>
+                        <div layout="row" layout-align="center end">
+                            <span flex></span>
+                            <md-button type="submit" class="md-primary">Buscar</md-button>
+                        </div>
+                    </form>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+</div>
