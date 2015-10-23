@@ -35,7 +35,6 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="vendor/angular-material/angular-material.css" />
     <link rel="stylesheet" href="vendor/animate.css/animate.css" />
-    <link rel="stylesheet" href="vendor/materialize/bin/materialize.css" />
     <link rel="stylesheet" href="vendor/angular-material-icons/angular-material-icons.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -66,8 +65,10 @@
       <md-content flex layout="row">
         <div ng-controller="SidebarController as SidebarCtrl" ng-include="'views/partials/partial.sidebar.html'">
         </div>
-        <md-content flex layout-padding layout="column"  layout-align="center center" ui-view>
-          <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" md-diameter="60"></md-progress-circular>
+        <md-content flex layout-padding layout="column" ui-view>
+          <div layout-align="center center" layout="column">
+            <md-progress-circular class="md-accent md-hue-1" md-mode="indeterminate" md-diameter="60"></md-progress-circular>
+          </div>
         </md-content>
       </md-content>
     </main>
@@ -81,9 +82,11 @@
     <script src="vendor/angular-material/angular-material.js"></script>
     <script src="vendor/firebase/firebase.js"></script>
     <script src="vendor/angularfire/dist/angularfire.js"></script>
-    <script src="vendor/materialize/bin/materialize.js"></script>
     <script src="vendor/angular-material-icons/angular-material-icons.min.js"></script>
+    <script src="vendor/moment/moment.js"></script>
+    <script src="vendor/angular-moment/angular-moment.js"></script>
     <!-- endbower -->
+    <script src="vendor/moment/locale/es.js"></script>
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->
     <!-- inject:js -->
