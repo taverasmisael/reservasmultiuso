@@ -3,9 +3,9 @@
     angular.module('reservacionesMulti')
             .controller('SidebarController', SidebarController);
 
-    SidebarController.$inject = ['$mdDialog'];
+    SidebarController.$inject = [];
 
-    function SidebarController ($mdDialog) {
+    function SidebarController () {
       var vm = this;
 
       vm.openMenu = openMenu;

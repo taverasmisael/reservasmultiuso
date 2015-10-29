@@ -8,17 +8,12 @@
         var vm = this;
         vm.querySearch = querySearch;
         active();
-        var monthList = Array.apply(0, Array(12)).map(
-            function(_,i){
-              return moment().month(i).format('MMMM')
-            }
-        );
         vm.months = [];
         vm.profesorsList = loadAll();
-        for (var i = 0; i < monthList.length; i += 1) {
+        for (var i = 0; i < 12; i += 1) {
           var currentMonth = {
             index: i,
-            name: monthList[i]
+            name:moment().month(i).format('MMMM')
           };
           vm.months.push(currentMonth);
         }
@@ -46,13 +41,7 @@
 
 
            function loadAll() {
-                 var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
-                         Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
-                         Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
-                         Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
-                         North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
-                         South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
-                         Wisconsin, Wyoming';
+                 var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware, Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina, North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming';
                  return allStates.split(/, +/g).map( function (state) {
                    return {
                      value: state.toLowerCase(),
