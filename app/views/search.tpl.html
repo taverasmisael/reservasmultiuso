@@ -59,10 +59,13 @@
                     <form layout="column" layout-padding ng-submit="SearchCtrl.searchByProf(SearchCtrl.profesor)">
                         <div layout="row" layout-padding layout-align="start center">
                             <ng-md-icon icon="person" size="48" class="ng-md-icon-special"></ng-md-icon>
-                            <md-autocomplete flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="SearchCtrl.selectedProfe.name" md-search-text="SearchCtrl.selectedProfesor" md-items="item in SearchCtrl.querySearch(SearchCtrl.selectedProfesor)" md-item-text="item.name" md-floating-label="Lista de Profesores" ng-model-options="{debounce: 350}">
+                            <md-autocomplete md-select-on-match="true" md-autofocus="true" md-delay="150" flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="SearchCtrl.selectedProfe.name" md-search-text="SearchCtrl.selectedProfesor" md-items="item in SearchCtrl.querySearch(SearchCtrl.selectedProfesor)" md-item-text="item.name" md-floating-label="Lista de Profesores">
                                 <md-item-template>
                                     <span md-highlight-text="SearchCtrl.selectedProfesor.value">{{item.name}}</span>
                                 </md-item-template>
+                                <md-not-found>
+                                   No se encontro "{{SearchCtrl.selectedProfesor}}"
+                                 </md-not-found>
                             </md-autocomplete>
                         </div>
                         <div layout="row" layout-align="center end">
