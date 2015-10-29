@@ -64,14 +64,12 @@ gulp.task('styles','Compile all .sass, .scss files' , function() {
     // For best performance, don't add Sass partials to `gulp.src`
     return gulp.src([
             'app/styles/**/*.scss',
-            'app/styles/**/*.css',
-            'app/styles/**/*.sass'
         ])
         .pipe($.connect.reload())
         .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.changed('app/styles', {
-            extension: '.css'
+            extension: '.sass'
         }))
         .pipe($.sass({
             precision: 10,
