@@ -39,7 +39,7 @@
               <md-divider></md-divider>
               <div flex layout="row" layout-align="start center">
                 <label for="newReservation-date">Fecha de reservación</label>
-                <md-datepicker ng-model="AdminCtrl.newReservationData.date" class="xl-datepicker" md-placeholder="19/10/2015" required></md-datepicker>
+                <md-datepicker md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" class="xl-datepicker" md-placeholder="19/10/2015" required></md-datepicker>
               </div>
               <div flex layout="row">
                 <md-input-container flex layout="column" layout-align="center center">
