@@ -20,6 +20,7 @@
             index: i,
             name: monthList[i]
           };
+          vm.months.push(currentMonth);
         }
 
         function active () {
