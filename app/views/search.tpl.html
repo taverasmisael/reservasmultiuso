@@ -1,6 +1,6 @@
 <div layout="column" layout-align="start center">
-    <md-content class="view-search" layout-padding flex="80">
-        <md-tabs md-dynamic-height md-border-bottom>
+    <md-content layout="row" layout-padding layout-fill layout-align="center center" class="view-search">
+        <md-tabs flex="80" md-dynamic-height md-border-bottom>
             <md-tab label="Por Fecha">
                 <md-content class="md-padding">
                     <h1 class="md-display-2">Busqueda por fecha</h1>
@@ -30,7 +30,7 @@
                             <md-input-container class="md-padding" flex layout="column" layout-align="center start">
                                 <h5>Mes de inicio</h5>
                                 <label>Enero</label>
-                                <md-select ng-model="SearchCtrl.byMonth.starts">
+                                <md-select ng-model="SearchCtrl.byMonth.starts" aria-label="Mes de inicio">
                                     <md-option ng-repeat="month in SearchCtrl.months" value="{{month.index}}">
                                         {{month.name}}
                                     </md-option>
@@ -39,7 +39,7 @@
                             <md-input-container class="md-padding" flex layout="column" layout-align="center start">
                                 <h5>Mes de fin</h5>
                                 <label>Abril</label>
-                                <md-select ng-model="SearchCtrl.byMonth.ends">
+                                <md-select ng-model="SearchCtrl.byMonth.ends" aria-label="Mes de fin">
                                     <md-option ng-repeat="month in SearchCtrl.months" value="{{month.index}}">
                                         {{month.name}}
                                     </md-option>

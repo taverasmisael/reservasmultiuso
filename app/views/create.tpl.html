@@ -21,7 +21,7 @@
                        </md-not-found>
                   </md-autocomplete>
                 </div>
-                <md-select flex flex-offset="5" ng-model="AdminCtrl.newReservationData.section">
+                <md-select flex flex-offset="5" ng-model="AdminCtrl.newReservationData.section" aria-label="Secciones del Profesor">
                     <md-option ng-repeat="section in AdminCtrl.selectedProfesor.sections" value="{{section.id}}">
                         {{section.number}}
                     </md-option>
