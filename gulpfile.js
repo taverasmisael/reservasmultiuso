@@ -64,13 +64,12 @@ gulp.task('styles','Compile all .sass, .scss files' , function() {
     // For best performance, don't add Sass partials to `gulp.src`
     return gulp.src([
             'app/styles/**/*.scss',
-            'app/styles/**/*.css',
-            'app/styles/**/*.sass'
         ])
+        .pipe($.connect.reload())
         .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.changed('app/styles', {
-            extension: '.css'
+            extension: '.sass'
         }))
         .pipe($.sass({
             precision: 10,
@@ -84,32 +83,30 @@ gulp.task('styles','Compile all .sass, .scss files' , function() {
         .pipe(gulp.dest('app/styles'))
         .pipe($.size({
             title: 'styles'
-        }))
-        .pipe($.connect.reload());
+        }));
 });
 
 // My Own Wiredep Task for Bower Options
 gulp.task('wiredep', 'Load Bower components to "index.html"', function() {
   gulp.src('./app/index.html')
+      .pipe($.connect.reload())
       .pipe(wiredep({
           ignorePath: /^(\.\.\/)+/
       }))
       .pipe(gulp.dest('./app'))
-      .pipe($.plumber())
-      .pipe($.connect.reload());
+      .pipe($.plumber());
 });
 
 gulp.task('inject', 'Injects your files into your "index.html"', function (){
   var sources = gulp.src(['scripts/**/*.js', 'styles/**/*.css'], {read: false, cwd: './app'});
   return gulp.src('./app/index.html')
+              .pipe($.connect.reload())
               .pipe($.plumber())
               .pipe($.inject(sources))
-              .pipe(gulp.dest('./app'))
-              .pipe($.connect.reload());
+              .pipe(gulp.dest('./app'));
 });
 
 gulp.task('watch', 'Watch your files and do his tasks with livereload', function() {
-    $.livereload.listen({basePath: 'app'});
     gulp.watch(['./app/styles/**/*.sass', './app/styles/**/*.scss'], ['styles']);
     gulp.watch(['./app/scripts/**/*.js'], ['jshint']);
     gulp.watch(['./app/index.html', './app/templates/**/*.html'], ['views']);
@@ -124,9 +121,9 @@ gulp.task('views', 'Reload server on "*.html" change', function (){
 
 gulp.task('server', 'Start a HTTP server with livereload on "./app"', function() {
   $.connect.server({
-      root: './app',
+      root: './app/',
       livereload: true,
-      fallback: "./app/index.html"
+      fallback: './app/index.html'
     });
 });
 

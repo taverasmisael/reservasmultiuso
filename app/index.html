@@ -66,7 +66,7 @@
         <div ng-controller="SidebarController as SidebarCtrl" ng-include="'views/partials/partial.sidebar.html'">
         </div>
         <md-content flex layout-padding layout="column" ui-view>
-          <div layout-align="center center" layout="column">
+          <div layout-align="center center" layout-fill layout="row" style="height: 100vh;">
             <md-progress-circular class="md-accent md-hue-3" md-mode="indeterminate" md-diameter="60"></md-progress-circular>
           </div>
         </md-content>

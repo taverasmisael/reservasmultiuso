@@ -17,11 +17,11 @@
                           <span md-highlight-text="AdminCtrl.selectedProfesor.value">{{profe.name}}</span>
                       </md-item-template>
                       <md-not-found>
-                         No se encontro "{{AdminCtrl.selectedProfesor}}"
+                         No se encontró "{{AdminCtrl.selectedProfesor}}"
                        </md-not-found>
                   </md-autocomplete>
                 </div>
-                <md-select flex flex-offset="5" ng-model="AdminCtrl.newReservationData.section">
+                <md-select flex flex-offset="5" ng-model="AdminCtrl.newReservationData.section" aria-label="Secciones del Profesor">
                     <md-option ng-repeat="section in AdminCtrl.selectedProfesor.sections" value="{{section.id}}">
                         {{section.number}}
                     </md-option>
@@ -38,8 +38,8 @@
               <md-subheader>Info. Horario</md-subheader>
               <md-divider></md-divider>
               <div flex layout="row" layout-align="start center">
-                <label for="newReservation-date">Fecha de Reservación</label>
-                <md-datepicker ng-model="AdminCtrl.newReservationData.date" md-id="newReservation-date" md-placeholder="Ingrese la Fecha" required></md-datepicker>
+                <label for="newReservation-date">Fecha de reservación</label>
+                <md-datepicker md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" class="xl-datepicker" md-placeholder="19/10/2015" required></md-datepicker>
               </div>
               <div flex layout="row">
                 <md-input-container flex layout="column" layout-align="center center">
