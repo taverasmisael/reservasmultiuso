@@ -26,6 +26,7 @@
     "globals": {
         "angular": true,
         "Firebase": true,
-        "Materialize": true
+        "Materialize": true,
+        "moment": true
     }
 }

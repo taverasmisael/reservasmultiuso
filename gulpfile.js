@@ -1,5 +1,11 @@
 /**
  *
+ *
+ *  Misael Taveras Starter GULPFILE (ECMACS5)
+ *
+ * See More at: https://github.com/taverasmisael/Angular-MaterialDesign-Boilerplate
+ *
+ *  Based on (With several Modifications):
  *  Web Starter Kit
  *  Copyright 2014 Google Inc. All rights reserved.
  *
@@ -17,18 +23,19 @@
  *
  */
 
+
+/**
+ * For Help Run `gulp help`
+ */
 'use strict';
 
 // Include Gulp & tools we'll use
-var gulp = require('gulp');
+var gulp = require('gulp-help')(require('gulp'));
 var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 
+var del = require('del');
 var wiredep = require('wiredep').stream;
-
-// Server Things
-var http = require('http'),
-    st = require('st');
 
 var AUTOPREFIXER_BROWSERS = [
     'ie >= 10',
@@ -43,25 +50,26 @@ var AUTOPREFIXER_BROWSERS = [
 ];
 
 // Lint JavaScript
-gulp.task('jshint', function() {
+gulp.task('jshint', 'Lints All Js with "JSHINT"', function() {
     return gulp.src(['app/scripts/**/*.js'])
+        .pipe($.plumber())
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.jshint.reporter('fail'))
-        .pipe($.livereload());
+        .pipe($.connect.reload());
 });
 
 // Compile and automatically prefix stylesheets
-gulp.task('styles', function() {
+gulp.task('styles','Compile all .sass, .scss files' , function() {
     // For best performance, don't add Sass partials to `gulp.src`
     return gulp.src([
             'app/styles/**/*.scss',
-            'app/styles/**/*.css',
-            'app/styles/**/*.sass'
         ])
+        .pipe($.connect.reload())
+        .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.changed('app/styles', {
-            extension: '.css'
+            extension: '.sass'
         }))
         .pipe($.sass({
             precision: 10,
@@ -75,50 +83,62 @@ gulp.task('styles', function() {
         .pipe(gulp.dest('app/styles'))
         .pipe($.size({
             title: 'styles'
-        }))
-        .pipe($.livereload());
+        }));
 });
 
 // My Own Wiredep Task for Bower Options
-gulp.task('wiredep', function() {
+gulp.task('wiredep', 'Load Bower components to "index.html"', function() {
   gulp.src('./app/index.html')
+      .pipe($.connect.reload())
       .pipe(wiredep({
           ignorePath: /^(\.\.\/)+/
       }))
       .pipe(gulp.dest('./app'))
-      .pipe($.livereload());
+      .pipe($.plumber());
 });
 
-gulp.task('inject', function (){
+gulp.task('inject', 'Injects your files into your "index.html"', function (){
   var sources = gulp.src(['scripts/**/*.js', 'styles/**/*.css'], {read: false, cwd: './app'});
   return gulp.src('./app/index.html')
+              .pipe($.connect.reload())
+              .pipe($.plumber())
               .pipe($.inject(sources))
-              .pipe(gulp.dest('./app'))
-              .pipe($.livereload());
+              .pipe(gulp.dest('./app'));
 });
 
-gulp.task('watch', function() {
-    $.livereload.listen({basePath: 'app'});
+gulp.task('watch', 'Watch your files and do his tasks with livereload', function() {
     gulp.watch(['./app/styles/**/*.sass', './app/styles/**/*.scss'], ['styles']);
     gulp.watch(['./app/scripts/**/*.js'], ['jshint']);
-    gulp.watch(['./app/**/*.html'],  ['views']);
+    gulp.watch(['./app/index.html', './app/templates/**/*.html'], ['views']);
+    gulp.watch(['./bower.json', './.bowerrc'], ['wiredep']);
 });
 
-gulp.task('views', function (){
-  return gulp.src('app/**/*.html')
-              .pipe($.livereload());
+gulp.task('views', 'Reload server on "*.html" change', function (){
+  return gulp.src(['./app/index.html', './app/templates/**/*.html'])
+          .pipe($.plumber())
+          .pipe($.connect.reload());
 });
 
-gulp.task('server', function() {
-  http.createServer(
-    st({ path: __dirname + '/app', index: 'index.html', cache: false})
-  ).listen(8080, function () {
-    console.log('Serving files on localhost:8080');
-  });
+gulp.task('server', 'Start a HTTP server with livereload on "./app"', function() {
+  $.connect.server({
+      root: './app/',
+      livereload: true,
+      fallback: './app/index.html'
+    });
 });
 
-// Build dist folder minifying files
-gulp.task('html', function (){
+// Clean output directory
+gulp.task('clean', 'Remove Files from "dist". Prepare for production', function (cb){
+    del(['.tmp', 'dist/*', '!dist/.git'], {dot: true}, cb).then(function (paths) {
+      if (paths.length) {
+        console.log('Deleted files/folders:\n', paths.join('\n'));
+        } else {
+          console.log('Nothing to see here');
+        }
+    });
+});
+
+gulp.task('concatify', 'Concatenate and minify files in "app". Prepare for production', function (){
   var assets = $.useref.assets();
   return gulp.src('app/index.html')
         .pipe(assets)
@@ -130,6 +150,11 @@ gulp.task('html', function (){
 });
 
 
-gulp.task('default', function(cb) {
-    runSequence('styles', ['wiredep', 'inject'], ['jshint', 'watch'], 'server', cb);
+// Build dist folder minifying files
+gulp.task('production', 'Creates Dist folder with minified files ready to production' , ['clean', 'concatify']);
+
+
+// Default Task
+gulp.task('default', 'runSequence("styles", ["wiredep", "inject", "jshint"], "watch", "server", cb)' , function(cb) {
+    runSequence('styles', ['wiredep', 'inject', 'jshint'], 'watch', 'server', cb);
 });

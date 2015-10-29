@@ -1,0 +1,41 @@
+a
+  text-decoration: none
+
+// Class For ngMdIcons with custom size
+.ng-md-icon-special
+  margin: 0
+  width: auto
+  height: auto
+
+.md-button-fixed
+  position: fixed
+  bottom: 1rem
+  right: 1rem
+  transition: top 350ms ease-in-out
+  @include media('>=600px')
+    top: 4.2%
+
+
+// DatePicker
+.md-datepicker-calendar-pane.md-pane-open
+  background: white
+  border: none
+  .md-calendar-date.md-calendar-date-today
+    background: color($primaryColor, "darken-1")
+    border-radius: 50%
+    color: white !important
+  .md-calendar-date.md-calendar-date-disabled
+    color: color("grey", "lighten-1")
+
+md-datepicker
+  &.ng-valid
+    .md-datepicker-input-container
+      border-color: color($primaryColor, "base")
+  &.ng-invalid
+    .md-datepicker-input-container
+      border-color: color($warnColor, "base")
+  &.xl-datepicker
+    .md-datepicker-input-container
+      width: 100%
+      input
+        width: 100%

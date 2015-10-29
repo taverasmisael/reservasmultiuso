@@ -1,0 +1,42 @@
+<md-sidenav flex md-component-id="left" class="md-sidenav-left" md-is-locked-open="$mdMedia('gt-sm')">
+    <!-- Inicio del toolbar con la informacion del usuario -->
+    <md-toolbar layout="row" layout-align="start end" class="md-tall">
+        <div class="md-toolbar-tools-bottom inset user" flex layout="row" layout-align="start center">
+            <ng-md-icon icon="account_circle" size="48" class="user-icon"></ng-md-icon>
+            <div layout="column">
+                <span class="user-name">Misael Taveras</span>
+                <small class="user-mail">misael@taveras.com</small>
+            </div>
+            <md-menu md-position-mode="target-right target">
+                <md-button aria-label="Abrir menu de Opciones de Usuario" class="md-icon-button" ng-click="SidebarCtrl.openMenu($mdOpenMenu, $event)">
+                    <ng-md-icon icon="keyboard_arrow_down"></ng-md-icon>
+                </md-button>
+                <md-menu-content width="4">
+                    <md-menu-item>
+                        <a ui-sref="config" md-ink-ripple md-ripple-size="full" class="md-button">
+                            <ng-md-icon icon="settings"></ng-md-icon>
+                            <span class="flex">Configuracion</span>
+                        </a>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <a ui-sref="home" aria-label="Cerrar Sesion" md-ink-ripple md-ripple-size="full" class="md-button">
+                            <ng-md-icon icon="logout"></ng-md-icon>
+                            <span class="flex">Salir</span>
+                        </a>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </md-toolbar>
+    <!-- Fin del toolbar con la informacion del usuario -->
+    <!-- Inicio de la lista de opciones disponibles -->
+    <md-list>
+        <md-subheader class="md-no-sticky">Acciones</md-subheader>
+        <md-list-item class="md-1-line" ng-repeat="option in SidebarCtrl.options">
+            <a ui-sref="{{option.state}}" ui-sref-active="md-active" class="md-list-item-text" md-ink-ripple flex layout="row" ng-class="{'md-offset': $index == 2 }">
+                <ng-md-icon icon="{{ option.icon }}"></ng-md-icon>
+                <p flex style="padding-left: 2rem;">{{ option.displayName }}</p>
+            </a>
+        </md-list-item>
+    </md-list>
+</md-sidenav>

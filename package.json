@@ -6,18 +6,21 @@
     "start": "gulp"
   },
   "devDependencies": {
+    "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^2.0.0",
     "gulp-cache": "0.2.2",
     "gulp-changed": "^1.0.0",
+    "gulp-connect": "^2.2.0",
     "gulp-csso": "^1.0.0",
     "gulp-flatten": "0.0.4",
+    "gulp-help": "^1.6.1",
     "gulp-if": "^1.2.1",
     "gulp-inject": "^3.0.0",
     "gulp-jshint": "^1.6.3",
     "gulp-livereload": "^3.8.0",
     "gulp-load-plugins": "^1.0.0",
-    "gulp-plumber": "^1.0.0",
+    "gulp-plumber": "^1.0.1",
     "gulp-replace": "^0.5.0",
     "gulp-sass": "^2.0.4",
     "gulp-size": "^1.0.0",
@@ -27,7 +30,6 @@
     "jshint-stylish": "^1.0.0",
     "require-dir": "^0.1.0",
     "run-sequence": "^1.1.4",
-    "st": "^1.0.0",
     "wiredep": "^2.2.2"
   },
   "engines": {
