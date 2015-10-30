@@ -18,23 +18,35 @@
         return ReservacionesService;
 
         function getToday () {
-          // Function for Getting all Reservations, only for today
+          var hoy = new Date(), d = $q.defer();
+          $firebaseArray(ref.child('reservaciones').orderByChild('fecha')
+            .equalTo(hoy.toDateString())).$loaded()
+              .then(function (data) {
+                d.resolve(data);
+              }).catch(function (err) {
+                d.reject(err);
+              });
+
+          return d.promise;
         }
 
-        function findById () {
-          // Function to find just one Reservation
+        function findById (reservacionID) {
+          return $firebaseObject(ref.child('reservaciones').child(reservacionID));
         }
 
-        function create () {
-          // Function For Adding New Reservations
+        function create (nuevaReservacion) {
+          nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
+          nuevaReservacion.status = 'active';
+          //reservacion.creator = Auth.user.profile.username;
+          return reservaciones.$add(nuevaReservacion);
         }
 
         function remove () {
           // Function for removing an especific REservation
         }
 
-        function isActive () {
-          // Function for consulting if a Reservention is actually active
+        function isActive (reservacion) {
+          return reservacion.status === 'active';
         }
     }
 })();
