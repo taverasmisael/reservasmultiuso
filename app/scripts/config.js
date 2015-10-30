@@ -10,7 +10,7 @@
     // Dependency Injection
     configRoutes.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'TMPDIR'];
     configPalette.$inject = ['$mdThemingProvider'];
-    onRun.$inject = ['amMoment'];
+    onRun.$inject = ['amMoment', '$state', '$rootScope'];
 
 
     // ui.router configuration for views
@@ -60,7 +60,8 @@
     }
 
     // amMoment Configuration for TimeZone with Momentjs
-    function onRun (amMoment) {
+    function onRun (amMoment, $state, $rootScope) {
       amMoment.changeLocale('es');
+      $rootScope.$state = $state;
     }
 })();

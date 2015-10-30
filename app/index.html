@@ -72,7 +72,7 @@
         </md-content>
       </md-content>
     </main>
-    <a ui-sref="create" class="md-fab md-accent md-hue-3 md-button-fixed md-button" md-ink-ripple aria-label="Crear reservacion">
+    <a ui-sref="create" ng-if="$state.current.name !== 'create'" class="md-fab md-accent md-hue-3 md-button-fixed md-button" md-ink-ripple aria-label="Crear reservacion">
       <ng-md-icon icon="add"></ng-md-icon>
     </a>
     <!-- build:js js/vendor.js -->
@@ -103,6 +103,7 @@
     <script src="/scripts/controllers/controller.search.js"></script>
     <script src="/scripts/controllers/controller.sidebar.js"></script>
     <script src="/scripts/services/service.reservas.js"></script>
+    <script src="/scripts/services/services.profesor.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
 </body>
