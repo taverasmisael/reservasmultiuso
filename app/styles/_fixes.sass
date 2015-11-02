@@ -2,6 +2,8 @@ a
   text-decoration: none
 
 // Class For ngMdIcons with custom size
+ng-md-icon
+  color: rgba(0,0,0,0.54)
 .ng-md-icon-special
   margin: 0
   width: auto
@@ -20,11 +22,18 @@ a
 .md-datepicker-calendar-pane.md-pane-open
   background: white
   border: none
-  .md-calendar-date.md-calendar-date-today
+  .md-calendar-date.md-calendar-selected-date > span
     background: color($primaryColor, "darken-1")
     border-radius: 50%
     color: white !important
-  .md-calendar-date.md-calendar-date-disabled
+  .md-calendar-date.md-calendar-date-today > span
+    border: 1px solid color($primaryColor, "darken-1")
+    border-radius: 50%
+    color: color($primaryColor, "darken-1") !important
+  // Fix Crash on date-today and selected-date are the same
+  .md-calendar-date.md-calendar-date-today.md-calendar-selected-date > span
+    color: white !important
+  .md-calendar-date.md-calendar-date-disabled > span
     color: color("grey", "lighten-1")
 
 md-datepicker
@@ -34,8 +43,12 @@ md-datepicker
   &.ng-invalid
     .md-datepicker-input-container
       border-color: color($warnColor, "base")
-  &.xl-datepicker
-    .md-datepicker-input-container
-      width: 100%
-      input
-        width: 100%
+  .md-datepicker-input-container
+    flex: 1
+    box-sizing: border-box;
+  .md-datepicker-button
+    width: 36px
+    margin: -0.5rem !important
+    md-icon
+      width: 36px
+      height: 36px

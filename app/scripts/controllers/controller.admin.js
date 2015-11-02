@@ -37,7 +37,7 @@
        }
 
         function fillSections () {
-          vm.availableSections = vm.newReservationData.profesor.secciones || [{id: 0, materia: 'Selecciona un profesor'}];
+          vm.availableSections = vm.newReservationData.profesor.secciones;
         }
 
         function createReservacion (reservationData) {
