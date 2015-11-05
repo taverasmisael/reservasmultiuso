@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['Profesores'];
-    function AdminController (Profesores) {
+    AdminController.$inject = ['Profesores', '$filter'];
+    function AdminController (Profesores, $filter) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
@@ -43,7 +43,11 @@
         }
 
         function createReservacion (reservationData) {
-          console.log(reservationData);
+          var newReservation = angular.copy(reservationData);
+          // Changes time values
+          newReservation.time.starts = $filter('amParse')(newReservation.time.starts, 'HH:mmA')._d;
+          newReservation.time.ends = $filter('amParse')(newReservation.time.ends, 'HH:mmA')._d;
+          console.log(newReservation);
         }
     }
 })();
