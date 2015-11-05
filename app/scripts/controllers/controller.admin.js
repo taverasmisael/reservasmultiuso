@@ -17,6 +17,8 @@
           vm.today = new Date();
           console.log(vm.profesorsList);
           vm.minReservationDate = new Date(vm.today.getFullYear(), vm.today.getMonth(), vm.today.getDate() - 1);
+          $('#newReservationDataStarts').timepicker({ 'scrollDefault': 'now', 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
+          $('#newReservationDataEnds').timepicker({ 'scrollDefault': $('#newReservationDataStarts').val(), 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
         }
 
         function queryProfesors (profesorName) {
