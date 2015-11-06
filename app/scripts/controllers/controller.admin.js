@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['Profesores', '$filter'];
-    function AdminController (Profesores, $filter) {
+    AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Profesores'];
+    function AdminController ($scope, $mdToast, $filter, Profesores) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
@@ -18,22 +18,21 @@
           console.log(vm.profesorsList);
           vm.minReservationDate = new Date(vm.today.getFullYear(), vm.today.getMonth(), vm.today.getDate() - 1);
           $('#newReservationDataStarts').timepicker({ 'scrollDefault': 'now', 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
-          $('#newReservationDataEnds').timepicker({ 'scrollDefault': $('#newReservationDataStarts').val(), 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
+          // Watch Value Changed On StartsTime
+          $('#newReservationDataStarts').on('changeTime', function () {
+            $('#newReservationDataEnds').timepicker({ 'scrollDefault': $(this).val(), 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
+          });
         }
 
         function queryProfesors (profesorName) {
-          console.log(profesorName, 'Query 22');
           var response = profesorName ? vm.profesorsList.filter(createFilterFor(profesorName)) : vm.profesorsList;
-          console.log(response);
           return response;
         }
 
-        // * Create filter function for a query string
+        // Create filter function for a query string
        function createFilterFor(query) {
          var capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
-         console.log(capitalcaseQuery, 'Query 31');
          return function filterFn(profesor) {
-          console.log(profesor, 'Query 33');
           return (profesor.name.indexOf(capitalcaseQuery) === 0) || (profesor.lastname.indexOf(capitalcaseQuery) === 0);
          };
        }
@@ -48,6 +47,15 @@
           newReservation.time.starts = $filter('amParse')(newReservation.time.starts, 'HH:mmA')._d;
           newReservation.time.ends = $filter('amParse')(newReservation.time.ends, 'HH:mmA')._d;
           console.log(newReservation);
+
+          // Calculates days until reservation day and display it
+          // on a beautiful toast
+          var fromNow = new moment().to(newReservation.date);
+          $mdToast.show(
+            $mdToast.simple()
+            .content('Reservacion ' + fromNow)
+            .position('right top')
+          );
         }
     }
 })();
