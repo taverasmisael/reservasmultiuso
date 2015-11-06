@@ -65,7 +65,7 @@
                     $mdToast.show(
                       $mdToast.simple()
                       .content('Reservacion ' + fromNow)
-                      .position('right top')
+                      .position('right bottom')
                     );
                     vm.newReservationData = {};
                     vm.selectedProfesor = '';
