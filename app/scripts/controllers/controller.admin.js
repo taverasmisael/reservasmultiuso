@@ -30,11 +30,11 @@
 
         // * Create filter function for a query string
        function createFilterFor(query) {
-         var lowercaseQuery = angular.lowercase(query);
-         console.log(lowercaseQuery, 'Query 31');
+         var capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
+         console.log(capitalcaseQuery, 'Query 31');
          return function filterFn(profesor) {
           console.log(profesor, 'Query 33');
-          return (profesor.name.indexOf(query) === 0) || (profesor.lastname.indexOf(query) === 0);
+          return (profesor.name.indexOf(capitalcaseQuery) === 0) || (profesor.lastname.indexOf(capitalcaseQuery) === 0);
          };
        }
 

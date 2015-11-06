@@ -2,7 +2,7 @@
   <md-content flex layout="column">
     <h1>Crear Reservacion</h1>
     <md-divider></md-divider>
-    <form layout="column" layout-align="center end" layout-padding layout-fill ame="AdminCtrl.creationForm" ng-submit="AdminCtrl.createReservacion(AdminCtrl.newReservationData)">
+    <form layout="column" layout-align="center end" layout-padding layout-fill name="creationForm" ng-submit="AdminCtrl.createReservacion(AdminCtrl.newReservationData)">
       <div layout="row" layout-align="start center" layout-padding layout-fill>
         <div layout="row" layout-align="start center" flex="70">
           <ng-md-icon icon="person" size="36" class="ng-md-icon-special"></ng-md-icon>
@@ -22,7 +22,7 @@
         </md-select>
       </div>
       <div layout="row" layout-align="start center" layout-padding layout-fill>
-        <md-datepicker layout="row" layout-align="start center" layout-fill md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Introduce la fecha" required></md-datepicker>
+        <md-datepicker required="true" layout="row" layout-align="start center" layout-fill md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Introduce la fecha"></md-datepicker>
       </div>
       <div layout="row" layout-padding layout-fill>
         <md-input-container layout="column" layout-align="center center">
@@ -42,7 +42,7 @@
       </div>
       <div layout="row" layout-padding layout-fill>
         <span flex></span>
-        <md-button type="submit" class="md-raised md-primary">Crear</md-button>
+        <md-button ng-disabled="creationForm.$invalid" type="submit" class="md-raised md-primary">Crear</md-button>
       </div>
     </form>
   </md-content>
