@@ -35,8 +35,9 @@
         }
 
         function create (nuevaReservacion) {
-          nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
-          nuevaReservacion.status = 'active';
+          nuevaReservacion.info = {};
+          nuevaReservacion.info.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
+          nuevaReservacion.info.status = 'active';
           //reservacion.creator = Auth.user.profile.username;
           return reservaciones.$add(nuevaReservacion);
         }

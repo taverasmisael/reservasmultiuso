@@ -7,8 +7,8 @@
         <div layout="row" layout-align="start center" flex="70">
           <ng-md-icon icon="person" size="36" class="ng-md-icon-special"></ng-md-icon>
           <md-autocomplete flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="AdminCtrl.newReservationData.meta.profesor" md-search-text="AdminCtrl.selectedProfesor" md-items="profe in AdminCtrl.queryProfesors(AdminCtrl.selectedProfesor)" md-item-text="profe.name" md-floating-label="Lista de Profesores" md-select-on-match="true" md-autofocus="true" md-selected-item-change="AdminCtrl.fillSections()" md-delay="150">
-              <md-item-template>
-                  <span md-highlight-text="AdminCtrl.selectedProfesor.value" ng-bind="profe.lastname + ', ' + profe.name"></span>
+              <md-item-template ng-cloak>
+                  <span md-highlight-text="AdminCtrl.selectedProfesor.value">{{profe.lastname + ', ' + profe.name}}</span>
               </md-item-template>
               <md-not-found>
                  No se encontró "{{AdminCtrl.selectedProfesor}}"

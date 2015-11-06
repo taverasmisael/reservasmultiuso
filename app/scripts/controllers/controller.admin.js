@@ -45,31 +45,32 @@
        }
 
         function fillSections () {
-          vm.newReservationData.meta.section = '';
-          vm.availableSections = vm.newReservationData.meta.profesor.secciones;
+          if (vm.newReservationData.meta && vm.newReservationData.meta.profesor) {
+            vm.newReservationData.meta.section = '';
+            vm.availableSections = vm.newReservationData.meta.profesor.secciones;
+          }
         }
 
         function createReservacion (reservationData) {
           var newReservation = angular.copy(reservationData);
           // Changes time values
-          newReservation.datetime.starts = $filter('amParse')(newReservation.datetime.starts, 'HH:mmA')._d;
-          newReservation.datetime.ends = $filter('amParse')(newReservation.datetime.ends, 'HH:mmA')._d;
+          newReservation.datetime.date = reservationData.datetime.date.toJSON();
+          newReservation.datetime.starts = $filter('amParse')(newReservation.datetime.starts, 'HH:mmA')._d.toJSON();
+          newReservation.datetime.ends = $filter('amParse')(newReservation.datetime.ends, 'HH:mmA')._d.toJSON();
           newReservation.meta.materia = _getSelectedSection()[0].materia;
-          console.log(newReservation);
-         /* Reservaciones.create(newReservation)
-                .then(function (data) {
-                  console.log(data);
-                  // Calculates days until reservation day and display it
-                  // on a beautiful toast
-                  var fromNow = new moment().to(newReservation.date);
-                  $mdToast.show(
-                    $mdToast.simple()
-                    .content('Reservacion ' + fromNow)
-                    .position('right top')
-                  );
-                }).catch(_errHdlr);
-        }*/
-      }
+            Reservaciones.create(newReservation)
+                  .then(function (data) {
+                    // Calculates days until reservation day and display it on a beautiful toast
+                    var fromNow = new moment().to(newReservation.datetime.date);
+                    $mdToast.show(
+                      $mdToast.simple()
+                      .content('Reservacion ' + fromNow)
+                      .position('right top')
+                    );
+                    vm.newReservationData = {};
+                    vm.selectedProfesor = '';
+                  }).catch(_errHdlr);
+          }
 
         function _errHdlr (err) {
           console.error(err);
