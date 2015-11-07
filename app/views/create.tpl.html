@@ -15,7 +15,7 @@
                </md-not-found>
           </md-autocomplete>
         </div>
-        <md-select flex="20" flex-offset="5" ng-model="AdminCtrl.newReservationData.meta.section" aria-label="Secciones del Profesor" placeholder="Secciones">
+        <md-select ng-disabled="!AdminCtrl.availableSections" flex="20" flex-offset="5" ng-model="AdminCtrl.newReservationData.meta.section" aria-label="Secciones del Profesor" placeholder="Secciones">
             <md-option ng-repeat="section in AdminCtrl.availableSections" value="{{section.id}}">
                 {{section.id}} - {{section.materia | limitTo: 15}}
             </md-option>
