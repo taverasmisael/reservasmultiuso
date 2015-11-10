@@ -18,11 +18,14 @@
         return ReservacionesService;
 
         function getToday () {
-          var hoy = new Date(), d = $q.defer();
-          $firebaseArray(ref.child('reservaciones').orderByChild('fecha')
-            .equalTo(hoy.toDateString())).$loaded()
+          var hoy = new Date(), d = $q.defer(), reservaciones = [];
+          $firebaseArray(ref.child('reservaciones').orderByChild('datetime')).$loaded()
               .then(function (data) {
-                d.resolve(data);
+                angular.forEach(data, function (reserv) {
+                  reserv.datetime.date === hoy.toDateString() ? reservaciones.push(reserv) : false;
+                });
+                console.log(reservaciones);
+                d.resolve(reservaciones);
               }).catch(function (err) {
                 d.reject(err);
               });
@@ -48,6 +51,19 @@
 
         function isActive (reservacion) {
           return reservacion.status === 'active';
+        }
+
+        // Funciones Privadas
+        function _filterToday (reservaciones) {
+          var d = $q.defer(), response = [];
+          var hoy = new Date();
+          hoy = hoy.toJSON();
+
+          reservaciones.filter(function (reservacion) {
+            console.log(reservacion.datetime.date);
+            console.log(hoy);
+            return reservacion.datetime.date === hoy;
+          });
         }
     }
 })();
