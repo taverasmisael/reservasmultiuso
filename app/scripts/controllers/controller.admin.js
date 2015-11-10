@@ -54,7 +54,7 @@
         function createReservacion (reservationData) {
           var newReservation = angular.copy(reservationData);
           // Changes time values
-          newReservation.datetime.date = reservationData.datetime.date.toJSON();
+          newReservation.datetime.date = reservationData.datetime.date.toDateString();
           newReservation.datetime.starts = $filter('amParse')(newReservation.datetime.starts, 'HH:mmA')._d.toJSON();
           newReservation.datetime.ends = $filter('amParse')(newReservation.datetime.ends, 'HH:mmA')._d.toJSON();
           newReservation.meta.materia = _getSelectedSection()[0].materia;
