@@ -5,14 +5,14 @@
       <md-list id="list-today">
         <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="item in HomeCtrl.reservaciones.today">
           <ng-md-icon icon="school"></ng-md-icon>
-          <div class="md-list-item-text" layout="row">
-            <div class="profesor" flex layout="column" layout-align="center start">
+          <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
+            <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
               <h3>{{ item.meta.profesor.name + ' ' + item.meta.profesor.lastname }}</h3>
               <h4>{{ item.meta.materia + ' - ' +item.meta.section }}</h4>
             </div>
-            <div class="fecha" layout="column" layout-align="center end">
-              <time datetime="{{ item.datetime.starts}}">{{ item.datetime.starts | date:'shortTime'}}</time>
-              <time datetime="{{ item.datetime.ends}}">{{ item.datetime.ends | date:'shortTime'}}</time>
+            <div class="fecha" layout-padding layout="row" layout-align="center end" layout-align="center start">
+              <time datetime="{{ item.time.starts}}">{{ item.time.starts | date:'shortTime'}} -&nbsp;</time>
+              <time datetime="{{ item.time.ends}}">{{ item.time.ends | date:'shortTime'}}</time>
             </div>
           </div>
         </md-list-item>
