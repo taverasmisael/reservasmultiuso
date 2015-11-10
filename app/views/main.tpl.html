@@ -3,16 +3,16 @@
     <section flex>
       <md-subheader><h5>Hoy <small><time datetime="{{ HomeCtrl.todayDate.toJSON() }}">{{HomeCtrl.todayDate | date: 'shortDate'}}</time></small></h5></md-subheader>
       <md-list id="list-today">
-        <md-list-item class="md-2-line flex" ng-repeat="item in HomeCtrl.reservaciones.today">
+        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="item in HomeCtrl.reservaciones.today">
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row">
-            <div class="profesor" layout="column" flex>
-              <h3>{{ item.who }}</h3>
-              <h4>{{ item.what }}</h4>
+            <div class="profesor" flex layout="column" layout-align="center start">
+              <h3>{{ item.meta.profesor.name + ' ' + item.meta.profesor.lastname }}</h3>
+              <h4>{{ item.meta.materia + ' - ' +item.meta.section }}</h4>
             </div>
-            <div class="fecha" layout="column">
-              <time>{{ item.date.starts | date:'shortTime'}}</time>
-              <time>{{ item.date.ends | date:'shortTime'}}</time>
+            <div class="fecha" layout="column" layout-align="center end">
+              <time datetime="{{ item.datetime.starts}}">{{ item.datetime.starts | date:'shortTime'}}</time>
+              <time datetime="{{ item.datetime.ends}}">{{ item.datetime.ends | date:'shortTime'}}</time>
             </div>
           </div>
         </md-list-item>
