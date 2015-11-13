@@ -19,10 +19,10 @@
 
         function getToday () {
           var hoy = new Date(), d = $q.defer();
-          $firebaseArray(ref.child('reservaciones').orderByChild('fecha')
+          $firebaseArray(ref.child('reservaciones').orderByChild('date')
             .equalTo(hoy.toDateString())).$loaded()
-              .then(function (data) {
-                d.resolve(data);
+              .then(function (reservaciones) {
+                d.resolve(reservaciones);
               }).catch(function (err) {
                 d.reject(err);
               });
@@ -49,5 +49,6 @@
         function isActive (reservacion) {
           return reservacion.status === 'active';
         }
+
     }
 })();

@@ -7,6 +7,7 @@
       'ngMdIcons',
       'angularMoment',
       'ui.router',
-      'firebase'
+      'firebase',
+      'mtTimeValidator'
     ]);
 })();
