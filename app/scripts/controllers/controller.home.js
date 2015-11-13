@@ -17,6 +17,9 @@
         Reservaciones.today().then(function (reservaciones) {
           vm.reservaciones.today = reservaciones;
         });
+        Reservaciones.getCommingSoon().then(function (reservaciones) {
+          vm.reservaciones.commingSoon = reservaciones;
+        });
       }
     }
 })();
