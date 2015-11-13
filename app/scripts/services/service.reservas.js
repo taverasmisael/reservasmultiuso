@@ -25,7 +25,7 @@
             var $d = $q.defer();
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
-                .startAt(hoy.toDateString()).endAt(hoy.toDateString()))
+                .startAt(hoy.toLocaleDateString()).endAt(hoy.toLocaleDateString()))
                 .$loaded().then(function(reservaciones) {
                     $d.resolve(reservaciones);
                 }).catch(function(err) {
@@ -37,7 +37,7 @@
 
         function getCommingSoon() {
             var $d = $q.defer(),
-                tomorrow = moment().add(1, 'day')._d.toDateString();
+                tomorrow = moment().add(1, 'day')._d.toLocaleDateString();
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
               .startAt(tomorrow)).$loaded().then(function(reservaciones) {
