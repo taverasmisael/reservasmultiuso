@@ -22,16 +22,16 @@
         </md-select>
       </div>
       <div layout="row" layout-align="start center" layout-padding layout-fill>
-        <md-datepicker required="true" layout="row" layout-align="start center" layout-fill md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Introduce la fecha"></md-datepicker>
+        <md-datepicker layout="row" layout-align="start center" layout-fill md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" required="true"></md-datepicker>
       </div>
       <div layout="row" layout-padding layout-fill>
         <md-input-container layout="column" layout-align="center center">
           <ng-md-icon icon="schedule"></ng-md-icon>
-          <input id="newReservationDataStarts" type="text" required ng-model="AdminCtrl.newReservationData.time.starts" placeholder="Hora de inicio">
+          <input id="newReservationDataStarts" type="text" integer required ng-model="AdminCtrl.newReservationData.time.starts" placeholder="Hora de inicio">
         </md-input-container>
         <md-input-container layout="column" layout-align="center center">
           <ng-md-icon icon="schedule"></ng-md-icon>
-          <input id="newReservationDataEnds" type="text" required ng-model="AdminCtrl.newReservationData.time.ends" placeholder="Hora de fin">
+          <input id="newReservationDataEnds" type="text" integer required ng-model="AdminCtrl.newReservationData.time.ends" placeholder="Hora de fin">
         </md-input-container>
       </div>
       <div layout="row" layout-padding layout-fill>

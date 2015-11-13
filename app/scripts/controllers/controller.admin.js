@@ -15,7 +15,7 @@
         function active () {
           console.log('Administrating...');
           vm.today = new Date();
-          console.log(vm.profesorsList);
+          _mdDatePickerFix();
           vm.minReservationDate = new Date(vm.today.getFullYear(), vm.today.getMonth(), vm.today.getDate() - 1);
           $('#newReservationDataStarts').timepicker({ 'scrollDefault': 'now', 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
           // Watch Value Changed On StartsTime
@@ -23,6 +23,7 @@
             var timeVal = $(this).val();
             $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true });
           });
+
         }
 
         function queryProfesors (profesorName) {
@@ -60,7 +61,7 @@
           newReservation.time.ends = $filter('amParse')(newReservation.time.ends, 'HH:mmA')._d.toJSON();
           newReservation.meta.materia = _getSelectedSection()[0].materia;
             Reservaciones.create(newReservation)
-                  .then(function (data) {
+                  .then(function () {
                     // Calculates days until reservation day and display it on a beautiful toast
                     var fromNow = new moment().to(newReservation.date);
                     $mdToast.show(
@@ -73,6 +74,16 @@
                   }).catch(_errHdlr);
           }
 
+
+        function _mdDatePickerFix () {
+          var datePicker = $('md-datepicker'),
+              datePickerInput = datePicker.find('input'),
+              datePickerButton = datePicker.find('button');
+          datePickerInput.on('focus', function (event) {
+            event.preventDefault();
+            datePickerButton.trigger('click');
+          });
+        }
         function _errHdlr (err) {
           console.error(err);
         }
