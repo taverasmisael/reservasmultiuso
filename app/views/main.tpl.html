@@ -10,8 +10,8 @@
               <h3>{{ item.meta.profesor.name + ' ' + item.meta.profesor.lastname }}</h3>
               <h4>{{ item.meta.materia + ' - ' +item.meta.section }}</h4>
             </div>
-            <div class="fecha" layout-padding layout="row" layout-align="center end" layout-align="center start">
-              <time datetime="{{ item.time.starts}}">{{ item.time.starts | date:'shortTime'}} -&nbsp;</time>
+            <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+              <time datetime="{{ item.time.starts}}">{{ item.time.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
               <time datetime="{{ item.time.ends}}">{{ item.time.ends | date:'shortTime'}}</time>
             </div>
           </div>
