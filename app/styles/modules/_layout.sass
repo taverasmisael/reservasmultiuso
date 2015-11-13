@@ -12,6 +12,10 @@ md-sidenav, md-menu-content
   a
     color: color("grey", "darken-2")
 
+md-toolbar
+  ng-md-icon
+    color: white
+
 md-menu-item
   span
     padding-left: 0.5rem
@@ -23,6 +27,8 @@ md-menu-item
 md-sidenav md-list md-list-item a.md-active
   color: color($primaryColor, "base")
   background: rgba(color("grey", "lighten-2"), 0.6)
+  ng-md-icon
+    color: color($primaryColor, "base")
 
 time
   font-family: "Roboto Mono", monospace, sans-serif
