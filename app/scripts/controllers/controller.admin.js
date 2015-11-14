@@ -56,7 +56,7 @@
           var newReservation = angular.copy(reservationData);
           // Changes time values
           console.log(newReservation);
-          newReservation.date = reservationData.date.toDateString();
+          newReservation.date = reservationData.date.toLocaleDateString();
           newReservation.time.starts = $filter('amParse')(newReservation.time.starts, 'HH:mmA')._d.toJSON();
           newReservation.time.ends = $filter('amParse')(newReservation.time.ends, 'HH:mmA')._d.toJSON();
           newReservation.meta.materia = _getSelectedSection()[0].materia;
