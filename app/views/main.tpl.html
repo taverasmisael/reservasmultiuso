@@ -1,5 +1,5 @@
 <div layout="column" layout-align="center center">
-  <md-content id="section-today" class="reservaciones" flex layout-padding layout="row" layout-align="center start">
+  <md-content id="section-today" class="reservaciones" flex layout-padding layout-fill layout="row" layout-align="center start">
     <section flex>
       <md-subheader><h5>Hoy <small><time datetime="{{ HomeCtrl.todayDate.toJSON() }}">{{HomeCtrl.todayDate | date: 'shortDate'}}</time></small></h5></md-subheader>
       <md-list id="list-today">
@@ -19,7 +19,7 @@
       </md-list>
     </section>
   </md-content>
-  <md-content id="section-comming-soon" class="reservaciones" flex layout-padding layout="row" layout-align="center start">
+  <md-content id="section-comming-soon" class="reservaciones" flex layout-fill layout-padding layout="row" layout-align="center start">
     <section flex>
       <md-subheader><h5>Próximos {{ HomeCtrl.reservaciones.commingSoon.length }} eventos</h5></md-subheader>
       <md-list id="list-comming-soon">
