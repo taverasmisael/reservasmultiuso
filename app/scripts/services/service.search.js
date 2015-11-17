@@ -75,10 +75,9 @@
     }
 
     function rByStartDate (date) {
-      var _date = new Date(date);
       var $d = $q.defer();
 
-      $firebaseArray(reservRef.startAt('date').equalTo(_date.toLocaleDateString()))
+      $firebaseArray(reservRef.orderByChild('date').equalTo(date.toLocaleDateString()))
         .$loaded().then(function (reserva) {
           $d.resolve(reserva);
         }).catch(function (err) {

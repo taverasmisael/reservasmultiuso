@@ -24,12 +24,17 @@
         function searchByProfesor (profesor) {
           Search.reservacion.ofProfesor(profesor.$id).then(function (data) {
             vm.query.results = data;
-            vm.query.currentProfesor = profesor.name + ' ' + profesor.lastname;
+            vm.query.heading = profesor.name + ' ' + profesor.lastname;
+            vm.query.needsDate = true;
           }).catch(_errHndl);
         }
 
         function searchByDate (date) {
-          console.log(date);
+          Search.reservacion.byDate(date).then(function (data) {
+            vm.query.results = data;
+            vm.query.heading = date.toLocaleDateString();
+            vm.query.needsDate = false;
+          }).catch(_errHndl);
         }
 
         function queryProfesors (profesorName) {
