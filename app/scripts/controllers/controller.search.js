@@ -3,11 +3,15 @@
     angular.module('reservacionesMulti')
             .controller('SearchController', SearchController);
 
-    SearchController.$inject = ['Profesores'];
-    function SearchController (Profesores) {
+    SearchController.$inject = ['Profesores', 'Search'];
+    function SearchController (Profesores, Search) {
         var vm = this;
         vm.queryProfesors = queryProfesors;
         vm.profesorsList = Profesores.all;
+        vm.search = {
+          byProfesor: searchByProfesor,
+          byDate: searchByDate
+        };
         active();
 
         function active () {
@@ -15,8 +19,20 @@
           vm.today = new Date();
         }
 
+
+
+        function searchByProfesor (profesor) {
+          Search.reservacion.ofProfesor(profesor.$id).then(function (data) {
+            vm.query.results = data;
+            vm.query.currentProfesor = profesor.name + ' ' + profesor.lastname;
+          }).catch(_errHndl);
+        }
+
+        function searchByDate (date) {
+          console.log(date);
+        }
+
         function queryProfesors (profesorName) {
-          console.log(profesorName);
           var response = profesorName ? vm.profesorsList.filter(createFilterFor(profesorName)) : vm.profesorsList;
           return response;
         }
@@ -27,6 +43,12 @@
          return function filterFn(profesor) {
           return (profesor.name.indexOf(capitalcaseQuery) === 0) || (profesor.lastname.indexOf(capitalcaseQuery) === 0);
          };
+       }
+
+       // Private Functions
+
+       function _errHndl (err) {
+         console.error(err);
        }
     }
 })();
