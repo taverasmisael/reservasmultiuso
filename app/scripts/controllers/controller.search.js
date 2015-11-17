@@ -16,6 +16,7 @@
 
         function active () {
           console.log('Active Search....');
+          _mdDatePickerFix();
           vm.today = new Date();
         }
 
@@ -51,6 +52,18 @@
        }
 
        // Private Functions
+
+       function _mdDatePickerFix () {
+         setTimeout(function () {
+           var datePicker = $('.md-datepicker-input-container'),
+               datePickerInput = datePicker.find('input'),
+               datePickerButton = datePicker.find('button');
+           datePickerInput.on('focus', function (event) {
+             event.preventDefault();
+             datePickerButton.trigger('click');
+           });
+         }, 250);
+       }
 
        function _errHndl (err) {
          console.error(err);
