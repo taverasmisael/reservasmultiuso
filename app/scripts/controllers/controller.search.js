@@ -3,51 +3,70 @@
     angular.module('reservacionesMulti')
             .controller('SearchController', SearchController);
 
-    SearchController.$inject = [];
-    function SearchController () {
+    SearchController.$inject = ['Profesores', 'Search'];
+    function SearchController (Profesores, Search) {
         var vm = this;
-        vm.querySearch = querySearch;
+        vm.queryProfesors = queryProfesors;
+        vm.profesorsList = Profesores.all;
+        vm.search = {
+          byProfesor: searchByProfesor,
+          byDate: searchByDate
+        };
         active();
-        vm.months = [];
-        vm.profesorsList = loadAll();
-        for (var i = 0; i < 12; i += 1) {
-          var currentMonth = {
-            index: i,
-            name:moment().month(i).format('MMMM')
-          };
-          vm.months.push(currentMonth);
-        }
 
         function active () {
           console.log('Active Search....');
+          _mdDatePickerFix();
           vm.today = new Date();
         }
 
 
-        function querySearch (query) {
-          console.log('Buscando...');
-          var results = query ? vm.profesorsList.filter( createFilterFor(query) ) : [];
-          return results;
+
+        function searchByProfesor (profesor) {
+          Search.reservacion.ofProfesor(profesor.$id).then(function (data) {
+            vm.query.results = data;
+            vm.query.heading = profesor.name + ' ' + profesor.lastname;
+            vm.query.needsDate = true;
+          }).catch(_errHndl);
         }
 
-        // TEMPORARY FUNCTIONS
-        function createFilterFor(query) {
-             var lowercaseQuery = angular.lowercase(query);
-             return function filterFn(profesor) {
-                console.log('Filtrando...');
-               return (profesor.value.indexOf(lowercaseQuery) === 0);
-             };
-           }
+        function searchByDate (date) {
+          Search.reservacion.byDate(date).then(function (data) {
+            vm.query.results = data;
+            vm.query.heading = date.toLocaleDateString();
+            vm.query.needsDate = false;
+          }).catch(_errHndl);
+        }
 
+        function queryProfesors (profesorName) {
+          var response = profesorName ? vm.profesorsList.filter(createFilterFor(profesorName)) : vm.profesorsList;
+          return response;
+        }
 
-           function loadAll() {
-                 var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware, Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana, Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana, Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina, North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia, Wisconsin, Wyoming';
-                 return allStates.split(/, +/g).map( function (state) {
-                   return {
-                     value: state.toLowerCase(),
-                     name: state
-                   };
-                 });
-               }
+        // Create filter function for a query string
+       function createFilterFor(query) {
+         var capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
+         return function filterFn(profesor) {
+          return (profesor.name.indexOf(capitalcaseQuery) === 0) || (profesor.lastname.indexOf(capitalcaseQuery) === 0);
+         };
+       }
+
+       // Private Functions
+
+       function _mdDatePickerFix () {
+         setTimeout(function () {
+           var datePicker = $('.md-datepicker-input-container'),
+               datePickerInput = datePicker.find('input'),
+               datePickerButton = datePicker.find('button');
+           datePickerInput.on('focus', function (event) {
+             event.preventDefault();
+             datePickerButton.trigger('click');
+           });
+         }, 250);
+       }
+
+       function _errHndl (err) {
+         console.error(err);
+       }
     }
 })();

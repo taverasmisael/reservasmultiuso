@@ -1,78 +1,63 @@
-<md-content layout="row" layout-padding layout-fill layout-align="center center" class="view-search">
-    <md-tabs flex="80" md-dynamic-height md-border-bottom>
-        <md-tab label="Por Fecha">
-            <md-content class="md-padding">
-                <h1 class="md-display-2">Busqueda por fecha</h1>
-                <form layout="column" layout-padding ng-submit="SearchCtrl.searchByDate(SearchCtrl.byDate.starts, SearchCtrl.byDate.ends)">
-                    <div layout="row" layout-align="start start">
-                        <div flex layout="column">
-                            <h5>Fecha de inicio</h5>
-                            <md-datepicker ng-model="SearchCtrl.byDate.starts" md-placeholder="19/10/2015" required></md-datepicker>
-                        </div>
-                        <div flex layout="column">
-                            <h5>Fecha de fin</h5>
-                            <md-datepicker ng-model="SearchCtrl.byDate.ends" md-placeholder="30/10/2015" required></md-datepicker>
-                        </div>
-                    </div>
-                    <div layout="row" layout-align="center end">
-                        <span flex></span>
-                        <md-button type="submit" class="md-primary">Buscar</md-button>
-                    </div>
-                </form>
-            </md-content>
-        </md-tab>
-        <md-tab label="Por Mes">
-            <md-content class="md-padding">
-                <h1 class="md-display-2">Busqueda por mes</h1>
-                <form layout="column" layout-padding ng-submit="SearchCtrl.searchByMonth(SearchCtrl.byMonth.starts, SearchCtrl.byMonth.ends)">
-                    <div layout="row" layout-padding layout-align="start center">
-                        <md-input-container class="md-padding" flex layout="column" layout-align="center start">
-                            <h5>Mes de inicio</h5>
-                            <label>Enero</label>
-                            <md-select ng-model="SearchCtrl.byMonth.starts" aria-label="Mes de inicio">
-                                <md-option ng-repeat="month in SearchCtrl.months" value="{{month.index}}">
-                                    {{month.name}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container class="md-padding" flex layout="column" layout-align="center start">
-                            <h5>Mes de fin</h5>
-                            <label>Abril</label>
-                            <md-select ng-model="SearchCtrl.byMonth.ends" aria-label="Mes de fin">
-                                <md-option ng-repeat="month in SearchCtrl.months" value="{{month.index}}">
-                                    {{month.name}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
-                    <div layout="row" layout-align="center end">
-                        <span flex></span>
-                        <md-button type="submit" class="md-primary">Buscar</md-button>
-                    </div>
-                </form>
-            </md-content>
-        </md-tab>
-        <md-tab label="Por Profesor">
-            <md-content class="md-padding">
-                <h1 class="md-display-2">Busqueda por profesor</h1>
-                <form layout="column" layout-padding ng-submit="SearchCtrl.searchByProf(SearchCtrl.profesor)">
-                    <div layout="row" layout-padding layout-align="start center">
-                        <ng-md-icon icon="person" size="48" class="ng-md-icon-special"></ng-md-icon>
-                        <md-autocomplete md-select-on-match="true" md-autofocus="true" md-delay="150" flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="SearchCtrl.selectedProfe.name" md-search-text="SearchCtrl.selectedProfesor" md-items="item in SearchCtrl.querySearch(SearchCtrl.selectedProfesor)" md-item-text="item.name" md-floating-label="Lista de Profesores">
-                            <md-item-template>
-                                <span md-highlight-text="SearchCtrl.selectedProfesor.value">{{item.name}}</span>
-                            </md-item-template>
-                            <md-not-found>
-                               No se encontró "{{SearchCtrl.selectedProfesor}}"
-                             </md-not-found>
-                        </md-autocomplete>
-                    </div>
-                    <div layout="row" layout-align="center end">
-                        <span flex></span>
-                        <md-button type="submit" class="md-primary">Buscar</md-button>
-                    </div>
-                </form>
-            </md-content>
-        </md-tab>
+<md-content layout="row" layout-sm="column" layout-padding layout-align="start space-between" class="view-search">
+  <section id="search" flex-gt-sm="40" layout="column" layout-fill>
+    <md-tabs md-dynamic-height md-border-bottom md-swipe-content>
+      <md-tab label="Profesor">
+        <md-content class="md-padding">
+          <h3 class="md-display-">Reservaciones por Profesor</h3>
+          <md-divider></md-divider>
+          <form ng-submit="SearchCtrl.search.byProfesor(SearchCtrl.query.profesor)" layout-fill layout="column" layout-align="space-around start">
+            <div layout="row" layout-fill>
+              <div flex layout="row" layout-align="start center">
+                <ng-md-icon icon="search" size="30" class="ng-md-icon-special"></ng-md-icon>
+                <md-autocomplete flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="SearchCtrl.query.profesor" md-search-text="SearchCtrl.selectedProfesor" md-items="profe in SearchCtrl.queryProfesors(SearchCtrl.selectedProfesor)" md-item-text="profe.name" md-floating-label="Profesores" md-select-on-match="true" md-autofocus="true" md-delay="150">
+                    <md-item-template>
+                        <span md-highlight-text="SearchCtrl.selectedProfesor.value">{{profe.lastname + ', ' + profe.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                       No se encontró "{{SearchCtrl.selectedProfesor}}"
+                     </md-not-found>
+                </md-autocomplete>
+                <md-button type="submit" class="md-primary">Buscar</md-button>
+              </div>
+            </div>
+          </form>
+        </md-content>
+      </md-tab>
+      <md-tab label="Fecha" md-active="true">
+        <md-content class="md-padding">
+          <h3 class="md-display-">Reservaciones por Fecha</h3>
+          <md-divider></md-divider>
+          <form ng-submit="SearchCtrl.search.byDate(SearchCtrl.query.date)" layout-fill layout="column" layout-align="space-around start">
+            <div layout="row" layout-align="start center" layout-padding layout-fill>
+              <md-datepicker flex layout="row" layout-align="start center" layout-fill ng-model="SearchCtrl.query.date" md-placeholder="Selecciona la fecha" required="true"></md-datepicker>
+              <md-button type="submit" class="md-primary">Buscar</md-button>
+            </div>
+          </form>
+        </md-content>
+      </md-tab>
     </md-tabs>
+  </section>
+  <section id="search-results" class="reservaciones-search" flex-gt-sm="50" flex-offset="10" layout="column">
+    <md-content layout-fill layout="column" layout-align="center center" ng-if="!SearchCtrl.query.results">
+      <h3>Realiza una busqueda para poder ver los resultados</h3>
+    </md-content>
+    <md-content layout-fill layout="column" ng-if="SearchCtrl.query.results">
+      <md-subheader><h3>Reservaciones de {{ SearchCtrl.query.heading }}</h3></md-subheader>
+      <md-divider></md-divider>
+      <md-list>
+        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
+          <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
+            <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
+              <h3>{{ ::reserv.materia }} - {{ ::reserv.section }}</h3>
+              <h4><span ng-if="!SearchCtrl.query.needsDate">{{ ::reserv.profesorFullName }}</span><time ng-if="SearchCtrl.query.needsDate" datetime="1/10/2015">{{ ::reserv.date }}</time></h4>
+            </div>
+            <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+              <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>
+              <time datetime="6:00 pm">{{ ::reserv.ends | date:'shortTime' }}</time>
+            </div>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </section>
 </md-content>

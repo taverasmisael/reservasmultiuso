@@ -7,12 +7,12 @@
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
-              <h3>{{ reserv.meta.profesor.name + ' ' + reserv.meta.profesor.lastname }}</h3>
-              <h4>{{ reserv.meta.materia + ' - ' +reserv.meta.section }}</h4>
+              <h3>{{ reserv.profesorFullName }}</h3>
+              <h4>{{ reserv.materia + ' - ' +reserv.section }}</h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
-              <time datetime="{{ reserv.time.starts}}">{{ reserv.time.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
-              <time datetime="{{ reserv.time.ends}}">{{ reserv.time.ends | date:'shortTime'}}</time>
+              <time datetime="{{ reserv.starts}}">{{ reserv.ends | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
+              <time datetime="{{ reserv.time.ends}}">{{ reserv.ends | date:'shortTime'}}</time>
             </div>
           </div>
         </md-list-item>
@@ -27,12 +27,12 @@
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
-              <h3>{{ reserv.meta.profesor.name + ' ' + reserv.meta.profesor.lastname }}</h3>
+              <h3>{{ reserv.profesorFullName }}</h3>
               <h4><time datetime="{{ reserv.date }}">{{ reserv.date }}</time></h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
-              <time datetime="{{ reserv.time.starts}}">{{ reserv.time.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
-              <time datetime="{{ reserv.time.ends}}">{{ reserv.time.ends | date:'shortTime'}}</time>
+              <time datetime="{{ reserv.starts}}">{{ reserv.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
+              <time datetime="{{ reserv.ends}}">{{ reserv.ends | date:'shortTime'}}</time>
             </div>
           </div>
         </md-list-item>
