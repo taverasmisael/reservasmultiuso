@@ -16,6 +16,7 @@
           console.log('Administrating...');
           vm.today = new Date();
           _mdDatePickerFix();
+          vm.newReservationData = {};
           vm.minReservationDate = new Date(vm.today.getFullYear(), vm.today.getMonth(), vm.today.getDate() - 1);
           $('#newReservationDataStarts').timepicker({ 'scrollDefault': 'now', 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
           // Watch Value Changed On StartsTime
@@ -41,37 +42,36 @@
 
        function _getSelectedSection () {
          return vm.availableSections.filter(function (seccion) {
-          return seccion.id === vm.newReservationData.meta.section;
+          return seccion.id === vm.newReservationData.section;
          });
        }
 
         function fillSections () {
-          if (vm.newReservationData.meta && vm.newReservationData.meta.profesor) {
-            vm.newReservationData.meta.section = '';
-            vm.availableSections = vm.newReservationData.meta.profesor.secciones;
+          if (vm.nrd) {
+            vm.newReservationData.section = '';
+            vm.availableSections = vm.nrd.profesor.secciones;
           }
         }
 
-        function createReservacion (reservationData) {
+        function createReservacion (reservationData, nrdProfesor) {
           var newReservation = angular.copy(reservationData);
           // Changes time values
-          console.log(newReservation);
           newReservation.date = reservationData.date.toLocaleDateString();
-          newReservation.time.starts = $filter('amParse')(newReservation.time.starts, 'HH:mmA')._d.toJSON();
-          newReservation.time.ends = $filter('amParse')(newReservation.time.ends, 'HH:mmA')._d.toJSON();
-          newReservation.meta.materia = _getSelectedSection()[0].materia;
-            Reservaciones.create(newReservation)
-                  .then(function () {
-                    // Calculates days until reservation day and display it on a beautiful toast
-                    var fromNow = new moment().to(newReservation.date);
-                    $mdToast.show(
-                      $mdToast.simple()
-                      .content('Reservacion ' + fromNow)
-                      .position('right bottom')
-                    );
-                    vm.newReservationData = {};
-                    vm.selectedProfesor = '';
-                  }).catch(_errHdlr);
+          newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.toJSON();
+          newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.toJSON();
+          newReservation.materia = _getSelectedSection()[0].materia;
+          Reservaciones.create(newReservation, nrdProfesor)
+                .then(function () {
+                  // Calculates days until reservation day and display it on a beautiful toast
+                  var fromNow = moment().to(newReservation.date);
+                  $mdToast.show(
+                    $mdToast.simple()
+                    .content('Reservacion ' + fromNow)
+                    .position('right bottom')
+                  );
+                  vm.newReservationData = {};
+                  vm.selectedProfesor = '';
+                }).catch(_errHdlr);
           }
 
 
