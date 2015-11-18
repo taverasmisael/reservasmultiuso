@@ -18,22 +18,38 @@
           console.log('Active Search....');
           _mdDatePickerFix();
           vm.today = new Date();
+          vm.query = {
+            message: 'Realiza una busqueda para poder ver los resultados'
+          };
         }
 
 
 
         function searchByProfesor (profesor) {
           Search.reservacion.ofProfesor(profesor.$id).then(function (data) {
-            vm.query.results = data;
             vm.query.heading = profesor.name + ' ' + profesor.lastname;
+            if (!data.length) {
+              vm.query.message = 'No hay reservaciones para ' + vm.query.heading;
+            } else {
+              vm.query.message = '';
+              vm.query.results = data;
+            }
+
             vm.query.needsDate = true;
           }).catch(_errHndl);
         }
 
         function searchByDate (date) {
           Search.reservacion.byDate(date).then(function (data) {
-            vm.query.results = data;
             vm.query.heading = date.toLocaleDateString();
+
+            if (!data.length) {
+              vm.query.message = 'No hay reservaciones para ' + vm.query.heading;
+            } else {
+              vm.query.message = '';
+              vm.query.results = data;
+            }
+
             vm.query.needsDate = false;
           }).catch(_errHndl);
         }
