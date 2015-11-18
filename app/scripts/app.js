@@ -8,6 +8,7 @@
       'angularMoment',
       'ui.router',
       'firebase',
+      'mtUtilities',
       'mtTimeValidator',
       'mtExcedReservations'
     ]);

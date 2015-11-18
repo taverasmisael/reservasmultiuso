@@ -6,8 +6,8 @@
     .service('Search', Search);
 
 
-  Search.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'FURL'];
-  function Search($q, $firebaseObject, $firebaseArray, FURL) {
+  Search.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
+  function Search($q, $firebaseObject, $firebaseArray, Utilities, FURL) {
 
     var baseRef = new Firebase(FURL),
         reservRef = baseRef.child('reservaciones'),
@@ -67,7 +67,7 @@
 
     function pInMonth (id, date) {
       var $d = $q.defer();
-      var lds = date.toLocaleDateString().split('/'),
+      var lds = date.toJSON().split('/'),
       initDate, finishDate;
 
       lds[0] = 1;
@@ -105,7 +105,7 @@
     function rByStartDate (date) {
       var $d = $q.defer();
 
-      $firebaseArray(reservRef.orderByChild('date').equalTo(date.toLocaleDateString()))
+      $firebaseArray(reservRef.orderByChild('date').equalTo(Utilities.date.fix(date).toJSON()))
         .$loaded().then(function (reserva) {
           $d.resolve(reserva);
         }).catch(function (err) {
