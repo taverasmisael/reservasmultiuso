@@ -17,7 +17,8 @@
       profesor: {
         byId: pById,
         byCedula: pByCedula,
-        sectionsOf: pSections
+        sectionsOf: pSections,
+        inMonth: pInMonth
       },
       reservacion: {
         byId: rById,
@@ -60,6 +61,33 @@
         }).catch(function (err) {
           $d.reject(err);
         });
+
+      return $d.promise;
+    }
+
+    function pInMonth (id, date) {
+      var $d = $q.defer();
+      var lds = date.toLocaleDateString().split('/'),
+      initDate, finishDate;
+
+      lds[0] = 1;
+      initDate = lds.join('/');
+      if (lds[1] === 12) {
+        finishDate = '1/1/' + parseInt(lds[2])+1;
+      } else {
+        finishDate = '1/' + (parseInt(lds[1])+ 1) + '/' + lds[2] ;
+      }
+
+      $firebaseArray(reservRef.orderByChild('date').startAt(initDate).endAt(finishDate))
+                .$loaded().then(function (data) {
+                  $d.resolve(data.filter(function (reserv) {
+                      console.log(reserv);
+                      return reserv.profesor === id;
+                    }).length
+                  );
+                }).catch(function (err) {
+                  $d.reject(err);
+                });
 
       return $d.promise;
     }

@@ -22,7 +22,7 @@
         </md-select>
       </div>
       <div layout="row" layout-align="start center" layout-padding layout-fill>
-        <md-datepicker layout="row" layout-align="start center" layout-fill md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" required="true"></md-datepicker>
+        <md-datepicker layout="row" layout-align="start center" layout-fill md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" required="true" mt-exced-reservations profid="{{ AdminCtrl.nrd.profesor.$id }}"></md-datepicker>
       </div>
       <div layout="row" layout-padding layout-fill>
         <md-input-container layout="column" layout-align="center center">
