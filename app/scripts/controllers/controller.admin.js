@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['$mdToast', '$filter', 'Reservaciones', 'Profesores'];
-    function AdminController ($mdToast, $filter, Reservaciones, Profesores) {
+    AdminController.$inject = ['$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Profesores'];
+    function AdminController ($mdToast, $filter, Utilities, Reservaciones, Profesores) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
@@ -56,7 +56,8 @@
         function createReservacion (reservationData, nrdProfesor) {
           var newReservation = angular.copy(reservationData);
           // Changes time values
-          newReservation.date = reservationData.date.toLocaleDateString();
+          console.log(reservationData.date);
+          newReservation.date = Utilities.date.fix(reservationData.date).toJSON();
           newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.toJSON();
           newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.toJSON();
           newReservation.materia = _getSelectedSection()[0].materia;

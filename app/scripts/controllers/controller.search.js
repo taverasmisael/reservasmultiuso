@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('SearchController', SearchController);
 
-    SearchController.$inject = ['Profesores', 'Search'];
-    function SearchController (Profesores, Search) {
+    SearchController.$inject = ['Utilities', 'Profesores', 'Search'];
+    function SearchController (Utilities, Profesores, Search) {
         var vm = this;
         vm.queryProfesors = queryProfesors;
         vm.profesorsList = Profesores.all;
