@@ -67,27 +67,24 @@
 
     function pInMonth (id, date) {
       var $d = $q.defer();
-      var lds = date.toJSON().split('/'),
-      initDate, finishDate;
+      var init = Utilities.date.fix(moment(date).date(1)._d);
+      var finish = Utilities.date.fix(moment(init).month(init.getMonth() + 1)._d);
 
-      lds[0] = 1;
-      initDate = lds.join('/');
-      if (lds[1] === 12) {
-        finishDate = '1/1/' + parseInt(lds[2])+1;
-      } else {
-        finishDate = '1/' + (parseInt(lds[1])+ 1) + '/' + lds[2] ;
-      }
+      init = init.toJSON();
+      finish = finish.toJSON();
 
-      $firebaseArray(reservRef.orderByChild('date').startAt(initDate).endAt(finishDate))
-                .$loaded().then(function (data) {
-                  $d.resolve(data.filter(function (reserv) {
-                      console.log(reserv);
-                      return reserv.profesor === id;
-                    }).length
-                  );
-                }).catch(function (err) {
-                  $d.reject(err);
-                });
+      console.log(init);
+      console.log(finish);
+
+      $firebaseArray(reservRef.orderByChild('date').startAt(init).endAt(finish))
+            .$loaded().then(function (data) {
+              $d.resolve(data.filter(function (reserv) {
+                return reserv.profesor === id;
+              }).length);
+            }).catch(function (err) {
+              console.error(err);
+              $d.reject(err);
+            });
 
       return $d.promise;
     }
@@ -140,5 +137,6 @@
 
       return $d.promise;
     }
+
   }
 }());
