@@ -20,11 +20,11 @@
         var $d = $q.defer();
         if(ctrl.$isEmpty(modelValue)) {
           // consider empty models to be valid
-          $d.resolve(true);
+          $d.reject(false);
         }
         var profId = attr.profid;
         if (!profId || !viewValue) {
-          $d.reject(false);
+          $d.resolve(true);
         } else {
           Search.profesor.inMonth(profId, viewValue)
               .then(function (cant) {

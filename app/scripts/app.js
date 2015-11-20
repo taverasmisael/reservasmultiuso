@@ -5,6 +5,7 @@
       'ngAria',
       'ngMaterial',
       'ngMdIcons',
+      'ngMessages',
       'angularMoment',
       'ui.router',
       'firebase',
