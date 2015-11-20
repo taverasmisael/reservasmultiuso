@@ -57,9 +57,9 @@
           var newReservation = angular.copy(reservationData);
           // Changes time values
           console.log(reservationData.date);
-          newReservation.date = Utilities.date.fix(reservationData.date).toJSON();
-          newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.toJSON();
-          newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.toJSON();
+          newReservation.date = Utilities.date.fix(reservationData.date).valueOf();
+          newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.valueOf();
+          newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.valueOf();
           newReservation.materia = _getSelectedSection()[0].materia;
           Reservaciones.create(newReservation, nrdProfesor)
                 .then(function () {

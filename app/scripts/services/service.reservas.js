@@ -24,10 +24,10 @@
 
         function getToday() {
             var $d = $q.defer();
-            console.log(hoy.toJSON());
+            console.log(hoy.valueOf());
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
-                .startAt(hoy.toJSON()).endAt(hoy.toJSON()))
+                .startAt(hoy.valueOf()).endAt(hoy.valueOf()))
                 .$loaded().then(function(reservaciones) {
                     $d.resolve(reservaciones);
                 }).catch(function(err) {
@@ -39,7 +39,7 @@
 
         function getCommingSoon() {
             var $d = $q.defer(),
-                tomorrow = moment(hoy).add(1, 'day')._d.toJSON();
+                tomorrow = moment(hoy).add(1, 'day')._d.valueOf();
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
               .startAt(tomorrow)).$loaded().then(function(reservaciones) {

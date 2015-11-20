@@ -56,7 +56,7 @@
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
               <h3>{{ ::reserv.materia }} - {{ ::reserv.section }}</h3>
-              <h4><span ng-if="!SearchCtrl.query.needsDate">{{ ::reserv.profesorFullName }}</span><time ng-if="SearchCtrl.query.needsDate" datetime="1/10/2015">{{ ::reserv.date | date: 'shorDate' }}</time></h4>
+              <h4><span ng-if="!SearchCtrl.query.needsDate">{{ ::reserv.profesorFullName }}</span><time ng-if="SearchCtrl.query.needsDate" datetime="1/10/2015">{{ ::reserv.date | date: 'shortDate' }}</time></h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
               <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>

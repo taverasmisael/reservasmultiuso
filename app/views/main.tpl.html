@@ -28,7 +28,7 @@
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
               <h3>{{ reserv.profesorFullName }}</h3>
-              <h4><time datetime="{{ reserv.date }}">{{ reserv.date | date: 'shorDate'}}</time></h4>
+              <h4><time datetime="{{ reserv.date }}">{{ reserv.date | date: 'shortDate'}}</time></h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
               <time datetime="{{ reserv.starts}}">{{ reserv.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>

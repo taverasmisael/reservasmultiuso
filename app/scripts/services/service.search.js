@@ -70,8 +70,8 @@
       var init = Utilities.date.fix(moment(date).date(1)._d);
       var finish = Utilities.date.fix(moment(init).month(init.getMonth() + 1)._d);
 
-      init = init.toJSON();
-      finish = finish.toJSON();
+      init = init.valueOf();
+      finish = finish.valueOf();
 
       console.log(init);
       console.log(finish);
@@ -102,7 +102,7 @@
     function rByStartDate (date) {
       var $d = $q.defer();
 
-      $firebaseArray(reservRef.orderByChild('date').equalTo(Utilities.date.fix(date).toJSON()))
+      $firebaseArray(reservRef.orderByChild('date').equalTo(Utilities.date.fix(date).valueOf()))
         .$loaded().then(function (reserva) {
           $d.resolve(reserva);
         }).catch(function (err) {
