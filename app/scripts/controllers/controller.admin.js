@@ -22,7 +22,7 @@
           // Watch Value Changed On StartsTime
           $('#newReservationDataStarts').on('changeTime', function () {
             var timeVal = $(this).val();
-            $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true });
+            $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true, 'showDuration': true });
           });
 
         }
