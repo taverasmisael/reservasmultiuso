@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['$mdToast', '$filter', 'Reservaciones', 'Profesores'];
-    function AdminController ($mdToast, $filter, Reservaciones, Profesores) {
+    AdminController.$inject = ['$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Profesores'];
+    function AdminController ($mdToast, $filter, Utilities, Reservaciones, Profesores) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
@@ -22,7 +22,7 @@
           // Watch Value Changed On StartsTime
           $('#newReservationDataStarts').on('changeTime', function () {
             var timeVal = $(this).val();
-            $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true });
+            $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true, 'showDuration': true });
           });
 
         }
@@ -56,9 +56,10 @@
         function createReservacion (reservationData, nrdProfesor) {
           var newReservation = angular.copy(reservationData);
           // Changes time values
-          newReservation.date = reservationData.date.toLocaleDateString();
-          newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.toJSON();
-          newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.toJSON();
+          console.log(reservationData.date);
+          newReservation.date = Utilities.date.fix(reservationData.date).valueOf();
+          newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.valueOf();
+          newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.valueOf();
           newReservation.materia = _getSelectedSection()[0].materia;
           Reservaciones.create(newReservation, nrdProfesor)
                 .then(function () {

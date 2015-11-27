@@ -5,9 +5,12 @@
       'ngAria',
       'ngMaterial',
       'ngMdIcons',
+      'ngMessages',
       'angularMoment',
       'ui.router',
       'firebase',
-      'mtTimeValidator'
+      'mtUtilities',
+      'mtTimeValidator',
+      'mtExcedReservations'
     ]);
 })();

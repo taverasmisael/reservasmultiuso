@@ -38,18 +38,25 @@
     </md-tabs>
   </section>
   <section id="search-results" class="reservaciones-search" flex-gt-sm="50" flex-offset="10" layout="column">
-    <md-content layout-fill layout="column" layout-align="center center" ng-if="!SearchCtrl.query.results">
-      <h3>Realiza una busqueda para poder ver los resultados</h3>
+    <md-content layout-fill layout="column" layout-align="center center" ng-if="SearchCtrl.query.message">
+      <h3>{{ SearchCtrl.query.message }}</h3>
     </md-content>
-    <md-content layout-fill layout="column" ng-if="SearchCtrl.query.results">
-      <md-subheader><h3>Reservaciones de {{ SearchCtrl.query.heading }}</h3></md-subheader>
+    <md-content layout-fill layout="column" ng-if="!SearchCtrl.query.message">
+      <md-subheader>
+        <div layout="row" layout-align="center center">
+          <h3 flex>Reservaciones de {{ SearchCtrl.query.heading }}</h3>
+          <md-button class="md-icon-button" aria-label="Imprimir">
+            <ng-md-icon icon="print"></ng-md-icon>
+          </md-button>
+        </div>
+      </md-subheader>
       <md-divider></md-divider>
       <md-list>
         <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
               <h3>{{ ::reserv.materia }} - {{ ::reserv.section }}</h3>
-              <h4><span ng-if="!SearchCtrl.query.needsDate">{{ ::reserv.profesorFullName }}</span><time ng-if="SearchCtrl.query.needsDate" datetime="1/10/2015">{{ ::reserv.date }}</time></h4>
+              <h4><span ng-if="!SearchCtrl.query.needsDate">{{ ::reserv.profesorFullName }}</span><time ng-if="SearchCtrl.query.needsDate" datetime="1/10/2015">{{ ::reserv.date | date: 'shortDate' }}</time></h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
               <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>

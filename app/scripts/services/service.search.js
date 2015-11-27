@@ -6,8 +6,8 @@
     .service('Search', Search);
 
 
-  Search.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'FURL'];
-  function Search($q, $firebaseObject, $firebaseArray, FURL) {
+  Search.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
+  function Search($q, $firebaseObject, $firebaseArray, Utilities, FURL) {
 
     var baseRef = new Firebase(FURL),
         reservRef = baseRef.child('reservaciones'),
@@ -17,7 +17,8 @@
       profesor: {
         byId: pById,
         byCedula: pByCedula,
-        sectionsOf: pSections
+        sectionsOf: pSections,
+        inMonth: pInMonth
       },
       reservacion: {
         byId: rById,
@@ -64,6 +65,30 @@
       return $d.promise;
     }
 
+    function pInMonth (id, date) {
+      var $d = $q.defer();
+      var init = Utilities.date.fix(moment(date).date(1)._d);
+      var finish = Utilities.date.fix(moment(init).month(init.getMonth() + 1)._d);
+
+      init = init.valueOf();
+      finish = finish.valueOf();
+
+      console.log(init);
+      console.log(finish);
+
+      $firebaseArray(reservRef.orderByChild('date').startAt(init).endAt(finish))
+            .$loaded().then(function (data) {
+              $d.resolve(data.filter(function (reserv) {
+                return reserv.profesor === id;
+              }).length);
+            }).catch(function (err) {
+              console.error(err);
+              $d.reject(err);
+            });
+
+      return $d.promise;
+    }
+
     /*
       **                              **
       * Querying reservation Functions *
@@ -77,7 +102,7 @@
     function rByStartDate (date) {
       var $d = $q.defer();
 
-      $firebaseArray(reservRef.orderByChild('date').equalTo(date.toLocaleDateString()))
+      $firebaseArray(reservRef.orderByChild('date').equalTo(Utilities.date.fix(date).valueOf()))
         .$loaded().then(function (reserva) {
           $d.resolve(reserva);
         }).catch(function (err) {
@@ -112,5 +137,6 @@
 
       return $d.promise;
     }
+
   }
 }());

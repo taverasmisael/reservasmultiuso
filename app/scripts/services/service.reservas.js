@@ -3,12 +3,13 @@
     angular.module('reservacionesMulti')
         .service('Reservaciones', Reservaciones);
 
-    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'FURL'];
+    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
 
-    function Reservaciones($q, $firebaseObject, $firebaseArray, FURL) {
+    function Reservaciones($q, $firebaseObject, $firebaseArray, Utilities, FURL) {
         var ref = new Firebase(FURL),
-            reservaciones = $firebaseArray(ref.child('reservaciones'));
-        var hoy = new Date();
+            reservaciones = $firebaseArray(ref.child('reservaciones')),
+            _hoy = new Date();
+        var hoy = Utilities.date.fix(_hoy);
 
         var ReservacionesService = {
             all: reservaciones,
@@ -23,9 +24,10 @@
 
         function getToday() {
             var $d = $q.defer();
+            console.log(hoy.valueOf());
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
-                .startAt(hoy.toLocaleDateString()).endAt(hoy.toLocaleDateString()))
+                .startAt(hoy.valueOf()).endAt(hoy.valueOf()))
                 .$loaded().then(function(reservaciones) {
                     $d.resolve(reservaciones);
                 }).catch(function(err) {
@@ -37,7 +39,7 @@
 
         function getCommingSoon() {
             var $d = $q.defer(),
-                tomorrow = moment().add(1, 'day')._d.toLocaleDateString();
+                tomorrow = moment(hoy).add(1, 'day')._d.valueOf();
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
               .startAt(tomorrow)).$loaded().then(function(reservaciones) {
