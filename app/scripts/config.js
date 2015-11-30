@@ -47,7 +47,7 @@
           controller: 'HelpController',
           controllerAs: 'HelpCtrl'
         })
-        .state('config', {
+        .state('profile', {
           url: '/user/',
           templateUrl: TMPDIR + 'userconfig.tpl.html',
           controller: 'AdminController',
