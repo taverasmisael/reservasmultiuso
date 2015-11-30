@@ -1,16 +1,29 @@
 (function(){
     'use strict';
-    angular.module('resrvacionesMulti')
+    angular.module('reservacionesMulti')
             .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['Auth'];
-    function AuthController (Auth) {
+    AuthController.$inject = ['$state', 'Auth'];
+    function AuthController ($state, Auth) {
         var vm = this;
-
+        vm.logginUser = logginUser;
         active();
 
         function active () {
           console.log('Authoring...');
+        }
+
+        function logginUser (username, password) {
+          var user = {
+            username: username,
+            password: password
+          };
+
+          Auth.login(user).then(function () {
+            $state.go('home');
+          }).catch(function (err) {
+            console.log(err);
+          });
         }
     }
 })();

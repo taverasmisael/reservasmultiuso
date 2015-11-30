@@ -1,1 +1,20 @@
-<h1>So you want to login ....</h1>
+<md-content layout="row" layout-align="center center" layout-padding>
+  <div flex="40" layout="column" layout-padding>
+    <h2 class="text-center">Bienvenido al Sistema</h2>
+    <md-divider></md-divider>
+    <form layout="column" layout-align="center center" layout-fill ng-submit="AuthCtrl.logginUser(AuthCtrl.loginData.user, AuthCtrl.loginData.password)">
+      <md-input-container layout-padding layout-fill>
+        <label>Usuario</label>
+        <input type="text" ng-model="AuthCtrl.loginData.user" required>
+      </md-input-container>
+      <md-input-container layout-padding layout-fill>
+        <label>Contraseña</label>
+        <input type="password" ng-model="AuthCtrl.loginData.password" required>
+      </md-input-container>
+      <div layout="row" layout-padding layout-fill>
+        <div flex></div>
+        <md-button class="md-primary">Acceder</md-button>
+      </div>
+    </form>
+  </div>
+</md-content>
