@@ -47,6 +47,12 @@
           controller: 'HelpController',
           controllerAs: 'HelpCtrl'
         })
+        .state('login', {
+          url: '/login/',
+          templateUrl: TMPDIR + 'login.tpl.html',
+          controller: 'AuthController',
+          controllerAs: 'AuthCtrl'
+        })
         .state('profile', {
           url: '/user/',
           templateUrl: TMPDIR + 'userconfig.tpl.html',
