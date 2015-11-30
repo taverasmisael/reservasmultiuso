@@ -23,7 +23,11 @@
           url: '/',
           templateUrl: TMPDIR + 'main.tpl.html',
           controller: 'HomeController',
-          controllerAs: 'HomeCtrl'
+          controllerAs: 'HomeCtrl',
+          resolve: {
+            today: function (Reservaciones){return Reservaciones.today();},
+            upcomming: function (Reservaciones){return Reservaciones.getCommingSoon();}
+          }
         })
         .state('search', {
           url: '/search/',
