@@ -10,7 +10,7 @@
     // Dependency Injection
     configRoutes.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'TMPDIR'];
     configPalette.$inject = ['$mdThemingProvider'];
-    onRun.$inject = ['amMoment', '$state', '$rootScope'];
+    onRun.$inject = ['$rootScope', 'amMoment', '$state', '$mdToast' , 'Auth'];
 
 
     // ui.router configuration for views
@@ -64,8 +64,20 @@
     }
 
     // amMoment Configuration for TimeZone with Momentjs
-    function onRun (amMoment, $state, $rootScope) {
+    function onRun ($rootScope, amMoment, $state, $mdToast, Auth) {
       amMoment.changeLocale('es');
       $rootScope.$state = $state;
+      $rootScope.auth = Auth;
+      $rootScope.$on('$stateChangeStart', function(event, toState) {
+        if ((toState.url === '/create/' || toState.url === '/user/') && !Auth.signedIn()) {
+          event.preventDefault();
+          $mdToast.show(
+            $mdToast.simple()
+            .content('No tiene Permiso para acceder a esta área')
+            .position('right bottom')
+          );
+          $state.go('home');
+        }
+      });
     }
 })();

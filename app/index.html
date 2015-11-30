@@ -60,7 +60,7 @@
                 <a ui-sref="home">Reservaciones Multiuso  </a>
               </h2>
               <span flex></span>
-              <a ui-sref="config" md-ink-ripple class="toolbar-link" ng-if="false">Login</a>
+              <a ui-sref="config" md-ink-ripple class="toolbar-link" ng-if="!Auth.signedIn()">Acceder</a>
           </div>
       </md-toolbar>
       <md-content flex layout="row">
@@ -73,7 +73,7 @@
         </md-content>
       </md-content>
     </main>
-    <a ui-sref="create" ng-if="$state.current.name !== 'create'" class="md-fab md-accent md-hue-3 md-button-fixed md-button" md-ink-ripple aria-label="Crear reservacion">
+    <a ui-sref="create" ng-if="$state.current.name !== 'create' && Auth.signedIn()" class="md-fab md-accent md-hue-3 md-button-fixed md-button" md-ink-ripple aria-label="Crear reservacion">
       <ng-md-icon icon="add"></ng-md-icon>
     </a>
     <!-- build:js js/vendor.js -->
@@ -107,6 +107,7 @@
     <script src="/scripts/controllers/controller.sidebar.js"></script>
     <script src="/scripts/directives/directive.exedeReserv.js"></script>
     <script src="/scripts/directives/directive.timevalidator.js"></script>
+    <script src="/scripts/services/service.auth.js"></script>
     <script src="/scripts/services/service.reservas.js"></script>
     <script src="/scripts/services/service.search.js"></script>
     <script src="/scripts/services/service.utils.js"></script>
