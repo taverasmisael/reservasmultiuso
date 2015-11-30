@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .service('Auth', Auth);
 
-    Auth.$inject = ['$q', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
-    function Auth ($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+    Auth.$inject = ['$q', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'Session', 'FURL'];
+    function Auth ($q, $firebaseAuth, $firebaseObject, $firebaseArray, Session, FURL) {
         var ref = new Firebase(FURL),
             auth = $firebaseAuth(ref);
 
@@ -20,9 +20,10 @@
             changePassword: changePassword,
             logout: function() {
                 auth.$unauth();
+                Session.destroyAuthData();
             },
             signedIn: function() {
-                return !!AuthService.user.provider;
+                return Session.getAuthData !== null;
             }
         };
 
@@ -134,9 +135,11 @@
             if (authData) {
                 angular.copy(authData, AuthService.user);
                 AuthService.user.profile = $firebaseObject(ref.child('profile').child(authData.uid));
+                Session.setAuthData(authData);
             } else {
                 if (AuthService && AuthService.user.profile) {
                     AuthService.user.profile.$destroy();
+                    Session.destroyAuthData();
                     angular.copy({}, AuthService.user);
                 }
             }

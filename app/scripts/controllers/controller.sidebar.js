@@ -3,12 +3,13 @@
     angular.module('reservacionesMulti')
             .controller('SidebarController', SidebarController);
 
-    SidebarController.$inject = [];
+    SidebarController.$inject = ['$state', 'Auth'];
 
-    function SidebarController () {
+    function SidebarController ($state, Auth) {
       var vm = this;
 
       vm.openMenu = openMenu;
+      vm.logOut = logout;
 
       vm.options = [
         {
@@ -30,6 +31,11 @@
 
       function openMenu ($mdOpenMenu, ev) {
         $mdOpenMenu(ev);
+      }
+
+      function logout () {
+        Auth.logout();
+        $state.go('home');
       }
     }
 })();

@@ -10,7 +10,7 @@
     // Dependency Injection
     configRoutes.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'TMPDIR'];
     configPalette.$inject = ['$mdThemingProvider'];
-    onRun.$inject = ['$rootScope', 'amMoment', '$state', '$mdToast' , 'Auth'];
+    onRun.$inject = ['$rootScope', 'amMoment', '$state', '$mdToast' , 'Auth', 'Session'];
 
 
     // ui.router configuration for views
@@ -70,10 +70,11 @@
     }
 
     // amMoment Configuration for TimeZone with Momentjs
-    function onRun ($rootScope, amMoment, $state, $mdToast, Auth) {
+    function onRun ($rootScope, amMoment, $state, $mdToast, Auth, Session) {
       amMoment.changeLocale('es');
       $rootScope.$state = $state;
-      $rootScope.auth = Auth;
+      $rootScope.Auth = Auth;
+      $rootScope.Session = Session;
       $rootScope.$on('$stateChangeStart', function(event, toState) {
         if ((toState.url === '/create/' || toState.url === '/user/') && !Auth.signedIn()) {
           event.preventDefault();
