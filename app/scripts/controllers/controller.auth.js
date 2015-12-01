@@ -3,14 +3,15 @@
     angular.module('reservacionesMulti')
             .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['$scope', '$state', 'Auth'];
-    function AuthController ($scope, $state, Auth) {
+    AuthController.$inject = ['$scope', '$state', 'Auth', 'profiles'];
+    function AuthController ($scope, $state, Auth, profiles) {
         var vm = this;
         vm.logginUser = logginUser;
         active();
 
         function active () {
           console.log('Authoring...');
+          vm.profiles = profiles;
         }
 
         function logginUser (username, password) {

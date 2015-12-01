@@ -3,17 +3,25 @@
     <h2 class="md-title">Lista de Usuarios</h2>
   </md-data-table-toolbar>
   <md-data-table-container>
-    <table md-data-table md-row-select="selected" md-progress="deferred">
-      <thead md-order="query.order" md-trigger="onOrderChange">
+    <table md-data-table md-row-select="selected">
+      <thead md-order="AuthCtrl.query.order" md-trigger="AuthCtrl.onOrderChange">
         <tr>
           <th name="Nombre" order-by="name"></th>
           <th name="Apellido" order-by="lastname"></th>
-          <th name="Apellido" order-by="lastname"></th>
+          <th name="Usuario" order-by="useraname"></th>
+          <th name="Admin" order-by="isAdmin"></th>
+          <th name="UID" order-by="$id"></th>
         </tr>
       </thead>
       <tbody>
+        <tr md-auto-select ng-repeat="profile in AuthCtrl.profiles">
+          <td>{{profile.name}}</td>
+          <td>{{profile.lastname}}</td>
+          <td>{{profile.username}}</td>
+          <td>{{profile.isAdmin ? 'Si' : 'No'}}</td>
+          <td>{{profile.$id}}</td>
+        </tr>
       </tbody>
     </table>
   </md-data-table-container>
-  <md-data-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{desserts.total}}" md-trigger="onPaginationChange"></md-data-table-pagination>
 </md-content>

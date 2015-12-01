@@ -19,6 +19,8 @@
             usernameExist: usernameExist,
             register: register,
             login: login,
+            loadProfiles: getAllProfiles,
+            getProfile: getProfileById,
             changePassword: changePassword,
             logout: function() {
                 auth.$unauth();
@@ -127,6 +129,14 @@
                 oldPassword: user.oldpass,
                 newPassword: user.newpass
             });
+        }
+
+        function getAllProfiles () {
+          return $firebaseArray(ref.child('profile')).$loaded();
+        }
+
+        function getProfileById (uid) {
+          return $firebaseObject(ref.child('profile').child(uid));
         }
 
         /**

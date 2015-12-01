@@ -25,8 +25,8 @@
           controller: 'HomeController',
           controllerAs: 'HomeCtrl',
           resolve: {
-            today: function (Reservaciones){return Reservaciones.today();},
-            upcomming: function (Reservaciones){return Reservaciones.getCommingSoon();}
+            today: ['Reservaciones', function (Reservaciones){return Reservaciones.today();}],
+            upcomming: ['Reservaciones', function (Reservaciones){return Reservaciones.getCommingSoon();}]
           }
         })
         .state('search', {
@@ -63,7 +63,10 @@
           url: '/manage-users/',
           templateUrl: TMPDIR + 'manageusers.tpl.html',
           controller: 'AuthController',
-          controllerAs: 'AuthCtrl'
+          controllerAs: 'AuthCtrl',
+          resolve: {
+            profiles: function (Auth) {return Auth.loadProfiles();}
+          }
         });
     }
 
