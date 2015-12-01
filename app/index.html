@@ -54,7 +54,7 @@
     <main layout="column" ng-cloak>
       <md-toolbar ng-controller="NavbarController as NavbarCtrl">
           <div class="md-toolbar-tools">
-              <md-button class="md-icon-button" aria-label="Menu" ng-click="NavbarCtrl.showSidebar()" hide-gt-sm>
+              <md-button class="md-icon-button" ng-if="NavbarCtrl.signedIn()" aria-label="Menu" ng-click="NavbarCtrl.toggleSideBar()" hide-gt-sm>
                   <ng-md-icon icon="menu"></ng-md-icon>
               </md-button>
               <h2>

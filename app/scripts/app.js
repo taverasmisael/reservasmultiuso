@@ -4,6 +4,7 @@
       'ngAnimate',
       'ngAria',
       'ngMaterial',
+      'md.data.table',
       'ngMdIcons',
       'ngMessages',
       'angularMoment',
