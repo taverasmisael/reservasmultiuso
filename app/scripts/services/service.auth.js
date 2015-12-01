@@ -1,16 +1,18 @@
-(function(){
+(function() {
     'use strict';
     angular.module('reservacionesMulti')
-            .service('Auth', Auth);
+        .service('Auth', Auth);
 
     Auth.$inject = ['$q', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
-    function Auth ($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+
+    function Auth($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+
         var ref = new Firebase(FURL),
             auth = $firebaseAuth(ref);
 
         var AuthService = {
             user: {
-                profile: undefined
+                profile: {}
             },
             createProfile: createProfile,
             updateProfile: updateProfile,
@@ -50,6 +52,7 @@
         function updateProfile (uid, user) {
           var prof = ref.child('profile').child(uid);
           prof.update({
+            cellphone: user.cellphone,
             username: user.username,
             name: user.name,
             lastname: user.lastname
@@ -133,7 +136,8 @@
         function setUserData(authData) {
             if (authData) {
                 angular.copy(authData, AuthService.user);
-                AuthService.user.profile = $firebaseObject(ref.child('profile').child(authData.uid));
+                var profile = $firebaseObject(ref.child('profile').child(authData.uid));
+                AuthService.user.profile = profile;
             } else {
                 if (AuthService && AuthService.user.profile) {
                     AuthService.user.profile.$destroy();
