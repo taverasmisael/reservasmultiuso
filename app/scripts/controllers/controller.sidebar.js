@@ -8,7 +8,7 @@
     function SidebarController ($state, $mdToast, Auth) {
       var vm = this;
       vm.signedIn = Auth.signedIn;
-    vm.user = Auth.user.profile;
+      vm.user = Auth.user.profile;
 
       vm.openMenu = openMenu;
       vm.logOut = logout;

@@ -58,6 +58,12 @@
           templateUrl: TMPDIR + 'userconfig.tpl.html',
           controller: 'AdminController',
           controllerAs: 'AdminCtrl'
+        })
+        .state('manage', {
+          url: '/manage-users/',
+          templateUrl: TMPDIR + 'manageusers.tpl.html',
+          controller: 'AuthController',
+          controllerAs: 'AuthCtrl'
         });
     }
 
@@ -74,7 +80,7 @@
       amMoment.changeLocale('es');
       $rootScope.$state = $state;
       $rootScope.$on('$stateChangeStart', function(event, toState) {
-        if ((toState.url === '/create/' || toState.url === '/user/') && !Auth.signedIn()) {
+        if (_getForbidenStates(toState.url) && !Auth.signedIn()) {
           event.preventDefault();
           $mdToast.show(
             $mdToast.simple()
@@ -84,5 +90,9 @@
           $state.go('home');
         }
       });
+    }
+
+    function _getForbidenStates (url) {
+      return (url === '/create/' || url === '/user/' || url === '/manage-users/') ? true : false;
     }
 })();
