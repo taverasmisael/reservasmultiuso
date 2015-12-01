@@ -3,10 +3,12 @@
     angular.module('reservacionesMulti')
             .controller('SidebarController', SidebarController);
 
-    SidebarController.$inject = ['$state', 'Auth'];
+    SidebarController.$inject = ['$state', '$mdToast', 'Auth'];
 
-    function SidebarController ($state, Auth) {
+    function SidebarController ($state, $mdToast, Auth) {
       var vm = this;
+      vm.signedIn = Auth.signedIn;
+    vm.user = Auth.user.profile;
 
       vm.openMenu = openMenu;
       vm.logOut = logout;
@@ -35,6 +37,11 @@
 
       function logout () {
         Auth.logout();
+        $mdToast.show(
+          $mdToast.simple()
+          .content('Has salido del Sistema')
+          .position('right bottom')
+        );
         $state.go('home');
       }
     }

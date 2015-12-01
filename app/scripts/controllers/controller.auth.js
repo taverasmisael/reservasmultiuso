@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('AuthController', AuthController);
 
-    AuthController.$inject = ['$state', 'Auth'];
-    function AuthController ($state, Auth) {
+    AuthController.$inject = ['$scope', '$state', 'Auth'];
+    function AuthController ($scope, $state, Auth) {
         var vm = this;
         vm.logginUser = logginUser;
         active();

@@ -3,10 +3,11 @@
     angular.module('reservacionesMulti')
                 .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = [ '$mdSidenav' ];
+    NavbarController.$inject = ['$mdSidenav', 'Auth'];
 
-    function NavbarController ($mdSidenav) {
+    function NavbarController ($mdSidenav, Auth) {
       var vm = this;
+      vm.signedIn = Auth.signedIn;
 
       vm.showSidebar = showSidebar;
 
