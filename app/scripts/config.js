@@ -56,16 +56,19 @@
         .state('profile', {
           url: '/user/',
           templateUrl: TMPDIR + 'userconfig.tpl.html',
-          controller: 'AdminController',
-          controllerAs: 'AdminCtrl'
+          controller: 'UsersController',
+          controllerAs: 'UsersCtrl',
+          resolve: {
+            profiles: ['Auth', function (Auth) {return Auth.loadProfiles();}]
+          }
         })
         .state('manage', {
           url: '/manage-users/',
           templateUrl: TMPDIR + 'manageusers.tpl.html',
-          controller: 'AuthController',
-          controllerAs: 'AuthCtrl',
+          controller: 'UsersController',
+          controllerAs: 'UsersCtrl',
           resolve: {
-            profiles: function (Auth) {return Auth.loadProfiles();}
+            profiles: ['Auth', function (Auth) {return Auth.loadProfiles();}]
           }
         });
     }
