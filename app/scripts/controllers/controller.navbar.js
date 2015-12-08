@@ -17,9 +17,7 @@
         console.log('Navbaring...');
         $(document).on('click', function(event) {
           if (!$(event.target).closest('.md-toolbar-tools .md-icon-button').length) {
-            console.log('Almost Close');
             if(!$mdSidenav('left').isLockedOpen()){
-              console.log('Close');
               $mdSidenav('left').close();
             }
           }
