@@ -1,10 +1,11 @@
 <md-content layout="column" layout-fill layout-padding>
   <md-data-table-toolbar>
-    <h2 class="md-title">Lista de Usuarios</h2>
+    <h2 class="md-title">Lista de Usuarios {{UsersCtrl.selectedProfiles}}</h2>
+    <div><p ng-repeat="s in UsersCtrl.selectedProfiles">{{s}}</p></div>
   </md-data-table-toolbar>
   <md-data-table-container>
-    <table md-data-table md-row-select="selected">
-      <thead md-order="AuthCtrl.query.order" md-trigger="AuthCtrl.onOrderChange">
+    <table md-data-table>
+      <thead md-order="UsersCtrl.query.order" md-trigger="UsersCtrl.onOrderChange">
         <tr>
           <th name="Nombre" order-by="name"></th>
           <th name="Apellido" order-by="lastname"></th>
@@ -14,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-auto-select ng-repeat="profile in AuthCtrl.profiles">
+        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles">
           <td>{{profile.name}}</td>
           <td>{{profile.lastname}}</td>
           <td>{{profile.username}}</td>
