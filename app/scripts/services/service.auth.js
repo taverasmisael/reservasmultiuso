@@ -149,9 +149,9 @@
                 var profile = $firebaseObject(ref.child('profile').child(authData.uid));
                 AuthService.user.profile = profile;
             } else {
+                angular.copy({}, AuthService.user);
                 if (AuthService && AuthService.user.profile) {
                     AuthService.user.profile.$destroy();
-                    angular.copy({}, AuthService.user);
                 }
             }
         }

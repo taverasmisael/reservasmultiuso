@@ -24,7 +24,6 @@
 
         function getToday() {
             var $d = $q.defer();
-            console.log(hoy.valueOf());
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
                 .startAt(hoy.valueOf()).endAt(hoy.valueOf()))
