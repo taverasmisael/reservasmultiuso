@@ -1,7 +1,15 @@
 <md-content layout="column" layout-fill layout-padding>
   <md-data-table-toolbar>
     <h2 class="md-title">Lista de Usuarios {{UsersCtrl.selectedProfiles}}</h2>
-    <div><p ng-repeat="s in UsersCtrl.selectedProfiles">{{s}}</p></div>
+    <span flex></span>
+    <md-button ui-sref="profile" class="md-icon-button" aria-label="Mi perfil">
+      <md-tooltip md-direction="top">Mi Perfil</md-tooltip>
+      <ng-md-icon icon="person"></ng-md-icon>
+    </md-button>
+    <md-button class="md-icon-button" aria-label="Agregar Usuario">
+      <md-tooltip md-direction="top">Agregar Usuario</md-tooltip>
+      <ng-md-icon icon="add"></ng-md-icon>
+    </md-button>
   </md-data-table-toolbar>
   <md-data-table-container>
     <table md-data-table>
@@ -15,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles">
+        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles" ng-click="UsersCtrl.editProfile(profile.$id)">
           <td>{{profile.name}}</td>
           <td>{{profile.lastname}}</td>
           <td>{{profile.username}}</td>
