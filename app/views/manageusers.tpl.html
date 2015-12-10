@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles" ng-click="UsersCtrl.editProfile(profile.$id)">
+        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles" ng-click="UsersCtrl.editProfile($event, profile.$id)">
           <td>{{profile.name}}</td>
           <td>{{profile.lastname}}</td>
           <td>{{profile.username}}</td>

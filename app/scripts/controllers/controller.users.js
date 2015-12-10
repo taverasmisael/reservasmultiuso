@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('UsersController', UsersController);
 
-    UsersController.$inject = ['$mdToast', 'profiles'];
-    function UsersController ($mdToast, profiles) {
+    UsersController.$inject = ['$mdMedia', '$mdToast', '$mdDialog', 'Auth', 'profiles'];
+    function UsersController ($mdMedia, $mdToast, $mdDialog, Auth, profiles) {
         var vm = this;
         vm.editProfile = editProfile;
 
@@ -14,12 +14,36 @@
           vm.profiles = profiles;
         }
 
-        function editProfile (id) {
-          $mdToast.show(
-            $mdToast.simple()
-            .content(id)
-            .position('right bottom')
-          );
+        function editProfile (event, id) {
+          Auth.getProfile(id).$loaded().then(function (response) {
+            $mdDialog.show({
+                controller: 'DialogController',
+                controllerAs: 'DialogCtrl',
+                templateUrl: 'views/dialogs/users.dlg.html',
+                targetEvent: event,
+                clickOutsideToClose: false,
+                locals: {
+                    currentUser: response,
+                    state: 'editando'
+                },
+                parent: angular.element(document.body)
+            }).then(function(respuesta) {
+                $mdToast.show(
+                  $mdToast.simple()
+                  .content(respuesta)
+                  .position('right bottom')
+                );
+            }).catch(function(err) {
+              $mdToast.show(
+                $mdToast.simple()
+                .content(err)
+                .position('right bottom')
+              );
+                console.log(err);
+            });
+          }).catch(function (err) {
+            console.log(err);
+          });
         }
     }
 })();
