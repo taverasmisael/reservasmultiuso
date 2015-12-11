@@ -51,16 +51,8 @@
             return ref.child('profile').child(uid).set(profile);
         }
 
-        function updateProfile (uid, user) {
-          var prof = ref.child('profile').child(uid);
-          prof.update({
-            cellphone: user.cellphone,
-            username: user.username,
-            name: user.name,
-            lastname: user.lastname
-          });
-
-          return $firebaseObject(prof).$loaded();
+        function updateProfile (newinfo) {
+          return newinfo.$save();
         }
 
         /**
