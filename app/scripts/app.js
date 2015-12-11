@@ -11,7 +11,8 @@
       'ui.router',
       'firebase',
       'mtUtilities',
+      'mtExcedReservations',
       'mtTimeValidator',
-      'mtExcedReservations'
+      'mtPasswordMatching'
     ]);
 })();
