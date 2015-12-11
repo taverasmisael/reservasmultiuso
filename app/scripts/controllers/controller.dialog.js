@@ -11,7 +11,7 @@
         vm.headding = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase() + ' usuario';
         vm.editing = state.toLowerCase() === 'editando' || false;
         vm.cancelar = cancelDialog;
-        vm.saveUser =saveUser;
+        vm.saveUser = saveUser;
 
 
         active();
@@ -23,9 +23,19 @@
 
         function saveUser (user2save) {
           console.log(user2save);
-          Auth.updateProfile(user2save).then(function () {
-            guardarDialog(user2save.username + ' salvado');
-          });
+          if (vm.editing) {
+            Auth.updateProfile(user2save).then(function () {
+              guardarDialog(user2save.username + ' salvado');
+            }).catch(function (err) {
+              console.log(err);
+            });
+          } else {
+            Auth.register(user2save).then(function () {
+              guardarDialog(user2save.username + ' creado con exito');
+            }).catch(function (err) {
+              console.log(err);
+            });
+          }
         }
 
         function cancelDialog(respuesta) {
