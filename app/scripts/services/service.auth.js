@@ -45,8 +45,9 @@
                 username: user.username,
                 email: user.email,
                 picture: '',
-                name: '',
-                lastname: ''
+                name: user.name,
+                lastname: user.lastname,
+                isAdmin: user.isAdmin
             };
             return ref.child('profile').child(uid).set(profile);
         }
