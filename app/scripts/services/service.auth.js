@@ -16,7 +16,7 @@
             },
             createProfile: createProfile,
             updateProfile: updateProfile,
-            usernameExist: usernameExist,
+            usernameAvailable: usernameAvailable,
             register: register,
             login: login,
             loadProfiles: getAllProfiles,
@@ -61,15 +61,24 @@
          * @param  {string} username El nombre de usuario a buscar
          * @return {promise}          promesa con el resultado TRUE or FALSE
          */
-        function usernameExist(username) {
-            var d = $q.defer();
-            $firebaseArray(ref.child('profile').orderByChild('username').equalTo(username)).$loaded().then(function(data) {
-                d.resolve(data.length > 0);
-            }, function() {
-                d.reject(false);
-            });
+        function usernameAvailable(username) {
+            var $d = $q.defer();
+            var userExistsError = {
+              name: 'USERNAME_EXISTS',
+              message: 'The User: "'+ username +'" already exist'
+            };
+            $firebaseArray(ref.child('profile').orderByChild('username').equalTo(username))
+              .$loaded().then(function(data) {
+                  if (data.length) {
+                   $d.reject(userExistsError);
+                 } else {
+                  $d.resolve('Usuario Disponible');
+                }
+              }).catch(function(err) {
+                  $d.reject(err);
+              });
 
-            return d.promise;
+            return $d.promise;
         }
 
         /**

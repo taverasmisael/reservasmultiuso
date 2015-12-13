@@ -11,6 +11,7 @@
       'ui.router',
       'firebase',
       'mtUtilities',
+      'mtCheckUserName',
       'mtExcedReservations',
       'mtTimeValidator',
       'mtPasswordMatching'

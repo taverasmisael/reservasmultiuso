@@ -35,7 +35,7 @@
           <div layout="row" layout-fill layout-align="space-between center">
             <md-input-container>
               <label>Usuario</label>
-              <input type="text" name="currentProfileUsername" required ng-model="DialogCtrl.selectedUser.username">
+              <input type="text" name="currentProfileUsername" required mt-check-username="{{ DialogCtrl.editing  ? 0 : 1}}" ng-model="DialogCtrl.selectedUser.username">
             </md-input-container>
             <md-input-container>
               <label>Es Admin</label>
