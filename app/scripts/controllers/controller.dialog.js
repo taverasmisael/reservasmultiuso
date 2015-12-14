@@ -12,6 +12,7 @@
         vm.editing = state.toLowerCase() === 'editando' || false;
         vm.cancelar = cancelDialog;
         vm.saveUser = saveUser;
+        vm.processStatus = '';
 
 
         active();
@@ -35,6 +36,9 @@
               guardarDialog(user2save.username + ' creado con exito');
             }).catch(function (err) {
               console.log(err);
+              if (err.code === 'EMAIL_TAKEN') {
+                vm.processStatus = 'El correo electronico está en uso';
+              }
             });
           }
         }

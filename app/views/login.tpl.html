@@ -3,6 +3,7 @@
     <h2 class="text-center">Bienvenido al Sistema</h2>
     <md-divider></md-divider>
     <form layout="column" layout-align="center center" layout-fill ng-submit="AuthCtrl.logginUser(AuthCtrl.loginData.user, AuthCtrl.loginData.password)">
+      <p class="md-warn">{{AuthCtrl.processStatus}}</p>
       <md-input-container layout-padding layout-fill>
         <label>Usuario</label>
         <input type="text" ng-model="AuthCtrl.loginData.user" required>

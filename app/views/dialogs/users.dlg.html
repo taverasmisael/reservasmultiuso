@@ -11,6 +11,7 @@
     </md-toolbar>
     <md-dialog-content layout="row" layout-align="center center">
       <div flex="80" layout-padding layout="column">
+        <p class="md-warn">{{DialogCtrl.processStatus}}</p>
         <div layout-fill layout="column">
           <h5 class="md-header">Informacion Básica</h5>
           <md-divider></md-divider>
@@ -25,7 +26,7 @@
             </md-input-container>
             <md-input-container>
               <label>Correo Electronico</label>
-              <input type="email" name="currentProfileUsername" required ng-model="DialogCtrl.selectedUser.email">
+              <input type="email" name="currentProfileEmail" required ng-model="DialogCtrl.selectedUser.email">
             </md-input-container>
           </div>
         </div>
