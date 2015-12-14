@@ -23,6 +23,9 @@
             loadProfiles: getAllProfiles,
             getProfile: getProfileById,
             changePassword: changePassword,
+            isAdmin: function () {
+              return AuthService.user.profile.isAdmin;
+            },
             logout: function() {
                 auth.$unauth();
             },

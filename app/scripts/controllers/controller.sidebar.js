@@ -9,6 +9,8 @@
       var vm = this;
       vm.openMenu = openMenu;
       vm.logOut = logout;
+      vm.isAdmin = Auth.isAdmin;
+      vm.user = Auth.user;
 
       active();
 
@@ -32,10 +34,6 @@
           }
         ];
         vm.signedIn = Auth.signedIn;
-        var cu = setInterval(function () {
-          vm.user = Auth.user.profile;
-          if (vm.user) {clearInterval(cu);}
-        }, 100);
       }
 
       function openMenu ($mdOpenMenu, ev) {
