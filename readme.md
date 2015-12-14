@@ -13,8 +13,16 @@ Contara con soporte local y optimizacion en las tareas.
 
 
 ## Aun en face BETA :disappointed:
-Si, es solo un proyecto que a penas inicia, pero será grande. Por ahora el proyecto está en este
-commit en blanco practicamente.
+Muy apesar de que llevamos el proyecto avanzando tan rapido como podemos, hay varios aspectos a considerar aun.
+Como por ejemplo:
+
+* No hay una manera de verificar si el Salon Principal, multiuso, están en uso cuando se va a hacer una reservacion nueva
+
+* Existen conflictos para cambiar el nombre de usuario, aunque no los permisos.
+
+* El usuario admin, solamente puede cambiar su propia contraseña, aunque puede agregar otros usuarios y cambiar su informacion
+
+Entre otras, si encuentras algun otro fallo o alguna nueva implementación que crees que pueda tener este sistema, [siente libre de contarnos](https://github.com/taverasmisael/reservasmultiuso/issues) o dejame un mensaje en [Twitter](https://twitter.com/taverasmisael).
 
 #¿Qué puedo esperar?
 * Una aplicacion en tiempo real es lo que se está construyendo aquí. Con herramientas como [firebase](http://firebase.com)
