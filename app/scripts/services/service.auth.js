@@ -1,22 +1,27 @@
-(function(){
+(function() {
     'use strict';
     angular.module('reservacionesMulti')
-            .service('Auth', Auth);
+        .service('Auth', Auth);
 
     Auth.$inject = ['$q', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
-    function Auth ($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+
+    function Auth($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+
         var ref = new Firebase(FURL),
             auth = $firebaseAuth(ref);
 
         var AuthService = {
             user: {
-                profile: undefined
+                profile: {}
             },
             createProfile: createProfile,
             updateProfile: updateProfile,
-            usernameExist: usernameExist,
+            usernameAvailable: usernameAvailable,
             register: register,
             login: login,
+            removeUser: removeUser,
+            loadProfiles: getAllProfiles,
+            getProfile: getProfileById,
             changePassword: changePassword,
             logout: function() {
                 auth.$unauth();
@@ -41,21 +46,15 @@
                 username: user.username,
                 email: user.email,
                 picture: '',
-                name: '',
-                lastname: ''
+                name: user.name,
+                lastname: user.lastname,
+                isAdmin: user.isAdmin
             };
             return ref.child('profile').child(uid).set(profile);
         }
 
-        function updateProfile (uid, user) {
-          var prof = ref.child('profile').child(uid);
-          prof.update({
-            username: user.username,
-            name: user.name,
-            lastname: user.lastname
-          });
-
-          return $firebaseObject(prof).$loaded();
+        function updateProfile (newinfo) {
+          return newinfo.$save();
         }
 
         /**
@@ -63,15 +62,24 @@
          * @param  {string} username El nombre de usuario a buscar
          * @return {promise}          promesa con el resultado TRUE or FALSE
          */
-        function usernameExist(username) {
-            var d = $q.defer();
-            $firebaseArray(ref.child('profile').orderByChild('username').equalTo(username)).$loaded().then(function(data) {
-                d.resolve(data.length > 0);
-            }, function() {
-                d.reject(false);
-            });
+        function usernameAvailable(username) {
+            var $d = $q.defer();
+            var userExistsError = {
+              name: 'USERNAME_EXISTS',
+              message: 'The User: "'+ username +'" already exist'
+            };
+            $firebaseArray(ref.child('profile').orderByChild('username').equalTo(username))
+              .$loaded().then(function(data) {
+                  if (data.length) {
+                   $d.reject(userExistsError);
+                 } else {
+                  $d.resolve('Usuario Disponible');
+                }
+              }).catch(function(err) {
+                  $d.reject(err);
+              });
 
-            return d.promise;
+            return $d.promise;
         }
 
         /**
@@ -113,6 +121,11 @@
         }
 
 
+        function removeUser (uid) {
+          return $firebaseObject(ref.child('profile').child(uid)).$remove();
+        }
+
+
         /**
          * Funcion para cambiar el password del Usuario
          * @param  {Object} user oldpass, newpass REQUIRED
@@ -126,6 +139,14 @@
             });
         }
 
+        function getAllProfiles () {
+          return $firebaseArray(ref.child('profile')).$loaded();
+        }
+
+        function getProfileById (uid) {
+          return $firebaseObject(ref.child('profile').child(uid));
+        }
+
         /**
          * Funcion encargada de Guardar los Datos del Usuario en el servicio
          * @param {Object} authData Todos los datos para autenticar el usuario
@@ -133,11 +154,12 @@
         function setUserData(authData) {
             if (authData) {
                 angular.copy(authData, AuthService.user);
-                AuthService.user.profile = $firebaseObject(ref.child('profile').child(authData.uid));
+                var profile = $firebaseObject(ref.child('profile').child(authData.uid));
+                AuthService.user.profile = profile;
             } else {
+                angular.copy({}, AuthService.user);
                 if (AuthService && AuthService.user.profile) {
                     AuthService.user.profile.$destroy();
-                    angular.copy({}, AuthService.user);
                 }
             }
         }

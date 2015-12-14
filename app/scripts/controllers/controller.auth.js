@@ -7,6 +7,7 @@
     function AuthController ($scope, $state, Auth) {
         var vm = this;
         vm.logginUser = logginUser;
+        vm.processStatus = '';
         active();
 
         function active () {
@@ -23,6 +24,7 @@
             $state.go('home');
           }).catch(function (err) {
             console.log(err);
+            vm.processStatus = err.message;
           });
         }
     }

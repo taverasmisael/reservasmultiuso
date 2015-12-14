@@ -25,8 +25,8 @@
           controller: 'HomeController',
           controllerAs: 'HomeCtrl',
           resolve: {
-            today: function (Reservaciones){return Reservaciones.today();},
-            upcomming: function (Reservaciones){return Reservaciones.getCommingSoon();}
+            today: ['Reservaciones', function (Reservaciones){return Reservaciones.today();}],
+            upcomming: ['Reservaciones', function (Reservaciones){return Reservaciones.getCommingSoon();}]
           }
         })
         .state('search', {
@@ -56,8 +56,20 @@
         .state('profile', {
           url: '/user/',
           templateUrl: TMPDIR + 'userconfig.tpl.html',
-          controller: 'AdminController',
-          controllerAs: 'AdminCtrl'
+          controller: 'UsersController',
+          controllerAs: 'UsersCtrl',
+          resolve: {
+            profiles: ['Auth', function (Auth) {return Auth.loadProfiles();}]
+          }
+        })
+        .state('manage', {
+          url: '/manage-users/',
+          templateUrl: TMPDIR + 'manageusers.tpl.html',
+          controller: 'UsersController',
+          controllerAs: 'UsersCtrl',
+          resolve: {
+            profiles: ['Auth', function (Auth) {return Auth.loadProfiles();}]
+          }
         });
     }
 
@@ -74,7 +86,7 @@
       amMoment.changeLocale('es');
       $rootScope.$state = $state;
       $rootScope.$on('$stateChangeStart', function(event, toState) {
-        if ((toState.url === '/create/' || toState.url === '/user/') && !Auth.signedIn()) {
+        if (_getForbidenStates(toState.url) && !Auth.signedIn()) {
           event.preventDefault();
           $mdToast.show(
             $mdToast.simple()
@@ -84,5 +96,9 @@
           $state.go('home');
         }
       });
+    }
+
+    function _getForbidenStates (url) {
+      return (url === '/create/' || url === '/user/' || url === '/manage-users/') ? true : false;
     }
 })();

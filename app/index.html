@@ -34,6 +34,7 @@
     <!-- build:css css/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="vendor/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="vendor/angular-material-data-table/dist/md-data-table.min.css" />
     <link rel="stylesheet" href="vendor/animate.css/animate.css" />
     <link rel="stylesheet" href="vendor/angular-material-icons/angular-material-icons.css" />
     <link rel="stylesheet" href="vendor/jt.timepicker/jquery.timepicker.css" />
@@ -53,7 +54,7 @@
     <main layout="column" ng-cloak>
       <md-toolbar ng-controller="NavbarController as NavbarCtrl">
           <div class="md-toolbar-tools">
-              <md-button class="md-icon-button" aria-label="Menu" ng-click="NavbarCtrl.showSidebar()" hide-gt-sm>
+              <md-button class="md-icon-button" ng-if="NavbarCtrl.signedIn()" aria-label="Menu" ng-click="NavbarCtrl.toggleSideBar()" hide-gt-sm>
                   <ng-md-icon icon="menu"></ng-md-icon>
               </md-button>
               <h2>
@@ -88,6 +89,7 @@
     <script src="vendor/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="vendor/angular-aria/angular-aria.js"></script>
     <script src="vendor/angular-material/angular-material.js"></script>
+    <script src="vendor/angular-material-data-table/dist/md-data-table.min.js"></script>
     <script src="vendor/firebase/firebase.js"></script>
     <script src="vendor/angularfire/dist/angularfire.js"></script>
     <script src="vendor/angular-material-icons/angular-material-icons.min.js"></script>
@@ -105,13 +107,17 @@
     <script src="/scripts/functions.js"></script>
     <script src="/scripts/controllers/controller.admin.js"></script>
     <script src="/scripts/controllers/controller.auth.js"></script>
+    <script src="/scripts/controllers/controller.dialog.js"></script>
     <script src="/scripts/controllers/controller.help.js"></script>
     <script src="/scripts/controllers/controller.home.js"></script>
     <script src="/scripts/controllers/controller.navbar.js"></script>
     <script src="/scripts/controllers/controller.search.js"></script>
     <script src="/scripts/controllers/controller.sidebar.js"></script>
+    <script src="/scripts/controllers/controller.users.js"></script>
     <script src="/scripts/directives/directive.exedeReserv.js"></script>
+    <script src="/scripts/directives/directive.passmatching.js"></script>
     <script src="/scripts/directives/directive.timevalidator.js"></script>
+    <script src="/scripts/directives/directive.usernameexist.js"></script>
     <script src="/scripts/services/service.auth.js"></script>
     <script src="/scripts/services/service.reservas.js"></script>
     <script src="/scripts/services/service.search.js"></script>
