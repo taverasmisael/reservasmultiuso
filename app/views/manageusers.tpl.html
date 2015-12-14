@@ -23,12 +23,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles" ng-click="UsersCtrl.editProfile($event, profile.$id)">
-          <td>{{profile.name}}</td>
-          <td>{{profile.lastname}}</td>
-          <td>{{profile.username}}</td>
-          <td>{{profile.isAdmin ? 'Si' : 'No'}}</td>
-          <td>{{profile.$id}}</td>
+        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles">
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.name}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.lastname}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.username}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.isAdmin ? 'Si' : 'No'}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.$id}}</td>
+          <td>
+            <md-button class="md-icon-button md-warn" ng-click="UsersCtrl.deleteUser($event, profile.$id)" aria-label="Eliminar Usuario">
+              <md-tooltip md-direction="top">Eliminar a {{profile.username}}</md-tooltip>
+              <ng-md-icon icon="delete" class="md-warn"></ng-md-icon>
+            </md-button>
+          </td>
         </tr>
       </tbody>
     </table>

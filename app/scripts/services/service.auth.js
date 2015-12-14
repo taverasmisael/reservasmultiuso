@@ -19,6 +19,7 @@
             usernameAvailable: usernameAvailable,
             register: register,
             login: login,
+            removeUser: removeUser,
             loadProfiles: getAllProfiles,
             getProfile: getProfileById,
             changePassword: changePassword,
@@ -117,6 +118,11 @@
                     };
                   }
                 });
+        }
+
+
+        function removeUser (uid) {
+          return $firebaseObject(ref.child('profile').child(uid)).$remove();
         }
 
 

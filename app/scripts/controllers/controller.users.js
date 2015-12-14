@@ -16,6 +16,7 @@
         };
         vm.editProfile = editProfile;
         vm.createUser = createUser;
+        vm.deleteUser = deleteUser;
 
         active();
 
@@ -45,6 +46,20 @@
               state: 'creando'
           };
           $mdDialog.show(createDialog).then(_dialogComplete).catch(_dialogAbort);
+        }
+
+        function deleteUser (event, uid) {
+          var confirm = $mdDialog.confirm({
+                              title: '¡Atención!',
+                              content: '¿Está seguro que desea elminar este usuario?',
+                              ariaLabel:'Confirmar: Eliminar Usuario',
+                              targetEvent: event,
+                              ok: 'Estoy Seguro',
+                              cancel: 'No deseo eliminarlo'
+                              });
+          $mdDialog.show(confirm).then(function () {
+            Auth.removeUser(uid).then(_dialogComplete('Usuario Eliminado')).catch(_dialogAbort);
+          });
         }
 
         function _dialogComplete(respuesta) {
