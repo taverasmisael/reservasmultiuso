@@ -17,6 +17,8 @@
         vm.editProfile = editProfile;
         vm.createUser = createUser;
         vm.deleteUser = deleteUser;
+        vm.arrangeTable = arrangeTable;
+        vm.tableOrder = 'name';
 
         active();
 
@@ -60,6 +62,11 @@
           $mdDialog.show(confirm).then(function () {
             Auth.removeUser(uid).then(_dialogComplete('Usuario Eliminado')).catch(_dialogAbort);
           });
+        }
+
+        function arrangeTable (order) {
+          console.log(order);
+          vm.tableOrder = order;
         }
 
         function _dialogComplete(respuesta) {

@@ -13,7 +13,7 @@
   </md-data-table-toolbar>
   <md-data-table-container>
     <table md-data-table>
-      <thead md-order="UsersCtrl.query.order" md-trigger="UsersCtrl.onOrderChange">
+      <thead md-order="UsersCtrl.tableOrder" md-trigger="UsersCtrl.arrangeTable">
         <tr>
           <th name="Nombre" order-by="name"></th>
           <th name="Apellido" order-by="lastname"></th>
@@ -23,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles">
+        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles | orderBy: 'UsersCtrl.tableOrder'">
           <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.name}}</td>
           <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.lastname}}</td>
           <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.username}}</td>
