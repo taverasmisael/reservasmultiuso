@@ -1,0 +1,42 @@
+<md-content layout="column" layout-fill layout-padding>
+  <md-data-table-toolbar>
+    <h2 class="md-title">Lista de Usuarios {{UsersCtrl.selectedProfiles}}</h2>
+    <span flex></span>
+    <md-button ui-sref="profile" class="md-icon-button" aria-label="Mi perfil">
+      <md-tooltip md-direction="top">Mi Perfil</md-tooltip>
+      <ng-md-icon icon="person"></ng-md-icon>
+    </md-button>
+    <md-button class="md-icon-button" ng-click="UsersCtrl.createUser($event)" aria-label="Agregar Usuario">
+      <md-tooltip md-direction="top">Agregar Usuario</md-tooltip>
+      <ng-md-icon icon="add"></ng-md-icon>
+    </md-button>
+  </md-data-table-toolbar>
+  <md-data-table-container>
+    <table md-data-table>
+      <thead md-order="UsersCtrl.tableOrder" md-trigger="UsersCtrl.arrangeTable">
+        <tr>
+          <th name="Nombre" order-by="name"></th>
+          <th name="Apellido" order-by="lastname"></th>
+          <th name="Usuario" order-by="useraname"></th>
+          <th name="Admin" order-by="isAdmin"></th>
+          <th name="UID" order-by="$id"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles | orderBy: 'UsersCtrl.tableOrder'">
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.name}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.lastname}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.username}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.isAdmin ? 'Si' : 'No'}}</td>
+          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.$id}}</td>
+          <td>
+            <md-button class="md-icon-button md-warn" ng-click="UsersCtrl.deleteUser($event, profile.$id)" aria-label="Eliminar Usuario">
+              <md-tooltip md-direction="top">Eliminar a {{profile.username}}</md-tooltip>
+              <ng-md-icon icon="delete" class="md-warn"></ng-md-icon>
+            </md-button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </md-data-table-container>
+</md-content>

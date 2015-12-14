@@ -1,11 +1,11 @@
-<md-sidenav flex md-component-id="left" class="md-sidenav-left" md-is-locked-open="$mdMedia('gt-sm')">
+<md-sidenav flex md-component-id="left" class="md-sidenav-left" md-is-locked-open="$mdMedia('gt-sm') && SidebarCtrl.signedIn()">
     <!-- Inicio del toolbar con la informacion del usuario -->
     <md-toolbar layout="row" layout-align="start end" class="md-tall">
         <div class="md-toolbar-tools-bottom inset user" flex layout="row" layout-align="start center">
             <ng-md-icon icon="account_circle" size="48" class="user-icon"></ng-md-icon>
             <div layout="column">
-                <span class="user-name">Misael Taveras</span>
-                <small class="user-mail">misael@taveras.com</small>
+                <span class="user-name">{{ SidebarCtrl.user.name + ' ' + SidebarCtrl.user.lastname }}</span>
+                <small class="user-mail">{{ SidebarCtrl.user.email }}</small>
             </div>
             <md-menu md-position-mode="target-right target">
                 <md-button aria-label="Abrir menu de Opciones de Usuario" class="md-icon-button" ng-click="SidebarCtrl.openMenu($mdOpenMenu, $event)">
@@ -13,13 +13,19 @@
                 </md-button>
                 <md-menu-content width="4">
                     <md-menu-item>
-                        <a ui-sref="config" md-ink-ripple md-ripple-size="full" class="md-button">
-                            <ng-md-icon icon="settings"></ng-md-icon>
-                            <span class="flex">Configuracion</span>
+                        <a ui-sref="profile" md-ink-ripple md-ripple-size="full" class="md-button">
+                            <ng-md-icon icon="person"></ng-md-icon>
+                            <span class="flex">Perfil</span>
                         </a>
                     </md-menu-item>
                     <md-menu-item>
-                        <a ui-sref="home" aria-label="Cerrar Sesion" md-ink-ripple md-ripple-size="full" class="md-button">
+                        <a ui-sref="manage" md-ink-ripple md-ripple-size="full" class="md-button">
+                            <ng-md-icon icon="group_add"></ng-md-icon>
+                            <span class="flex">Administrar Cuentas</span>
+                        </a>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <a ng-click="SidebarCtrl.logOut()" aria-label="Cerrar Sesion" md-ink-ripple md-ripple-size="full" class="md-button">
                             <ng-md-icon icon="logout"></ng-md-icon>
                             <span class="flex">Salir</span>
                         </a>

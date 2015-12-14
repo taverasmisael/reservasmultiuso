@@ -10,7 +10,7 @@
     // Dependency Injection
     configRoutes.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', 'TMPDIR'];
     configPalette.$inject = ['$mdThemingProvider'];
-    onRun.$inject = ['amMoment', '$state', '$rootScope'];
+    onRun.$inject = ['$rootScope', 'amMoment', '$state', '$mdToast' , 'Auth'];
 
 
     // ui.router configuration for views
@@ -25,8 +25,8 @@
           controller: 'HomeController',
           controllerAs: 'HomeCtrl',
           resolve: {
-            today: function (Reservaciones){return Reservaciones.today();},
-            upcomming: function (Reservaciones){return Reservaciones.getCommingSoon();}
+            today: ['Reservaciones', function (Reservaciones){return Reservaciones.today();}],
+            upcomming: ['Reservaciones', function (Reservaciones){return Reservaciones.getCommingSoon();}]
           }
         })
         .state('search', {
@@ -47,11 +47,29 @@
           controller: 'HelpController',
           controllerAs: 'HelpCtrl'
         })
-        .state('config', {
+        .state('login', {
+          url: '/login/',
+          templateUrl: TMPDIR + 'login.tpl.html',
+          controller: 'AuthController',
+          controllerAs: 'AuthCtrl'
+        })
+        .state('profile', {
           url: '/user/',
           templateUrl: TMPDIR + 'userconfig.tpl.html',
-          controller: 'AdminController',
-          controllerAs: 'AdminCtrl'
+          controller: 'UsersController',
+          controllerAs: 'UsersCtrl',
+          resolve: {
+            profiles: ['Auth', function (Auth) {return Auth.loadProfiles();}]
+          }
+        })
+        .state('manage', {
+          url: '/manage-users/',
+          templateUrl: TMPDIR + 'manageusers.tpl.html',
+          controller: 'UsersController',
+          controllerAs: 'UsersCtrl',
+          resolve: {
+            profiles: ['Auth', function (Auth) {return Auth.loadProfiles();}]
+          }
         });
     }
 
@@ -64,8 +82,23 @@
     }
 
     // amMoment Configuration for TimeZone with Momentjs
-    function onRun (amMoment, $state, $rootScope) {
+    function onRun ($rootScope, amMoment, $state, $mdToast, Auth) {
       amMoment.changeLocale('es');
       $rootScope.$state = $state;
+      $rootScope.$on('$stateChangeStart', function(event, toState) {
+        if (_getForbidenStates(toState.url) && !Auth.signedIn()) {
+          event.preventDefault();
+          $mdToast.show(
+            $mdToast.simple()
+            .content('No tiene Permiso para acceder a esta área')
+            .position('right bottom')
+          );
+          $state.go('home');
+        }
+      });
+    }
+
+    function _getForbidenStates (url) {
+      return (url === '/create/' || url === '/user/' || url === '/manage-users/') ? true : false;
     }
 })();

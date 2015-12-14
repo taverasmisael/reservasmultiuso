@@ -1,9 +1,16 @@
 a
   text-decoration: none
 
+.md-warn
+  color: color($warnColor, 'darken-2')
+  font-weight: 700
 // Class For ngMdIcons with custom size
 ng-md-icon
   color: rgba(0,0,0,0.54)
+  &.md-warn
+    color: rgba(color($warnColor, 'lighten-1'), 0.54)
+    &:hover
+      color: rgba(color($warnColor, 'lighten-1'), 1)
 .ng-md-icon-special
   margin: 0
   width: auto
@@ -17,6 +24,9 @@ ng-md-icon
   @include media('>=600px')
     top: 4.2%
 
+
+md-sidenav, .md-sidenav
+  overflow: hidden
 
 // DatePicker
 .md-datepicker-calendar-pane.md-pane-open
