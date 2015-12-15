@@ -57,11 +57,14 @@
         function checkAvailability (date, start, end) {
           var _s =  $filter('amParse')(start, 'HH:mmA'),
               _e = $filter('amParse')(end, 'HH:mmA');
-          Search.isAvailable(date, _s, _e).then(function (msg) {
-            $mdToast.show($mdToast.simple().content(msg).position('right bottom'));
-          }).catch(function (err) {
-            vm.creationForm.$setValidity('onUse', false);
-            $mdToast.show($mdToast.simple().content(err).position('right bottom'));
+          Search.isAvailable(date, _s, _e).catch(function (err) {
+            if (err.name === 'ENDS_TOO_LATE') {
+              vm.creationForm.$setValidity('endTime', false);
+            } else if (err.name === 'START_AT_SAME_TIME') {
+              vm.creationForm.$setValidity('startTime', false);
+            } else {
+              vm.creationForm.$setValidity('confirmTime', false);
+            }
           });
         }
 

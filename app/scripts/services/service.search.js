@@ -140,32 +140,26 @@
     }
 
     function rAvailable (date, start, end) {
-      var $d = $q.defer(),
-          _s = new Date(start),
-          _e = new Date(end);
-
-      console.log('SendedStart: ', start);
-      console.log('SendedEnd: ', end);
-
-      var notAvailableError = {
-        name: 'NOT_AVAILABLE',
-        message: 'The Hours between'+ _s.toLocaleTimeString() + ' and ' + _e.toLocaleTimeString() + ' are already taken'
-      };
-
+      var $d = $q.defer();
+      var errMessage = {name: '', message: ''};
 
       rByStartDate(date).then(function (reservas) {
         var filteredReservations = reservas.filter(function (res) {
-          console.log(start, res.starts, res.ends);
           if (start >= res.starts && start <= res.ends) {
-            $d.reject(notAvailableError);
-          }
+            errMessage.name = 'START_AT_SAME_TIME';
+            errMessage.message = 'Both Reservations has same or closser StartTime';
+            $d.reject(errMessage);
+            return true;
+          } else if (end >= res.starts) {
+            errMessage.name = 'ENDS_TOO_LATE';
+            errMessage.message = 'The reservation you\'re trying to make colides with other';
+            $d.reject(errMessage);
+            return true;
+          } else {return false;}
         });
 
-        console.log(filteredReservations);
         if (!filteredReservations.length) {
           $d.resolve('Todo Bajo Control');
-        } else {
-          $d.reject(notAvailableError);
         }
       }).catch(function (err) {
         console.error(err);

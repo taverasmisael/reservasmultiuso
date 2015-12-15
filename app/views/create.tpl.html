@@ -48,7 +48,9 @@
         <div flex ng-messages="AdminCtrl.creationForm.$error" role="alert">
           <div ng-message="mtExcedReservations">Este profesor <strong>tiene 2 reservaciones</strong> en este mes</div>
           <div ng-message="pattern">El formato de <strong>la hora</strong> es incorrecto</div>
-          <div ng-message="onUse">A esas horas ya existe una reservacion</div>
+          <div ng-message="endTime">Intenta cambiar la hora de finalizacion a una más temprano</div>
+          <div ng-message="startTime">A esta hora ya existe una reservación.</div>
+          <div ng-message="confirmTime">Debes confirmar si está disponible a esa hora</div>
         </div>
         <md-button ng-disabled="AdminCtrl.creationForm.$invalid" type="submit" class="md-raised md-primary">Crear</md-button>
       </div>
