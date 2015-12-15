@@ -13,7 +13,6 @@
       'mtUtilities',
       'mtCheckUserName',
       'mtExcedReservations',
-      'mtTimeValidator',
       'mtPasswordMatching'
     ]);
 })();
