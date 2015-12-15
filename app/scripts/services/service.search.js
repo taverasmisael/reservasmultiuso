@@ -25,7 +25,8 @@
         byDate: rByStartDate,
         byPeriod: rByPeriod,
         ofProfesor: rByProfesor
-      }
+      },
+      isAvailable: rAvailable
     };
 
     return SearchService;
@@ -134,6 +135,36 @@
         }).catch(function (err) {
           $d.reject(err);
         });
+
+      return $d.promise;
+    }
+
+    function rAvailable (date, start, end) {
+      var $d = $q.defer();
+      var errMessage = {name: '', message: ''};
+
+      rByStartDate(date).then(function (reservas) {
+        var filteredReservations = reservas.filter(function (res) {
+          if (start >= res.starts && start <= res.ends) {
+            errMessage.name = 'START_AT_SAME_TIME';
+            errMessage.message = 'Both Reservations has same or closser StartTime';
+            $d.reject(errMessage);
+            return true;
+          } else if (end >= res.starts) {
+            errMessage.name = 'ENDS_TOO_LATE';
+            errMessage.message = 'The reservation you\'re trying to make colides with other';
+            $d.reject(errMessage);
+            return true;
+          } else {return false;}
+        });
+
+        if (!filteredReservations.length) {
+          $d.resolve('Todo Bajo Control');
+        }
+      }).catch(function (err) {
+        console.error(err);
+        $d.reject(err);
+      });
 
       return $d.promise;
     }

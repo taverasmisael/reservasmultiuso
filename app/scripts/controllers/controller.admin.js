@@ -3,13 +3,14 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Profesores'];
-    function AdminController ($mdToast, $filter, Utilities, Reservaciones, Profesores) {
+    AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Search', 'Profesores'];
+    function AdminController ($scope, $mdToast, $filter, Utilities, Reservaciones, Search, Profesores) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
         vm.queryProfesors = queryProfesors;
         vm.fillSections = fillSections;
+        vm.checkAvailability = checkAvailability;
         active();
 
         function active () {
@@ -24,7 +25,6 @@
             var timeVal = $(this).val();
             $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true, 'showDuration': true });
           });
-
         }
 
         function queryProfesors (profesorName) {
@@ -51,6 +51,22 @@
             vm.newReservationData.section = '';
             vm.availableSections = vm.nrd.profesor.secciones;
           }
+        }
+
+        function checkAvailability (date, start, end) {
+          var _s =  $filter('amParse')(start, 'HH:mmA'),
+              _e = $filter('amParse')(end, 'HH:mmA');
+          Search.isAvailable(date, _s, _e).then(function() {
+            vm.creationForm.$setValidity('confirmTime', true);
+          }).catch(function (err) {
+            if (err.name === 'ENDS_TOO_LATE') {
+              vm.creationForm.$setValidity('endTime', false);
+            } else if (err.name === 'START_AT_SAME_TIME') {
+              vm.creationForm.$setValidity('startTime', false);
+            } else {
+              vm.creationForm.$setValidity('confirmTime', false);
+            }
+          });
         }
 
         function createReservacion (reservationData, nrdProfesor) {
@@ -88,5 +104,15 @@
         function _errHdlr (err) {
           console.error(err);
         }
+
+
+        /**
+         * Watchers From Hell
+         * But helpfulls :3
+         */
+
+        $scope.$watch(function () {return vm.newReservationData.ends;}, function (ov, nv) {
+          if (ov || nv) {vm.creationForm.$setValidity('confirmTime', false);}
+        });
     }
 })();

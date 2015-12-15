@@ -24,7 +24,7 @@
             getProfile: getProfileById,
             changePassword: changePassword,
             isAdmin: function () {
-              return AuthService.user.profile.isAdmin;
+              return AuthService.user.profile ? AuthService.user.profile.isAdmin : false;
             },
             logout: function() {
                 auth.$unauth();
