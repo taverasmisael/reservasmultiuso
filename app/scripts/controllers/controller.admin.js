@@ -3,8 +3,8 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Search', 'Profesores'];
-    function AdminController ($mdToast, $filter, Utilities, Reservaciones, Search, Profesores) {
+    AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Search', 'Profesores'];
+    function AdminController ($scope, $mdToast, $filter, Utilities, Reservaciones, Search, Profesores) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
@@ -25,7 +25,6 @@
             var timeVal = $(this).val();
             $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true, 'showDuration': true });
           });
-
         }
 
         function queryProfesors (profesorName) {
@@ -57,7 +56,9 @@
         function checkAvailability (date, start, end) {
           var _s =  $filter('amParse')(start, 'HH:mmA'),
               _e = $filter('amParse')(end, 'HH:mmA');
-          Search.isAvailable(date, _s, _e).catch(function (err) {
+          Search.isAvailable(date, _s, _e).then(function() {
+            vm.creationForm.$setValidity('confirmTime', true);
+          }).catch(function (err) {
             if (err.name === 'ENDS_TOO_LATE') {
               vm.creationForm.$setValidity('endTime', false);
             } else if (err.name === 'START_AT_SAME_TIME') {
@@ -103,5 +104,15 @@
         function _errHdlr (err) {
           console.error(err);
         }
+
+
+        /**
+         * Watchers From Hell
+         * But helpfulls :3
+         */
+
+        $scope.$watch(function () {return vm.newReservationData.ends;}, function (ov, nv) {
+          if (ov || nv) {vm.creationForm.$setValidity('confirmTime', false);}
+        });
     }
 })();
