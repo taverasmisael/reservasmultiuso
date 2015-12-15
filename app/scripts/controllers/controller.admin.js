@@ -3,13 +3,14 @@
     angular.module('reservacionesMulti')
             .controller('AdminController', AdminController);
 
-    AdminController.$inject = ['$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Profesores'];
-    function AdminController ($mdToast, $filter, Utilities, Reservaciones, Profesores) {
+    AdminController.$inject = ['$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Search', 'Profesores'];
+    function AdminController ($mdToast, $filter, Utilities, Reservaciones, Search, Profesores) {
         var vm = this;
         vm.createReservacion = createReservacion;
         vm.profesorsList = Profesores.all;
         vm.queryProfesors = queryProfesors;
         vm.fillSections = fillSections;
+        vm.checkAvailability = checkAvailability;
         active();
 
         function active () {
@@ -51,6 +52,16 @@
             vm.newReservationData.section = '';
             vm.availableSections = vm.nrd.profesor.secciones;
           }
+        }
+
+        function checkAvailability (date, start, end) {
+          var _s =  $filter('amParse')(start, 'HH:mmA'),
+              _e = $filter('amParse')(end, 'HH:mmA');
+          Search.isAvailable(date, _s, _e).then(function (msg) {
+            $mdToast.show($mdToast.simple().content(msg).position('right bottom'));
+          }).catch(function (err) {
+            $mdToast.show($mdToast.simple().content(err).position('right bottom'));
+          });
         }
 
         function createReservacion (reservationData, nrdProfesor) {

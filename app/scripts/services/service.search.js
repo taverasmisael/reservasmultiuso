@@ -25,7 +25,8 @@
         byDate: rByStartDate,
         byPeriod: rByPeriod,
         ofProfesor: rByProfesor
-      }
+      },
+      isAvailable: rAvailable
     };
 
     return SearchService;
@@ -134,6 +135,42 @@
         }).catch(function (err) {
           $d.reject(err);
         });
+
+      return $d.promise;
+    }
+
+    function rAvailable (date, start, end) {
+      var $d = $q.defer(),
+          _s = new Date(start),
+          _e = new Date(end);
+
+      console.log('SendedStart: ', start);
+      console.log('SendedEnd: ', end);
+
+      var notAvailableError = {
+        name: 'NOT_AVAILABLE',
+        message: 'The Hours between'+ _s.toLocaleTimeString() + ' and ' + _e.toLocaleTimeString() + ' are already taken'
+      };
+
+
+      rByStartDate(date).then(function (reservas) {
+        var filteredReservations = reservas.filter(function (res) {
+          console.log(start, res.starts, res.ends);
+          if (start >= res.starts && start <= res.ends) {
+            $d.reject(notAvailableError);
+          }
+        });
+
+        console.log(filteredReservations);
+        if (!filteredReservations.length) {
+          $d.resolve('Todo Bajo Control');
+        } else {
+          $d.reject(notAvailableError);
+        }
+      }).catch(function (err) {
+        console.error(err);
+        $d.reject(err);
+      });
 
       return $d.promise;
     }
