@@ -99,6 +99,6 @@
     }
 
     function _getForbidenStates (url) {
-      return (url === '/create/' || url === '/user/' || url === '/manage-users/') ? true : false;
+      return (url === '/user/' || url === '/manage-users/') ? true : false;
     }
 })();

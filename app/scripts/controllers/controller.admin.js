@@ -60,6 +60,7 @@
           Search.isAvailable(date, _s, _e).then(function (msg) {
             $mdToast.show($mdToast.simple().content(msg).position('right bottom'));
           }).catch(function (err) {
+            vm.creationForm.$setValidity('onUse', false);
             $mdToast.show($mdToast.simple().content(err).position('right bottom'));
           });
         }
