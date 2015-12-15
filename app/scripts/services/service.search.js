@@ -150,7 +150,7 @@
             errMessage.message = 'Both Reservations has same or closser StartTime';
             $d.reject(errMessage);
             return true;
-          } else if (end >= res.starts) {
+          } else if (start<= res.starts && end >= res.starts) {
             errMessage.name = 'ENDS_TOO_LATE';
             errMessage.message = 'The reservation you\'re trying to make colides with other';
             $d.reject(errMessage);
