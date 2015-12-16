@@ -26,6 +26,7 @@
 
 
 
+// Everytime a search is done, it changes the vm.heading to display to the user a right header for his Search
         function searchByProfesor (profesor) {
           Search.reservacion.ofProfesor(profesor.$id).then(function (data) {
             vm.query.heading = profesor.name + ' ' + profesor.lastname;
@@ -69,6 +70,7 @@
           }).catch(_errHndl);
         }
 
+// Function to query profesors list
         function queryProfesors (profesorName) {
           var response = profesorName ? vm.profesorsList.filter(createFilterFor(profesorName)) : vm.profesorsList;
           return response;
@@ -82,8 +84,11 @@
          };
        }
 
-       // Private Functions
+/**
+  * Private Functions *
+*/
 
+       // This function is used to prevent the user for introduce an invalid date
        function _mdDatePickerFix () {
          setTimeout(function () {
            var datePicker = $('.md-datepicker-input-container'),

@@ -99,6 +99,7 @@
     }
 
     function _getForbidenStates (url) {
-      return (url === '/user/' || url === '/manage-users/') ? true : false;
+      // Here you can add as many as you routes you need with permisions or loggedIn users
+      return (url === '/create/' || url === '/user/' || url === '/manage-users/') ? true : false;
     }
 })();
