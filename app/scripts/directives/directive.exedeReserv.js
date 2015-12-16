@@ -20,7 +20,7 @@
         var $d = $q.defer();
         if(ctrl.$isEmpty(modelValue)) {
           // consider empty models to be valid
-          $d.reject(false);
+          $d.resolve(false);
         }
         var profId = attr.profid;
         if (!profId || !viewValue) {

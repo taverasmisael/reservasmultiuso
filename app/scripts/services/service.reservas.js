@@ -54,29 +54,33 @@
             return $firebaseObject(ref.child('reservaciones').child(reservacionID));
         }
 
-        function create(nuevaReservacion, nrProfesor) {
+        function create(nuevaReservacion, nrProfesor, exception) {
             var $d = $q.defer();
-
-            nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
-            nuevaReservacion.status = 'active';
-            console.log(nuevaReservacion);
-            //reservacion.creator = Auth.user.profile.username;
-
-            reservaciones.$add(nuevaReservacion).then(function (ref) {
-              var key = ref.key();
-              var reservacion = new Firebase(FURL + 'reservaciones/' + key);
-              var newUpdate = {
-                profesor: nrProfesor.$id,
-                profesorFullName: nrProfesor.name + ' ' + nrProfesor.lastname
-              };
-
-              console.log(reservacion);
-              reservacion.update(newUpdate);
+            console.log(exception);
+            if (exception) {
               $d.resolve(true);
-            }).catch(function (err) {
-              console.log(err);
-              $d.reject(false);
-            });
+            } else {
+              nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
+              nuevaReservacion.status = 'active';
+              console.log(nuevaReservacion);
+              //reservacion.creator = Auth.user.profile.username;
+
+              reservaciones.$add(nuevaReservacion).then(function (ref) {
+                var key = ref.key();
+                var reservacion = new Firebase(FURL + 'reservaciones/' + key);
+                var newUpdate = {
+                  profesor: nrProfesor.$id,
+                  profesorFullName: nrProfesor.name + ' ' + nrProfesor.lastname
+                };
+
+                console.log(reservacion);
+                reservacion.update(newUpdate);
+                $d.resolve(true);
+              }).catch(function (err) {
+                console.log(err);
+                $d.reject(false);
+              });
+            }
 
             return $d.promise;
         }
