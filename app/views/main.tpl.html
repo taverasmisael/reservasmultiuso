@@ -3,7 +3,7 @@
     <section flex>
       <md-subheader><h5>Hoy <small><time datetime="{{ HomeCtrl.todayDate.toJSON() }}">{{HomeCtrl.todayDate | date: 'shortDate'}}</time></small></h5></md-subheader>
       <md-list id="list-today">
-        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in HomeCtrl.reservaciones.today">
+        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in HomeCtrl.reservaciones.today |filter: {status: 'active'}">
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
@@ -21,9 +21,9 @@
   </md-content>
   <md-content id="section-comming-soon" class="reservaciones" flex layout-fill layout-padding layout="row" layout-align="center start">
     <section flex>
-      <md-subheader><h5>Próximos {{ HomeCtrl.reservaciones.commingSoon.length }} eventos</h5></md-subheader>
+      <md-subheader><h5>Próximos eventos</h5></md-subheader>
       <md-list id="list-comming-soon">
-        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in HomeCtrl.reservaciones.commingSoon">
+        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in HomeCtrl.reservaciones.commingSoon | filter: {status: 'active'}">
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
