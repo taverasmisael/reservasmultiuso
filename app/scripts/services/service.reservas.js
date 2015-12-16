@@ -3,9 +3,9 @@
     angular.module('reservacionesMulti')
         .service('Reservaciones', Reservaciones);
 
-    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
+    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'Search', 'FURL'];
 
-    function Reservaciones($q, $firebaseObject, $firebaseArray, Utilities, FURL) {
+    function Reservaciones($q, $firebaseObject, $firebaseArray, Utilities, Search, FURL) {
         var ref = new Firebase(FURL),
             reservaciones = $firebaseArray(ref.child('reservaciones')),
             _hoy = new Date();
@@ -26,14 +26,14 @@
             var $d = $q.defer();
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
-                .startAt(hoy.valueOf()).endAt(hoy.valueOf()))
+                    .startAt(hoy.valueOf()).endAt(hoy.valueOf()))
                 .$loaded().then(function(reservaciones) {
                     $d.resolve(reservaciones);
                 }).catch(function(err) {
                     $d.reject(err);
                 });
 
-                return $d.promise;
+            return $d.promise;
         }
 
         function getCommingSoon() {
@@ -41,11 +41,11 @@
                 tomorrow = moment(hoy).add(1, 'day')._d.valueOf();
 
             $firebaseArray(ref.child('reservaciones').orderByChild('date')
-              .startAt(tomorrow)).$loaded().then(function(reservaciones) {
+                .startAt(tomorrow)).$loaded().then(function(reservaciones) {
                 $d.resolve(reservaciones);
-              }).catch(function(err) {
-                  $d.reject(err);
-              });
+            }).catch(function(err) {
+                $d.reject(err);
+            });
 
             return $d.promise;
         }
@@ -56,41 +56,81 @@
 
         function create(nuevaReservacion, nrProfesor, exception) {
             var $d = $q.defer();
-            console.log(exception);
+            nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
+            nuevaReservacion.status = 'active';
+            //reservacion.creator = Auth.user.profile.username;
             if (exception) {
-              $d.resolve(true);
+                _disableReservations(nuevaReservacion.date, nuevaReservacion.starts, nuevaReservacion.ends)
+                    .then(function() {
+                        _makeReservation(nuevaReservacion, nrProfesor).then(function() {
+                            $d.resolve(true);
+                        }).catch(function(err) {
+                            $d.reject(err);
+                        });
+                    }).catch(function(err) {
+                        $d.reject(err);
+                    });
             } else {
-              nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
-              nuevaReservacion.status = 'active';
-              console.log(nuevaReservacion);
-              //reservacion.creator = Auth.user.profile.username;
-
-              reservaciones.$add(nuevaReservacion).then(function (ref) {
-                var key = ref.key();
-                var reservacion = new Firebase(FURL + 'reservaciones/' + key);
-                var newUpdate = {
-                  profesor: nrProfesor.$id,
-                  profesorFullName: nrProfesor.name + ' ' + nrProfesor.lastname
-                };
-
-                console.log(reservacion);
-                reservacion.update(newUpdate);
-                $d.resolve(true);
-              }).catch(function (err) {
-                console.log(err);
-                $d.reject(false);
-              });
+                _makeReservation(nuevaReservacion, nrProfesor).then(function() {
+                    $d.resolve(true);
+                }).catch(function(err) {
+                    $d.reject(err);
+                });
             }
-
             return $d.promise;
         }
 
-        function remove() {
-            // Function for removing an especific REservation
+        function remove(id) {
+            console.log('Removing: ', id);
+            findById(id).$loaded().then(function (reserv) {
+              reserv.status = 'disabled';
+              return reserv.$save();
+            });
         }
 
         function isActive(reservacion) {
             return reservacion.status === 'active';
+        }
+
+
+        // Really Private Functions
+        function _makeReservation(data, profesor) {
+            var $d = $q.defer();
+
+            reservaciones.$add(data)
+                .then(function(ref) {
+                    var key = ref.key();
+                    var reservacion = new Firebase(FURL + 'reservaciones/' + key);
+                    var newUpdate = {
+                        profesor: profesor.$id,
+                        profesorFullName: profesor.name + ' ' + profesor.lastname
+                    };
+                    reservacion.update(newUpdate);
+                    $d.resolve(true);
+                }).catch(function(err) {
+                    console.log(err);
+                    $d.reject(false);
+                });
+
+            return $d.promise;
+        }
+
+        function _disableReservations(date, start, end) {
+            var $d = $q.defer();
+            Search.reservacion.byDate(date).then(function(reservas) {
+                var filteredReservations = reservas.filter(function(res) {
+                    return (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts);
+                });
+                console.log(filteredReservations);
+                for (var i = 0; i < filteredReservations.length; i += 1) {
+                  remove(filteredReservations[i].$id);
+                }
+
+                $d.resolve(true);
+            });
+
+            return $d.promise;
+
         }
 
     }
