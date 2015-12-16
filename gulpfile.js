@@ -109,7 +109,7 @@ gulp.task('inject', 'Injects your files into your "index.html"', function (){
 gulp.task('watch', 'Watch your files and do his tasks with livereload', function() {
     gulp.watch(['./app/styles/**/*.sass', './app/styles/**/*.scss'], ['styles']);
     gulp.watch(['./app/scripts/**/*.js'], ['jshint']);
-    gulp.watch(['./app/index.html', './app/templates/**/*.html'], ['views']);
+    gulp.watch(['./app/index.html', './app/views/**/*.html'], ['views']);
     gulp.watch(['./bower.json', './.bowerrc'], ['wiredep']);
 });
 

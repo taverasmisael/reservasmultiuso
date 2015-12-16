@@ -1,38 +1,38 @@
 <div layout="column" layout-align="center center">
-  <md-content id="section-today" class="reservaciones" flex layout-padding layout="row" layout-align="center start">
+  <md-content id="section-today" class="reservaciones" flex layout-padding layout-fill layout="row" layout-align="center start">
     <section flex>
       <md-subheader><h5>Hoy <small><time datetime="{{ HomeCtrl.todayDate.toJSON() }}">{{HomeCtrl.todayDate | date: 'shortDate'}}</time></small></h5></md-subheader>
       <md-list id="list-today">
-        <md-list-item class="md-2-line flex" ng-repeat="item in HomeCtrl.reservaciones.today">
+        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in HomeCtrl.reservaciones.today |filter: {status: 'active'}">
           <ng-md-icon icon="school"></ng-md-icon>
-          <div class="md-list-item-text" layout="row">
-            <div class="profesor" layout="column" flex>
-              <h3>{{ item.who }}</h3>
-              <h4>{{ item.what }}</h4>
+          <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
+            <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
+              <h3>{{ reserv.profesorFullName }}</h3>
+              <h4>{{ reserv.materia + ' - ' +reserv.section }}</h4>
             </div>
-            <div class="fecha" layout="column">
-              <time>{{ item.date.starts | date:'shortTime'}}</time>
-              <time>{{ item.date.ends | date:'shortTime'}}</time>
+            <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+              <time datetime="{{ reserv.starts}}">{{ reserv.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
+              <time datetime="{{ reserv.time.ends}}">{{ reserv.ends | date:'shortTime'}}</time>
             </div>
           </div>
         </md-list-item>
       </md-list>
     </section>
   </md-content>
-  <md-content id="section-tomorrow" class="reservaciones" flex layout-padding layout="row" layout-align="center start">
+  <md-content id="section-comming-soon" class="reservaciones" flex layout-fill layout-padding layout="row" layout-align="center start">
     <section flex>
-      <md-subheader><h5>Mañana</h5></md-subheader>
-      <md-list id="list-tomorrow">
-        <md-list-item class="md-2-line flex" ng-repeat="item in HomeCtrl.reservaciones.tomorrow">
+      <md-subheader><h5>Próximos eventos</h5></md-subheader>
+      <md-list id="list-comming-soon">
+        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in HomeCtrl.reservaciones.commingSoon | filter: {status: 'active'}">
           <ng-md-icon icon="school"></ng-md-icon>
-          <div class="md-list-item-text" layout="row">
-            <div class="profesor" layout="column" flex>
-              <h3>{{ item.who }}</h3>
-              <h4>{{ item.what }}</h4>
+          <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
+            <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
+              <h3>{{ reserv.profesorFullName }}</h3>
+              <h4><time datetime="{{ reserv.date }}">{{ reserv.date | date: 'shortDate'}}</time></h4>
             </div>
-            <div class="fecha" layout="column">
-              <time>{{ item.date.starts | date:'shortTime'}}</time>
-              <time>{{ item.date.ends | date:'shortTime'}}</time>
+            <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+              <time datetime="{{ reserv.starts}}">{{ reserv.starts | date:'shortTime'}}<span hide-gt-sm> -&nbsp;</span></time>
+              <time datetime="{{ reserv.ends}}">{{ reserv.ends | date:'shortTime'}}</time>
             </div>
           </div>
         </md-list-item>

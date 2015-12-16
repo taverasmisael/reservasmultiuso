@@ -1,0 +1,72 @@
+<md-dialog layout="column" aria-label="Creacion/Edicion de Usuarios" ng-cloak flex="90" flex-gt-sm="55">
+  <form name="userdialog" ng-submit="DialogCtrl.saveUser(DialogCtrl.selectedUser)">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2 ng-bind="::DialogCtrl.headding"></h2>
+        <span flex></span>
+        <md-button href="#" class="md-icon-button" ng-click="DialogCtrl.cancelar('Accion Abortada')">
+          <ng-md-icon icon="close" aria-label="Cerrar Dialogo"></ng-md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content layout="row" layout-align="center center">
+      <div flex="80" layout-padding layout="column">
+        <p class="md-warn">{{DialogCtrl.processStatus}}</p>
+        <div layout-fill layout="column">
+          <h5 class="md-header">Informacion Básica</h5>
+          <md-divider></md-divider>
+          <div layout="row" layout-fill layout-align="space-arround center">
+            <md-input-container>
+              <label>Nombre</label>
+              <input type="text" name="currentProfileName" required ng-model="DialogCtrl.selectedUser.name">
+            </md-input-container>
+            <md-input-container>
+              <label>Apellido</label>
+              <input type="text" name="currentProfileLastName" required ng-model="DialogCtrl.selectedUser.lastname">
+            </md-input-container>
+            <md-input-container>
+              <label>Correo Electronico</label>
+              <input type="email" name="currentProfileEmail" required ng-model="DialogCtrl.selectedUser.email">
+            </md-input-container>
+          </div>
+        </div>
+        <div layout-fill layout="column">
+          <h5 class="md-header">Informacion de Acceso</h5>
+          <md-divider></md-divider>
+          <div layout="row" layout-fill layout-align="space-between center">
+            <md-input-container>
+              <label>Usuario</label>
+              <input type="text" name="currentProfileUsername" required mt-check-username="{{ DialogCtrl.editing  ? 0 : 1}}" ng-model="DialogCtrl.selectedUser.username">
+            </md-input-container>
+            <md-input-container>
+              <label>Es Admin</label>
+              <md-select ng-model="DialogCtrl.selectedUser.isAdmin">
+                <md-option value="1">Si</md-option>
+                <md-option value="0">No</md-option>
+              </md-select>
+            </md-input-container>
+          </div>
+        </div>
+        <div layout-fill layout="column" ng-if="!DialogCtrl.editing">
+          <h5 class="md-header">Informacion de Seguridad</h5>
+          <md-divider></md-divider>
+          <div layout="row" layout-fill layout-align="space-arround center">
+            <md-input-container>
+              <label>Contraseña</label>
+              <input type="password" name="currentProfilePass1" required ng-model="DialogCtrl.selectedUser.password">
+            </md-input-container>
+            <md-input-container>
+              <label>Repteir Contraseña</label>
+              <input type="password" name="currentProfilePass2" required ng-model="DialogCtrl.selectedUser.password2" mt-password-match="DialogCtrl.selectedUser.password">
+            </md-input-container>
+          </div>
+        </div>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions flex-order="2" layout="row">
+      <span flex></span>
+      <md-button href="#" ng-click="DialogCtrl.cancelar('No se guardaron Los cambios')">Cancelar</md-button>
+      <md-button type="submit" ng-disabled="userdialog.$invalid" class="md-primary md-raised" style="margin-right:20px;">Guardar</md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
