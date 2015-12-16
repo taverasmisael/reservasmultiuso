@@ -113,15 +113,17 @@
       return $d.promise;
     }
 
-    function rByPeriod (period) {
+    function rByPeriod (init, end) {
       var $d = $q.defer();
 
-      $firebaseArray(reservRef.orderByChild('period').equalTo(period))
-        .$loaded().then(function (reservas) {
-          $d.resolve(reservas);
-        }).catch(function (err) {
-          $d.reject(err);
-        });
+      $firebaseArray(reservRef.orderByChild('date')
+          .startAt(Utilities.date.fix(init).valueOf())
+          .endAt(Utilities.date.fix(end).valueOf()))
+          .$loaded().then(function (reservas) {
+            $d.resolve(reservas);
+          }).catch(function (err) {
+            $d.reject(err);
+          });
 
       return $d.promise;
     }
