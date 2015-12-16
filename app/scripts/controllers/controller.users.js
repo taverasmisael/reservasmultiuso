@@ -65,7 +65,6 @@
         }
 
         function arrangeTable (order) {
-          console.log(order);
           vm.tableOrder = order;
         }
 

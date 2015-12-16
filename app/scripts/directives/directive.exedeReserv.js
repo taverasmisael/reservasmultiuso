@@ -28,7 +28,6 @@
         } else {
           Search.profesor.inMonth(profId, viewValue)
               .then(function (cant) {
-                console.log(cant);
                 if (cant >= 2) {
                   $d.reject(false);
                 } else {

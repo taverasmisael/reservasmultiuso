@@ -85,7 +85,6 @@
         }
 
         function remove(id) {
-            console.log('Removing: ', id);
             findById(id).$loaded().then(function (reserv) {
               reserv.status = 'disabled';
               return reserv.$save();
@@ -126,7 +125,6 @@
                 var filteredReservations = reservas.filter(function(res) {
                     return (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts);
                 });
-                console.log(filteredReservations);
                 for (var i = 0; i < filteredReservations.length; i += 1) {
                   remove(filteredReservations[i].$id);
                   disabledList.push(filteredReservations[i].$id);

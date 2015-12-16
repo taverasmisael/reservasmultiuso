@@ -74,9 +74,6 @@
       init = init.valueOf();
       finish = finish.valueOf();
 
-      console.log(init);
-      console.log(finish);
-
       $firebaseArray(reservRef.orderByChild('date').startAt(init).endAt(finish))
             .$loaded().then(function (data) {
               $d.resolve(data.filter(function (reserv) {
