@@ -10,7 +10,8 @@
         vm.profesorsList = Profesores.all;
         vm.search = {
           byProfesor: searchByProfesor,
-          byDate: searchByDate
+          byDate: searchByDate,
+          byPeriod: searchByPeriod
         };
         active();
 
@@ -51,6 +52,20 @@
             }
 
             vm.query.needsDate = false;
+          }).catch(_errHndl);
+        }
+
+        function searchByPeriod (period) {
+          Search.reservacion.byPeriod(period.start, period.end).then(function (data) {
+            vm.query.heading = 'periodo del ' + period.start.toLocaleDateString() + ' al ' + period.end.toLocaleDateString();
+            if (!data.length) {
+              vm.query.message = 'No hay reservaciones para ' + vm.query.heading;
+            } else {
+              vm.query.message = '';
+              vm.query.results = data;
+            }
+
+            vm.query.needsDate = true;
           }).catch(_errHndl);
         }
 
