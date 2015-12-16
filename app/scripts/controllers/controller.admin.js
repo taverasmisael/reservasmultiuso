@@ -11,18 +11,22 @@
         vm.queryProfesors = queryProfesors;
         vm.fillSections = fillSections;
         vm.checkAvailability = checkAvailability;
+        vm.exonerate = exonerate;
         active();
 
         function active () {
           console.log('Administrating...');
           vm.today = new Date();
+          vm.exceptionMode = false;
           _mdDatePickerFix();
           vm.newReservationData = {};
           vm.minReservationDate = new Date(vm.today.getFullYear(), vm.today.getMonth(), vm.today.getDate() - 1);
+          //FIX THE INIT TIME
           $('#newReservationDataStarts').timepicker({ 'scrollDefault': 'now', 'minTime': '8:00am', 'maxTime': '8:00pm', 'forceRoundTime': true });
           // Watch Value Changed On StartsTime
           $('#newReservationDataStarts').on('changeTime', function () {
             var timeVal = $(this).val();
+            // RESET/DESTROY timePicker
             $('#newReservationDataEnds').timepicker({ 'scrollDefault': timeVal, 'minTime': timeVal, 'maxTime': '8:00pm', 'forceRoundTime': true, 'showDuration': true });
           });
         }
@@ -47,7 +51,7 @@
        }
 
         function fillSections () {
-          if (vm.nrd) {
+          if (vm.nrd.profesor) {
             vm.newReservationData.section = '';
             vm.availableSections = vm.nrd.profesor.secciones;
           }
@@ -77,7 +81,7 @@
           newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.valueOf();
           newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.valueOf();
           newReservation.materia = _getSelectedSection()[0].materia;
-          Reservaciones.create(newReservation, nrdProfesor)
+          Reservaciones.create(newReservation, nrdProfesor, vm.exceptionMode)
                 .then(function () {
                   // Calculates days until reservation day and display it on a beautiful toast
                   var fromNow = moment().to(newReservation.date);
@@ -89,6 +93,11 @@
                   vm.newReservationData = {};
                   vm.selectedProfesor = '';
                 }).catch(_errHdlr);
+          }
+
+          function exonerate () {
+            vm.creationForm.$invalid = false;
+            vm.exceptionMode = true;
           }
 
 

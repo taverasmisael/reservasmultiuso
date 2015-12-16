@@ -22,7 +22,7 @@
         </md-select>
       </div>
       <div layout="row" layout-align="start center" layout-padding layout-fill>
-        <md-datepicker layout="row" layout-align="start center" flex md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" name="newReservationDataDate" required="true" mt-exced-reservations profid="{{ AdminCtrl.nrd.profesor.$id }}"></md-datepicker>
+        <md-datepicker layout="row" layout-align="start center" flex md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" name="newReservationDataDate" required="true" mt-exced-reservations ng-model-options="{allowInvalid: true}" profid="{{ AdminCtrl.nrd.profesor.$id }}"></md-datepicker>
       </div>
       <div layout="row" md-no-float layout-padding layout-fill>
         <md-input-container md-no-float layout="column" layout-align="center center">
@@ -45,12 +45,17 @@
         </md-input-container>
       </div>
       <div layout="row" layout-padding layout-fill>
-        <div flex ng-messages="AdminCtrl.creationForm.$error" role="alert">
-          <div ng-message="mtExcedReservations">Este profesor <strong>tiene 2 reservaciones</strong> en este mes</div>
-          <div ng-message="pattern">El formato de <strong>la hora</strong> es incorrecto</div>
-          <div ng-message="endTime">Intenta cambiar la hora de finalizacion a una más temprano</div>
-          <div ng-message="startTime">A esta hora ya existe una reservación.</div>
-          <div ng-message="confirmTime">Debes confirmar si está disponible a esa hora</div>
+        <div flex layout="column" role="alert">
+          <div ng-messages="AdminCtrl.creationForm.$error" ng-if="AdminCtrl.creationForm.$invalid" role="alert">
+            <div ng-message="mtExcedReservations">Este profesor <strong>tiene 2 reservaciones</strong> en este mes</div>
+            <div ng-message="pattern">El formato de <strong>la hora</strong> es incorrecto</div>
+            <div ng-message="endTime">Intenta cambiar la hora de finalizacion a una más temprano</div>
+            <div ng-message="startTime">A esta hora ya existe una reservación.</div>
+            <div ng-message="confirmTime">Debes confirmar si está disponible a esa hora</div>
+          </div>
+          <div ng-if="(AdminCtrl.nrd.profesor.hasException && !AdminCtrl.creationForm.$error.pattern && !AdminCtrl.creationForm.$error.required) && AdminCtrl.creationForm.$invalid">
+            <md-button type="button" md-no-ink class="md-primary" ng-click="AdminCtrl.exonerate()">¿Desea agregar una excepción?</md-button>
+          </div>
         </div>
         <md-button ng-disabled="AdminCtrl.creationForm.$invalid" type="submit" class="md-raised md-primary">Crear</md-button>
       </div>
