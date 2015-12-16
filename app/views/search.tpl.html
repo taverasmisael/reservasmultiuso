@@ -23,7 +23,23 @@
           </form>
         </md-content>
       </md-tab>
-      <md-tab label="Fecha" md-active="true">
+      <md-tab label="Periodo" md-active="true">
+        <md-content class="md-padding">
+          <h3 class="md-display-">Reservaciones por Periodos</h3>
+          <md-divider></md-divider>
+          <form ng-submit="SearchCtrl.search.byPeriod(SearchCtrl.query.period)" layout-fill layout="column" layout-align="space-around start">
+            <div layout="row" layout-align="start center" layout-padding layout-fill>
+              <md-datepicker flex layout="row" layout-align="start center" layout-fill ng-model="SearchCtrl.query.period.start" md-placeholder="Fecha de Inicio" required="true"></md-datepicker>
+              <md-datepicker flex layout="row" layout-align="start center" layout-fill ng-model="SearchCtrl.query.period.end" md-placeholder="Fecha de Fin" required="true"></md-datepicker>
+            </div>
+            <div layout="row" layout-fill layout-padding>
+              <span flex></span>
+              <md-button type="submit" class="md-primary">Buscar</md-button>
+            </div>
+          </form>
+        </md-content>
+      </md-tab>
+      <md-tab label="Fecha">
         <md-content class="md-padding">
           <h3 class="md-display-">Reservaciones por Fecha</h3>
           <md-divider></md-divider>
@@ -52,13 +68,15 @@
       </md-subheader>
       <md-divider></md-divider>
       <md-list>
-        <md-list-item class="md-2-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
+        <md-list-item class="md-3-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
-              <h3>{{ ::reserv.materia }} - {{ ::reserv.section }}</h3>
-              <h4><span ng-if="!SearchCtrl.query.needsDate">{{ ::reserv.profesorFullName }}</span><time ng-if="SearchCtrl.query.needsDate" datetime="1/10/2015">{{ ::reserv.date | date: 'shortDate' }}</time></h4>
+              <strong>{{ ::reserv.materia }} - {{ ::reserv.section }}</strong>
+              <span>{{ ::reserv.profesorFullName }}</span>
+              <span>{{ ::reserv.creator }}</span>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+              <time datetime="{{ ::reserv.date }}">{{ ::reserv.date | date: 'shortDate' }}</time>
               <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>
               <time datetime="6:00 pm">{{ ::reserv.ends | date:'shortTime' }}</time>
             </div>
