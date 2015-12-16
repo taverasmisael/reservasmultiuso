@@ -24,7 +24,6 @@
                 }
                 if (Boolean(parseInt(attrs.mtCheckUsername))) {
                     var username = viewValue;
-                    console.log('Going To Call with: ', username);
                     Auth.usernameAvailable(username).then(function(response) {
                         $d.resolve(response);
                     }).catch(function(err) {

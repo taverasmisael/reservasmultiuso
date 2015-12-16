@@ -65,9 +65,13 @@
         }
 
         function arrangeTable (order) {
-          console.log(order);
           vm.tableOrder = order;
         }
+
+
+/**
+  * Private Functions *
+*/
 
         function _dialogComplete(respuesta) {
             $mdToast.show(

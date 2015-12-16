@@ -24,7 +24,6 @@
 
         function saveUser (user2save) {
           user2save.isAdmin = Boolean(parseInt(user2save.isAdmin));
-          console.log(user2save);
           if (vm.editing) {
             Auth.updateProfile(user2save).then(function () {
               guardarDialog(user2save.username + ' salvado');

@@ -74,9 +74,6 @@
       init = init.valueOf();
       finish = finish.valueOf();
 
-      console.log(init);
-      console.log(finish);
-
       $firebaseArray(reservRef.orderByChild('date').startAt(init).endAt(finish))
             .$loaded().then(function (data) {
               $d.resolve(data.filter(function (reserv) {
@@ -141,6 +138,14 @@
       return $d.promise;
     }
 
+
+    /**
+     * Function that search for an available hour in a day. Was intended to be rejected
+     * @param  {Date} date  The day we'll search if is available at...
+     * @param  {Date} start ... this time to
+     * @param  {Date} end   ... this time (hour)
+     * @return {Promise}       The promise'll be rejected wiht a specific message if any reservation were found
+     */
     function rAvailable (date, start, end) {
       var $d = $q.defer();
       var errMessage = {name: '', message: ''};
