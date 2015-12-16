@@ -63,7 +63,9 @@
             nuevaReservacion.creatorFullName = Auth.user.profile.name + ' ' + Auth.user.profile.lastname;
             if (exception) {
                 _disableReservations(nuevaReservacion.date, nuevaReservacion.starts, nuevaReservacion.ends)
-                    .then(function() {
+                    .then(function(dList) {
+                        nuevaReservacion.isException = true;
+                        nuevaReservacion.wereDisabled = dList;
                         _makeReservation(nuevaReservacion, nrProfesor).then(function() {
                             $d.resolve(true);
                         }).catch(function(err) {
@@ -119,6 +121,7 @@
 
         function _disableReservations(date, start, end) {
             var $d = $q.defer();
+            var disabledList = [];
             Search.reservacion.byDate(date).then(function(reservas) {
                 var filteredReservations = reservas.filter(function(res) {
                     return (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts);
@@ -126,9 +129,10 @@
                 console.log(filteredReservations);
                 for (var i = 0; i < filteredReservations.length; i += 1) {
                   remove(filteredReservations[i].$id);
+                  disabledList.push(filteredReservations[i].$id);
                 }
 
-                $d.resolve(true);
+                $d.resolve(disabledList);
             });
 
             return $d.promise;
