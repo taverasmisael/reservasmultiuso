@@ -3,9 +3,9 @@
     angular.module('reservacionesMulti')
         .service('Reservaciones', Reservaciones);
 
-    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'Search', 'FURL'];
+    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Auth', 'Utilities', 'Search', 'FURL'];
 
-    function Reservaciones($q, $firebaseObject, $firebaseArray, Utilities, Search, FURL) {
+    function Reservaciones($q, $firebaseObject, $firebaseArray, Auth, Utilities, Search, FURL) {
         var ref = new Firebase(FURL),
             reservaciones = $firebaseArray(ref.child('reservaciones')),
             _hoy = new Date();
@@ -58,7 +58,9 @@
             var $d = $q.defer();
             nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
             nuevaReservacion.status = 'active';
-            //reservacion.creator = Auth.user.profile.username;
+            nuevaReservacion.creator = Auth.user.profile.username;
+            nuevaReservacion.creatorEmail = Auth.user.profile.email;
+            nuevaReservacion.creatorFullName = Auth.user.profile.name + ' ' + Auth.user.profile.lastname;
             if (exception) {
                 _disableReservations(nuevaReservacion.date, nuevaReservacion.starts, nuevaReservacion.ends)
                     .then(function() {
