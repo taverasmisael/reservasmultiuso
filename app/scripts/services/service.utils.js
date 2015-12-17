@@ -9,6 +9,9 @@
     var UtilitiesService = {
       date: {
         fix: fixMilliseconds
+      },
+      time: {
+        setDate: fixDate
       }
     };
 
@@ -23,6 +26,13 @@
       _date.setSeconds(0);
 
       return _date;
+    }
+
+    function fixDate (date, time) {
+      var _time = moment(time);
+      _time.set({year: date.getFullYear(), month: date.getMonth(), day: date.getDate()});
+
+      return _time;
     }
   }
 }());

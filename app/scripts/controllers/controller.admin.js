@@ -47,9 +47,14 @@
         function createReservacion(reservationData, nrdProfesor) {
             var newReservation = angular.copy(reservationData);
             // Changes time values
+            var filtered = {
+              s: $filter('amParse')(newReservation.starts, 'HH:mmA'),
+              e: $filter('amParse')(newReservation.ends, 'HH:mmA')
+            };
+
             newReservation.date = Utilities.date.fix(reservationData.date).valueOf();
-            newReservation.starts = $filter('amParse')(newReservation.starts, 'HH:mmA')._d.valueOf();
-            newReservation.ends = $filter('amParse')(newReservation.ends, 'HH:mmA')._d.valueOf();
+            newReservation.starts = Utilities.time.setDate(reservationData.date, filtered.s).valueOf();
+            newReservation.ends = Utilities.time.setDate(reservationData.date, filtered.e).valueOf();
             newReservation.materia = _getSelectedSection()[0].materia;
             Reservaciones.create(newReservation, nrdProfesor, vm.exceptionMode)
                 .then(function() {
@@ -96,6 +101,8 @@
                 _e = $filter('amParse')(end, 'HH:mmA');
             Search.isAvailable(date, _s, _e).then(function() {
                 vm.creationForm.$setValidity('confirmTime', true);
+                vm.creationForm.$setValidity('endTime', true);
+                vm.creationForm.$setValidity('startTime', true);
             }).catch(function(err) {
                 if (err.name === 'ENDS_TOO_LATE') {
                     vm.creationForm.$setValidity('endTime', false);

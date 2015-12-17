@@ -150,14 +150,17 @@
       var $d = $q.defer();
       var errMessage = {name: '', message: ''};
 
+      var _s = Utilities.time.setDate(date, start),
+          _e = Utilities.time.setDate(date, end);
+
       rByStartDate(date).then(function (reservas) {
         var filteredReservations = reservas.filter(function (res) {
-          if (start >= res.starts && start <= res.ends) {
+          if (_s.isSame(res.starts) || _s.isBetween(res.starts, res.ends)) {
             errMessage.name = 'START_AT_SAME_TIME';
             errMessage.message = 'Both Reservations has same or closser StartTime';
             $d.reject(errMessage);
             return true;
-          } else if (start<= res.starts && end >= res.starts) {
+          } else if (_s.isBefore(res.starts) && _e.isAfter(res.starts)) {
             errMessage.name = 'ENDS_TOO_LATE';
             errMessage.message = 'The reservation you\'re trying to make colides with other';
             $d.reject(errMessage);
