@@ -64,9 +64,10 @@ $RECYCLE.BIN/
 /app/vendor
 /vendor
 
-#Ignoremsos el Directorio de Distribucion por ahora
+# Ignoremsos el Directorio de Distribucion por ahora
 /dist
-
+# Ignoramos Cualquier configuracion de Produccion de Firebase
+firebase.json
 
 # Sublime Generated Files / Temporary Folders
 *.sublime-project
