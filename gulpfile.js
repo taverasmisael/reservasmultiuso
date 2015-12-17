@@ -31,6 +31,7 @@
 
 // Include Gulp & tools we'll use
 var gulp = require('gulp-help')(require('gulp'));
+/*jshint -W079 */
 var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 
@@ -127,9 +128,29 @@ gulp.task('server', 'Start a HTTP server with livereload on "./app"', function()
     });
 });
 
+gulp.task('server:dist', 'Start a HTTP Distribution Server with livereload on "./dist"', function() {
+  $.connect.server({
+      root: './dist/',
+      livereload: false,
+      fallback: './dist/index.html',
+      port: 80
+    });
+});
+
+gulp.task('copy', function (){
+  return gulp.src('./app/views/**/*.html')
+            .pipe($.minifyHtml())
+            .pipe(gulp.dest('./dist/views'));
+});
+
+gulp.task('images', function (){
+  return gulp.src('./app/images/**/*.*')
+            .pipe(gulp.dest('./dist/images'));
+});
+
 // Clean output directory
 gulp.task('clean', 'Remove Files from "dist". Prepare for production', function (cb){
-    del(['.tmp', 'dist/*', '!dist/.git'], {dot: true}, cb).then(function (paths) {
+   return del(['.tmp', 'dist/*', '!dist/.git'], {dot: true}, cb).then(function (paths) {
       if (paths.length) {
         console.log('Deleted files/folders:\n', paths.join('\n'));
         } else {
@@ -146,13 +167,15 @@ gulp.task('concatify', 'Concatenate and minify files in "app". Prepare for produ
         .pipe($.if('*.css', $.csso()))
         .pipe(assets.restore())
         .pipe($.useref())
+        .pipe($.if('*.html', $.minifyHtml()))
         .pipe(gulp.dest('dist'));
 });
 
 
 // Build dist folder minifying files
-gulp.task('production', 'Creates Dist folder with minified files ready to production' , ['clean', 'concatify']);
-
+gulp.task('production', 'Creates Dist folder with minified files ready to production' , function (cb) {
+  runSequence('clean', 'concatify', ['copy', 'images'], cb);
+});
 
 // Default Task
 gulp.task('default', 'runSequence("styles", ["wiredep", "inject", "jshint"], "watch", "server", cb)' , function(cb) {
