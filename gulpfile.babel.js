@@ -87,6 +87,9 @@ GULP.task('inject', `Inject our own files to the 'index.html'`, ()=> {
   return GULP.src(config.index)
               .pipe($.plumber())
               .pipe($.inject(sources))
+              .pipe($.size({
+                title: 'Inject'
+              }))
               .pipe(GULP.dest(config.output.basedir));
 });
 
@@ -106,6 +109,9 @@ GULP.task('serve', `Start our main HTTP server with Livereload`, ()=> {
 GULP.task('partials', `Copy & Minify all Views and HTML partials`, ()=> {
   return GULP.src(config.paths.views)
               .pipe($.minifyHtml())
+              .pipe($.size({
+                title: 'Partials'
+              }))
               .pipe(GULP.dest(config.output.views));
 });
 
@@ -113,6 +119,9 @@ GULP.task('partials', `Copy & Minify all Views and HTML partials`, ()=> {
 GULP.task('images', `Minify and Copy Images`, ()=> {
   return GULP.src(config.paths.images)
               //.pipe($.imagemin())
+              .pipe($.size({
+                title: 'Images'
+              }))
               .pipe(GULP.dest(config.output.images));
 });
 
@@ -132,10 +141,19 @@ GULP.task('concatify', `Concatenates and Minify './app' folder. Send files to pr
   return GULP.src(config.index)
               .pipe(assets)
               .pipe($.if('*.js', $.uglify()))
+              .pipe($.size({
+                title: 'Minifyed JS'
+              }))
               .pipe($.if('*.css', $.csso()))
+              .pipe($.size({
+                title: 'Minifyed CSS'
+              }))
               .pipe(assets.restore())
               .pipe($.useref())
               .pipe($.if('*.html', $.minifyHtml()))
+              .pipe($.size({
+                title: 'Minifyed HTML'
+              }))
               .pipe(GULP.dest(config.output.basedir));
 });
 
