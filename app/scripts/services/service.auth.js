@@ -1,30 +1,29 @@
 'use strict';
 
-const USER = new WeakMap(),
-      firebaseArray = new WeakMap(),
+const firebaseArray = new WeakMap(),
       firebaseObject = new WeakMap(),
       REF = new WeakMap(),
-      AUTH = new WeakMap(),
-      OLYMPUS = {
-        gods: ['ZEUS', 'POSEIDON', 'HADES']
-      };
+      AUTH = new WeakMap();
+
+let OLYMPUS;
 
 class Auth {
     constructor($firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+        OLYMPUS = this;
+        this.user = {profile: {}};
         firebaseObject.set(this, $firebaseObject);
         firebaseArray.set(this, $firebaseArray);
         REF.set(this, new Firebase(FURL + 'profile'));
-        AUTH.set(this, $firebaseAuth(REF.get(this)));
-        USER.set(OLYMPUS, {profile: {}});
-        AUTH.get(this).$onAuth((authData)=> {
+        AUTH.set(OLYMPUS, $firebaseAuth(REF.get(this)));
+        AUTH.get(OLYMPUS).$onAuth((authData)=> {
           if (authData) {
-            USER.set(OLYMPUS, authData);
+            this.user = authData;
             let profile = this.getProfile(authData.uid);
-            USER.get(OLYMPUS).profile = profile;
+            this.user.profile = profile;
           } else {
-            USER.set(OLYMPUS, {});
-            if (USER.get(OLYMPUS).profile) {
-              USER.get(OLYMPUS).profile.$destroy();
+            this.user = {};
+            if (this.user.profile) {
+              this.user.profile.$destroy();
             }
           }
         });
@@ -60,7 +59,7 @@ class Auth {
         };
         delete user.email;
         delete user.password;
-        return AUTH.get(this).$createUser(usuario).then((data) => this.createProfile(data.uid, user)).catch((e)=> console.error(e));
+        return AUTH.get(OLYMPUS).$createUser(usuario).then((data) => this.createProfile(data.uid, user)).catch((e)=> console.error(e));
     }
     login(user) {
         let { username, password } = user;
@@ -74,7 +73,7 @@ class Auth {
         return firebaseArray.get(this)(REF.get(this).orderByChild('username').equalTo(username)).$loaded()
             .then((data) => {
                 if (data.length) {
-                 return AUTH.get(this).$authWithPassword({
+                 return AUTH.get(OLYMPUS).$authWithPassword({
                       email: data[0].email,
                       password: password
                   });
@@ -93,20 +92,20 @@ class Auth {
       return firebaseObject.get(this)(REF.get(this).child(uid));
     }
     changePassword(user) {
-      return AUTH.get(this).$changePassword({
-        email: USER.get(OLYMPUS).profile.email,
+      return AUTH.get(OLYMPUS).$changePassword({
+        email: this.user.profile.email,
         oldPassword: user.oldpass,
         newPassword: user.newpass
       });
     }
     isAdmin() {
-        return USER.get(OLYMPUS).profile && USER.get(OLYMPUS).profile.isAdmin;
+        return this.user.profile && this.user.profile.isAdmin;
     }
     logout() {
-        AUTH.get(this).$unauth();
+        AUTH.get(OLYMPUS).$unauth();
     }
     signedIn() {
-        return USER.get(OLYMPUS) ? Boolean(USER.get(OLYMPUS).provider) : false;
+        return Boolean(AUTH.get(OLYMPUS).$getAuth());
     }
 }
 

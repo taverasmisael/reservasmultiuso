@@ -9,8 +9,8 @@
       var vm = this;
       vm.openMenu = openMenu;
       vm.logOut = logout;
+      vm.user = {};
       vm.isAdmin = Auth.isAdmin;
-      vm.user = Auth.user;
 
       active();
 
@@ -34,6 +34,12 @@
           }
         ];
         vm.signedIn = Auth.signedIn;
+        let checkProfile = setInterval(()=> {
+          vm.user = Auth.user;
+          if (vm.user.profile) {
+            clearInterval(checkProfile);
+          }
+        }, 500);
       }
 
       function openMenu ($mdOpenMenu, ev) {

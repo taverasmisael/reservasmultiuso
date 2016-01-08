@@ -22,6 +22,7 @@
             }
           }
         });
+        console.log(vm.signedIn());
       }
 
       // Public controller Functionality
