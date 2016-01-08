@@ -20,12 +20,7 @@
             password: password
           };
 
-          Auth.login(user).then(function () {
-            $state.go('home');
-          }).catch(function (err) {
-            console.log(err);
-            vm.processStatus = err.message;
-          });
+          Auth.login(user).then(()=> $state.go('home')).catch((err)=> vm.processStatus = err.message);
         }
     }
 })();

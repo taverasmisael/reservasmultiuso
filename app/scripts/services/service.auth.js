@@ -46,7 +46,7 @@ class Auth {
             firebaseArray.get(_this)(REF.get(_this).orderByChild('username').equalTo(username)).$loaded()
                 .then((data) => {
                     return data.length ? reject(USESREXISTS) : resolve('Usuario Disponible');
-                }).catch(console.bind(console));
+                }).catch((e)=> console.error(e));
         }
 
         promise = new Promise(usernameAvailablePromise);
@@ -60,7 +60,7 @@ class Auth {
         };
         delete user.email;
         delete user.password;
-        return AUTH.get(this).$createUser(usuario).then((data) => this.createProfile(data.uid, user)).catch(console.bind(console));
+        return AUTH.get(this).$createUser(usuario).then((data) => this.createProfile(data.uid, user)).catch((e)=> console.error(e));
     }
     login(user) {
         let { username, password } = user;
@@ -71,17 +71,17 @@ class Auth {
         };
 
 
-        return firebaseObject.get(this)(REF.get(this).orderBy('username').equalTo(username)).$loaded()
+        return firebaseArray.get(this)(REF.get(this).orderByChild('username').equalTo(username)).$loaded()
             .then((data) => {
-                if (data) {
+                if (data.length) {
                  return AUTH.get(this).$authWithPassword({
-                      email: data.email,
+                      email: data[0].email,
                       password: password
                   });
                 } else {
                   throw INVALIDUSERNAME;
                 }
-            }).catch(console.bind(console));
+            });
     }
     removeuser(uid) {
       return firebaseObject.get(this)(REF.get(this).child(uid)).$remove();
@@ -106,7 +106,6 @@ class Auth {
         AUTH.get(this).$unauth();
     }
     signedIn() {
-        console.info(USER.get(OLYMPUS));
         return USER.get(OLYMPUS) ? Boolean(USER.get(OLYMPUS).provider) : false;
     }
 }

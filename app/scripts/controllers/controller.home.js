@@ -3,9 +3,9 @@
     angular.module('reservacionesMulti')
             .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['today', 'upcomming'];
+    HomeController.$inject = ['Reservaciones'];
 
-    function HomeController (today, upcomming) {
+    function HomeController (Reservaciones) {
       var vm = this;
       vm.todayDate = new Date();
       vm.reservaciones = {};
@@ -14,8 +14,9 @@
 
       function active () {
         console.log('Active Main...');
-        vm.reservaciones.today = today;
-        vm.reservaciones.commingSoon = upcomming;
+
+        Reservaciones.today().then((hoy)=> vm.reservaciones.today = hoy).catch((e)=>console.error(e));
+        Reservaciones.getCommingSoon().then((soon)=>vm.reservaciones.commingSoon = soon).catch((e)=>console.error(e));
       }
     }
 })();

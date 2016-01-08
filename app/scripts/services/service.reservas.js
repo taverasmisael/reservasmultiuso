@@ -2,7 +2,6 @@
 
 class Reservaciones {
     constructor($firebaseObject, $firebaseArray, Auth, Utilities, Search, FURL) {
-      console.log(FURL);
         this.$firebaseObject = $firebaseObject;
         this.$firebaseArray = $firebaseArray;
         this.Auth = Auth;
@@ -72,8 +71,8 @@ class Reservaciones {
         return this.reservaciones;
     }
     today() {
-        return this.$firebaseArray(this.ref.child('reservaciones').orderByChuld('date')
-            .equalTo(this.hoy)).$loaded();
+        return this.$firebaseArray(this.ref.child('reservaciones').orderByChild('date')
+            .equalTo(this.hoy.valueOf())).$loaded();
     }
     getCommingSoon() {
         const tomorrow = moment(this.hoy).add(1, 'day')._d.valueOf();
@@ -107,7 +106,7 @@ class Reservaciones {
             nuevaReservacion.isException = true;
             nuevaReservacion.wereDisabled = disabledList;
             return this.makeReservation(nuevaReservacion, profesor);
-        }).catch(console.bind(console));
+        }).catch((e)=>console.error(e));
     }
 }
 
