@@ -1,170 +1,119 @@
-(function() {
-    'use strict';
-    angular.module('reservacionesMulti')
-        .service('Auth', Auth);
+'use strict';
 
-    Auth.$inject = ['$q', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
+const USER = new WeakMap(),
+      firebaseArray = new WeakMap(),
+      firebaseObject = new WeakMap(),
+      REF = new WeakMap(),
+      AUTH = new WeakMap(),
+      OLYMPUS = {
+        gods: ['ZEUS', 'POSEIDON', 'HADES']
+      };
 
-    function Auth($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
-
-        var ref = new Firebase(FURL),
-            auth = $firebaseAuth(ref);
-
-        var AuthService = {
-            user: {
-                profile: {}
-            },
-            createProfile: createProfile,
-            updateProfile: updateProfile,
-            usernameAvailable: usernameAvailable,
-            register: register,
-            login: login,
-            removeUser: removeUser,
-            loadProfiles: getAllProfiles,
-            getProfile: getProfileById,
-            changePassword: changePassword,
-            isAdmin: function () {
-              return AuthService.user.profile ? AuthService.user.profile.isAdmin : false;
-            },
-            logout: function() {
-                auth.$unauth();
-            },
-            signedIn: function() {
-                return !!AuthService.user.provider;
+class Auth {
+    constructor($firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+        firebaseObject.set(this, $firebaseObject);
+        firebaseArray.set(this, $firebaseArray);
+        REF.set(this, new Firebase(FURL + 'profile'));
+        AUTH.set(this, $firebaseAuth(REF.get(this)));
+        USER.set(OLYMPUS, {profile: {}});
+        AUTH.get(this).$onAuth((authData)=> {
+          if (authData) {
+            USER.set(OLYMPUS, authData);
+            let profile = this.getProfile(authData.uid);
+            USER.get(OLYMPUS).profile = profile;
+          } else {
+            USER.set(OLYMPUS, {});
+            if (USER.get(OLYMPUS).profile) {
+              USER.get(OLYMPUS).profile.$destroy();
             }
+          }
+        });
+    }
+    createProfile(uid, user) {
+        return REF.get(this).child(uid).set(user);
+    }
+    updateProfile(newinfo) {
+        return newinfo.$save();
+    }
+    usernameAvailable(username) {
+        const USESREXISTS = {
+            name: 'USERNAME_EXIST',
+            message: `The User: "${username}" already exist in our DB.`
+        }, _this = this;
+        let promise;
+
+        function usernameAvailablePromise(resolve, reject) {
+            firebaseArray.get(_this)(REF.get(_this).orderByChild('username').equalTo(username)).$loaded()
+                .then((data) => {
+                    return data.length ? reject(USESREXISTS) : resolve('Usuario Disponible');
+                }).catch(console.bind(console));
+        }
+
+        promise = new Promise(usernameAvailablePromise);
+        return promise;
+    }
+    register(user) {
+        let { email, password } = user,
+        usuario = {
+            email: email,
+            password: password
+        };
+        delete user.email;
+        delete user.password;
+        return AUTH.get(this).$createUser(usuario).then((data) => this.createProfile(data.uid, user)).catch(console.bind(console));
+    }
+    login(user) {
+        let { username, password } = user;
+
+        const INVALIDUSERNAME = {
+            name: 'INVALID_USERNAME',
+            message: `The User: "${username} doesn't exist"`
         };
 
-        auth.$onAuth(setUserData);
-        return AuthService;
 
-
-        /**
-         * Funcion encargada de crear un perfil en blanco por cada nuevo usuario
-         * @param  {String} uid  uid in firebaseAuthDB
-         * @param  {Object} user username and email REQUIRED
-         * @return {NOTHING}      Firebase Added entry
-         */
-        function createProfile(uid, user) {
-            var profile = {
-                username: user.username,
-                email: user.email,
-                picture: '',
-                name: user.name,
-                lastname: user.lastname,
-                isAdmin: user.isAdmin
-            };
-            return ref.child('profile').child(uid).set(profile);
-        }
-
-        function updateProfile (newinfo) {
-          return newinfo.$save();
-        }
-
-        /**
-         * Checar si el Nombre de usuario existe en la Base de Datos
-         * @param  {string} username El nombre de usuario a buscar
-         * @return {promise}          promesa con el resultado TRUE or FALSE
-         */
-        function usernameAvailable(username) {
-            var $d = $q.defer();
-            var userExistsError = {
-              name: 'USERNAME_EXISTS',
-              message: 'The User: "'+ username +'" already exist'
-            };
-            $firebaseArray(ref.child('profile').orderByChild('username').equalTo(username))
-              .$loaded().then(function(data) {
-                  if (data.length) {
-                   $d.reject(userExistsError);
-                 } else {
-                  $d.resolve('Usuario Disponible');
+        return firebaseObject.get(this)(REF.get(this).orderBy('username').equalTo(username)).$loaded()
+            .then((data) => {
+                if (data) {
+                 return AUTH.get(this).$authWithPassword({
+                      email: data.email,
+                      password: password
+                  });
+                } else {
+                  throw INVALIDUSERNAME;
                 }
-              }).catch(function(err) {
-                  $d.reject(err);
-              });
-
-            return $d.promise;
-        }
-
-        /**
-         * Funcion para registrar usuarios nuevos
-         * @param  {Object} user emai, password username REQUIRED
-         * @return {Object}      CreateProfile()
-         */
-        function register(user) {
-            return auth.$createUser({
-                email: user.email,
-                password: user.password
-            }).then(function(data) {
-                return AuthService.createProfile(data.uid, user);
-            });
-        }
-
-        /**
-         * Funcion para Logear usuarios y autenticarlos
-         * @param  {Object} user email, username, password REQUIRED
-         * @return {Object}      Un objeto con los datos del Usuario
-         */
-        function login(user) {
-            return $firebaseArray(ref.child('profile').orderByChild('username')
-                    .equalTo(user.username)).$loaded()
-                .then(function(data) {
-                  if (data.length >0) {
-                    user.email = data[0].email;
-                    return auth.$authWithPassword({
-                        email: user.email,
-                        password: user.password
-                    });
-                  } else {
-                    throw {
-                      name: 'INVALID_USERNAME',
-                      message: 'The User: "'+ user.username +'" Doesn\'t exist'
-                    };
-                  }
-                });
-        }
-
-
-        function removeUser (uid) {
-          return $firebaseObject(ref.child('profile').child(uid)).$remove();
-        }
-
-
-        /**
-         * Funcion para cambiar el password del Usuario
-         * @param  {Object} user oldpass, newpass REQUIRED
-         * @return {NOTHING}      Contraseña Cambiada con exito
-         */
-        function changePassword(user) {
-            return auth.$changePassword({
-                email: AuthService.user.profile.email,
-                oldPassword: user.oldpass,
-                newPassword: user.newpass
-            });
-        }
-
-        function getAllProfiles () {
-          return $firebaseArray(ref.child('profile')).$loaded();
-        }
-
-        function getProfileById (uid) {
-          return $firebaseObject(ref.child('profile').child(uid));
-        }
-
-        /**
-         * Funcion encargada de Guardar los Datos del Usuario en el servicio
-         * @param {Object} authData Todos los datos para autenticar el usuario
-         */
-        function setUserData(authData) {
-            if (authData) {
-                angular.copy(authData, AuthService.user);
-                var profile = $firebaseObject(ref.child('profile').child(authData.uid));
-                AuthService.user.profile = profile;
-            } else {
-                angular.copy({}, AuthService.user);
-                if (AuthService && AuthService.user.profile) {
-                    AuthService.user.profile.$destroy();
-                }
-            }
-        }
+            }).catch(console.bind(console));
     }
-})();
+    removeuser(uid) {
+      return firebaseObject.get(this)(REF.get(this).child(uid)).$remove();
+    }
+    loadProfiles() {
+      return firebaseArray.get(this)(REF.get(this)).$loaded();
+    }
+    getProfile(uid) {
+      return firebaseObject.get(this)(REF.get(this).child(uid));
+    }
+    changePassword(user) {
+      return AUTH.get(this).$changePassword({
+        email: USER.get(OLYMPUS).profile.email,
+        oldPassword: user.oldpass,
+        newPassword: user.newpass
+      });
+    }
+    isAdmin() {
+        return USER.get(OLYMPUS).profile && USER.get(OLYMPUS).profile.isAdmin;
+    }
+    logout() {
+        AUTH.get(this).$unauth();
+    }
+    signedIn() {
+        console.info(USER.get(OLYMPUS));
+        return USER.get(OLYMPUS) ? Boolean(USER.get(OLYMPUS).provider) : false;
+    }
+}
+
+Auth.$inject = ['$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
+
+angular.module('reservacionesMulti')
+      .service('Auth', Auth);
+
+//export default Auth;

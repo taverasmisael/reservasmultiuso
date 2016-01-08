@@ -23,16 +23,20 @@ let config = {
         views: ['./app/templates/**/*.html']
     },
     folders: {
-        sass: './app/styles'
+        styles: './app/styles'
     },
     options: {
         autoprefixer: {
             browsers: AUTOPREFIXER_BROWSERS
         },
+        babel: {
+          presets: ['es2015']
+        },
         connect: {
-            root: './app/',
+            debug: true,
+            fallback: './app/index.html',
             livereload: true,
-            fallback: './app/index.html'
+            root: ['./.tmp/', './app/',]
         },
         inject: {
             read: false,
@@ -41,6 +45,10 @@ let config = {
         wiredep: {
             ignorePath: /^(\.\.\/)+/
         }
+    },
+    temp: {
+      scripts: './.tmp/scripts',
+      styles: './.tmp/styles'
     },
     output: {
         basedir: './app',
