@@ -58,7 +58,7 @@ GULP.task('babelize', 'Transform ES6 Scripts to normla ES5', ()=> {
               .pipe($.changed(config.temp.scripts))
               .pipe($.plumber())
               .pipe($.sourcemaps.init())
-              .pipe($.babel(config.options.babel))
+              .pipe($.babel())
               .pipe($.sourcemaps.write('.'))
               .pipe(gulp.dest(config.temp.scripts))
               .pipe($.size({

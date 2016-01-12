@@ -30,7 +30,11 @@ let config = {
             browsers: AUTOPREFIXER_BROWSERS
         },
         babel: {
-          presets: ['es2015']
+          "plugins": ["transform-decorators"],
+          "presets": [
+            "stage-1",
+            "es2015"
+          ]
         },
         connect: {
             debug: true,
