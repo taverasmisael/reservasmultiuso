@@ -10,7 +10,7 @@ class Reservaciones {
         this.FURL = FURL;
         this.ref = new Firebase(FURL);
         this.reservaciones = $firebaseArray(this.ref.child('reservaciones'));
-        this.hoy = Utilities.date.fix(new Date());
+        this.hoy = Utilities.fixDate(new Date());
         this.setReservationData = function(data) {
             data.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
             data.status = 'active';
