@@ -1,27 +1,34 @@
-(function(){
-    'use strict';
-    angular.module('reservacionesMulti')
-            .service('Profesores', Profesores);
+'use strict';
 
-    Profesores.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'FURL'];
-    function Profesores ($q, $firebaseObject, $firebaseArray, FURL) {
-        var ref = new Firebase(FURL),
-            profesores = $firebaseArray(ref.child('profesores'));
+import { autobind } from 'core-decorators';
 
-        var ProfesoresService = {
-          all: profesores,
-          create: create,
-          getSecciones: getProfesorSections
-        };
 
-        return ProfesoresService;
+const REF = new WeakMap(),
+  firebaseObject = new WeakMap(),
+  firebaseArray = new WeakMap();
 
-        function create (ProfesorData) {
-          return profesores.$add(ProfesorData);
-        }
+@autobind
+class Profesores {
+  constructor($firebaseObject, $firebaseArray, FURL) {
+    REF.set(this, new Firebase(FURL));
+    firebaseObject.set(this, $firebaseObject);
+    firebaseArray.set(this, $firebaseArray);
+    this.profesores = $firebaseArray(REF.get(this).child('profesores'));
+  }
+  @autobind
+  all() {
+    return this.profesores;
+  }
+  @autobind
+  create(profesorData) {
+    this.profesores.$add(profesorData);
+  }
+  @autobind
+  getSections(pofesorID) {
+    return firebaseObject.get(this)(REF.get(this).child('profesores').child(pofesorID).child('secciones'));
+  }
+}
 
-        function getProfesorSections (ProfesorID) {
-          return $firebaseObject(ref.child('profesores').child(ProfesorID).child('secciones'));
-        }
-    }
-})();
+Profesores.$inject = ['$firebaseObject', '$firebaseArray', 'FURL'];
+angular.module('reservacionesMulti')
+        .service('Profesores', Profesores);
