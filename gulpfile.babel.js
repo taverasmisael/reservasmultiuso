@@ -35,6 +35,38 @@ import wiredep from 'wiredep';
 
 import config from './config';
 
+// Browserify Stuffs
+import { default as source } from 'vinyl-source-stream'
+import { default as buffer } from 'vinyl-buffer'
+import browserify from 'browserify';
+import watchify from 'watchify';
+import babelify from 'babelify';
+
+
+function compile (isWatching) {
+  let bundler = watchify(browserify('./app/scripts/app.js', {debug: true}).transform(babelify));
+
+  function rebundle () {
+    console.log('Rebuilding...');
+    return bundler.bundle()
+          .pipe($.plumber())
+          .pipe(source('build.js'))
+          .pipe(buffer())
+          .pipe($.sourcemaps.init({ loadMaps: true }))
+          .pipe($.sourcemaps.write('./'))
+          .pipe(gulp.dest('./.tmp/scripts/'));
+  }
+
+  if (isWatching) {
+      bundler.on('update', function() {
+        console.log('-> Changes detected. Rebuilding...');
+        return rebundle();
+      });
+    }
+
+    return rebundle();
+}
+
 /*jshint -W079 */
 const $ = gulpLoadPlugins();
 const WIREDEP = wiredep.stream;
@@ -52,24 +84,14 @@ GULP.task('jshint', `Lints all our JS with 'JSHINT'`,  ()=> {
               .pipe($.jshint.reporter('fail'));
 });
 
+// Transform ES6 Scripts to normla ES5 And wathc the files
+GULP.task('babelize:watch', 'Transform ES6 Scripts to normal ES5: watching', ()=> compile(true))
+
 // Transform ES6 Scripts to normla ES5
-GULP.task('babelize', 'Transform ES6 Scripts to normla ES5', ()=> {
-  return gulp.src(config.paths.scripts)
-              .pipe($.changed(config.temp.scripts))
-              .pipe($.plumber())
-              .pipe($.sourcemaps.init())
-              .pipe($.babel())
-              .pipe($.sourcemaps.write('.'))
-              .pipe(gulp.dest(config.temp.scripts))
-              .pipe($.size({
-                title: 'BabelScripts',
-                showFiles: true
-              }))
-              .pipe($.connect.reload());
-});
+GULP.task('babelize', 'Transform ES6 Scripts to normla ES5', ()=>  compile());
 
 // Run JSHint on scripts and then babelize them
-GULP.task('scripts', (cb)=> { return runSequence('jshint', 'babelize', cb); });
+GULP.task('scripts', (cb)=> { return runSequence('babelize:watch', cb); });
 
 // Compile Our Css
 GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
