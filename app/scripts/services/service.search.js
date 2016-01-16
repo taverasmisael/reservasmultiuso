@@ -1,183 +1,131 @@
-(function() {
-  'use strict';
+import {
+  autobind
+}
+from 'core-decorators';
 
-  angular
-    .module('reservacionesMulti')
-    .service('Search', Search);
+const firebaseObject = new WeakMap(),
+  firebaseArray = new WeakMap(),
+  RESERVREF = new WeakMap(),
+  PROFEREF = new WeakMap();
 
-
-  Search.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
-  function Search($q, $firebaseObject, $firebaseArray, Utilities, FURL) {
-
-    var baseRef = new Firebase(FURL),
-        reservRef = baseRef.child('reservaciones'),
-        profeRef = baseRef.child('profesores');
-
-    var SearchService = {
-      profesor: {
-        byId: pById,
-        byCedula: pByCedula,
-        sectionsOf: pSections,
-        inMonth: pInMonth
-      },
-      reservacion: {
-        byId: rById,
-        byDate: rByStartDate,
-        byPeriod: rByPeriod,
-        ofProfesor: rByProfesor
-      },
-      isAvailable: rAvailable
-    };
-
-    return SearchService;
-
-    /*
-      **                           **
-      * Querying Profesor Functions *
-      **                           **
-    */
-    function pById (id) {
-      return $firebaseArray(profeRef.child(id));
-    }
-
-    function pByCedula (cedula) {
-      var $d = $q.defer();
-
-      $firebaseArray(profeRef.orderByChild('cedula').equalTo(cedula))
-          .$loaded().then(function (profesor) {
-            $d.resolve(profesor);
-          }).catch(function (err) {
-            $d.reject(err);
-          });
-
-      return $d.promise;
-    }
-
-    function pSections (pName) {
-      var $d = $q.defer();
-
-      $firebaseArray(profeRef.orderByChild('nombre').equalTo(pName))
-        .$loaded().then(function (profesor) {
-          $d.resolve(profesor.secciones);
-        }).catch(function (err) {
-          $d.reject(err);
-        });
-
-      return $d.promise;
-    }
-
-    function pInMonth (id, date) {
-      var $d = $q.defer();
-      var init = Utilities.date.fix(moment(date).date(1)._d);
-      var finish = Utilities.date.fix(moment(init).month(init.getMonth() + 1)._d);
-
-      init = init.valueOf();
-      finish = finish.valueOf();
-
-      $firebaseArray(reservRef.orderByChild('date').startAt(init).endAt(finish))
-            .$loaded().then(function (data) {
-              $d.resolve(data.filter(function (reserv) {
-                return reserv.profesor === id;
-              }).length);
-            }).catch(function (err) {
-              console.error(err);
-              $d.reject(err);
-            });
-
-      return $d.promise;
-    }
-
-    /*
-      **                              **
-      * Querying reservation Functions *
-      **                              **
-    */
-
-    function rById (id) {
-      return $firebaseArray(reservRef.child(id));
-    }
-
-    function rByStartDate (date) {
-      var $d = $q.defer();
-
-      $firebaseArray(reservRef.orderByChild('date').equalTo(Utilities.date.fix(date).valueOf()))
-        .$loaded().then(function (reserva) {
-          $d.resolve(reserva);
-        }).catch(function (err) {
-          $d.reject(err);
-        });
-
-      return $d.promise;
-    }
-
-    function rByPeriod (init, end) {
-      var $d = $q.defer();
-
-      $firebaseArray(reservRef.orderByChild('date')
-          .startAt(Utilities.date.fix(init).valueOf())
-          .endAt(Utilities.date.fix(end).valueOf()))
-          .$loaded().then(function (reservas) {
-            $d.resolve(reservas);
-          }).catch(function (err) {
-            $d.reject(err);
-          });
-
-      return $d.promise;
-    }
-
-    function rByProfesor (profesorId) {
-      var $d = $q.defer();
-
-      $firebaseArray(reservRef.orderByChild('profesor').equalTo(profesorId))
-        .$loaded().then(function (reservations) {
-          $d.resolve(reservations);
-        }).catch(function (err) {
-          $d.reject(err);
-        });
-
-      return $d.promise;
-    }
-
-
-    /**
-     * Function that search for an available hour in a day. Was intended to be rejected
-     * @param  {Date} date  The day we'll search if is available at...
-     * @param  {Date} start ... this time to
-     * @param  {Date} end   ... this time (hour)
-     * @return {Promise}       The promise'll be rejected wiht a specific message if any reservation were found
-     */
-    function rAvailable (date, start, end) {
-      var $d = $q.defer();
-      var errMessage = {name: '', message: ''};
-
-      var _s = Utilities.time.setDate(date, start),
-          _e = Utilities.time.setDate(date, end);
-
-      rByStartDate(date).then(function (reservas) {
-        var filteredReservations = reservas.filter(function (res) {
-          if (_s.isSame(res.starts) || _s.isBetween(res.starts, res.ends)) {
-            errMessage.name = 'START_AT_SAME_TIME';
-            errMessage.message = 'Both Reservations has same or closser StartTime';
-            $d.reject(errMessage);
-            return true;
-          } else if (_s.isBefore(res.starts) && _e.isAfter(res.starts)) {
-            errMessage.name = 'ENDS_TOO_LATE';
-            errMessage.message = 'The reservation you\'re trying to make colides with other';
-            $d.reject(errMessage);
-            return true;
-          } else {return false;}
-        });
-
-        if (!filteredReservations.length) {
-          $d.resolve('Todo Bajo Control');
-        }
-      }).catch(function (err) {
-        console.error(err);
-        $d.reject(err);
-      });
-
-      return $d.promise;
-    }
-
+class Search {
+  constructor($firebaseObject, $firebaseArray, Utilities, FURL) {
+    let baseref = new Firebase(FURL);
+    this.Utilities = Utilities;
+    firebaseObject.set(this, $firebaeObject);
+    firebaseArray.set(this, $firebaseArray);
+    RESERVREF.set(this, baseref.child('reservaciones'));
+    PROFEREF.set(this, baseref.child('profesores'))
   }
-}());
+
+  @autobind
+  searchProfesorById(profesorId) {
+    return firebaseObject.get(this)(PROFEREF.get(this).child(id));
+  }
+
+  @autobind
+  searchProfesorByCedula(cedula) {
+    return firebaseObject.get(this)(PROFEREF.get(this).orderByChild('cedula').equalTo(cedula)).$loaded();
+  }
+
+  @autobind
+  searchSectionsOf(profesorId) {
+    let sections = new Promise((resolve, reject) => {
+      this.searchProfesorById.$loaded().then((profesor) => {
+        resolve(profesor.secciones);
+      }).catch((err) => {
+        reject(err);
+      });
+    });
+
+    return sections;
+  }
+
+  @autobind
+  searchProfesorInMonth(profesorId, date) {
+    let start = Utilities.fixDate(moment(date).date(1)._d).valueOf(),
+      end = Utilities.fixDate(moment(start).month(start.getMonth() + 1)._d).valueOf();
+
+    let reservacionesEnMes = new Promise((resolve, reject) => {
+      firebaseArray.get(this)(RESERVREF.get(this).orderByChild('date').startAt(start).endAt(end)).$loaded().then((data) => {
+        let reservaciones = data.filter((r) => r.profesor == profesorId);
+        resolve(reservaciones);
+      }).catch((err) => {
+        console.error(err);
+        reject(err);
+      })
+    });
+
+    return reservacionesEnMes;
+  }
+
+  @autobind
+  searchReservacionById(reservacionId) {
+    return firebaseObject.get(this)(RESERVREF.get(this).child(reservacionId));
+  }
+
+  @autobind
+  searchReservacionByDate(date) {
+    let fixedDate = Utilities.fixDate(date).valueOf();
+    return firebaeArray.get(this)(RESERVREF.get(this).orderByChild('date').equalTo(fixedDate)).$loaded();
+  }
+
+  @autobind
+  searchReservacionByPeriod(start, end) {
+    let fixedStart = Utilities.fixDate(start).valueOf(),
+      fixedEnd = Utilities.fixDate(end).valueOf();
+
+    return firebaseArray.get(this)(RESERVREF.get(this).orderByChild('date').startAt(fixedStart).endAt(fixedEnd)).$loaded();
+  }
+
+  @autobind
+  searchReservationsOf(profesorId) {
+    return firebaseArray.get(this)(RESERVREF.get(this).orderByChild('profesor').equalTo(profesorId)).$loaded();
+  }
+
+  @autobind
+  checkAvailability(date, start, end, place) {
+    let errMessage = {
+      name: '',
+      message: ''
+    };
+    start = Utilities.fixTime(date, start);
+    end = Utilities.fixTime(date, end);
+
+    let response = new Promise((resolve, reject) => {
+      this.searchReservacionByDate(date).then((reservas) => {
+        let filteredReservas = reservas.filter((res) => {
+          if (start.isSame(res.starts) || start.isBetween(res.starts, res.ends)) {
+            errMessage.name = 'START_AT_SAME_TIME';
+            errMessage.message = 'Both reservations has same or closer time';
+            return true;
+          } else if (start.isBefore(res.starts) && end.isAfter(res.starts)) {
+            errMessage.name = 'ENDS_TOO_LATE';
+            errMessage.message = 'The reservation you check colides with other';
+            return true;
+          } else {
+            return false;
+          }
+        });
+
+        if (filteredReservas) {
+          reject({
+            data: filteredReservas,
+            message: errMessage
+          });
+        } else {
+          resolve({
+            data: [],
+            message: 'No colitions found'
+          });
+        }
+      })
+    });
+
+    return response;
+  }
+}
+
+Search.$inject = ['$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
+
+export default Search;

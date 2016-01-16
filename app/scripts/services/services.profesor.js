@@ -1,13 +1,12 @@
-'use strict';
-
-import { autobind } from 'core-decorators';
-
+import {
+  autobind
+}
+from 'core-decorators';
 
 const REF = new WeakMap(),
   firebaseObject = new WeakMap(),
   firebaseArray = new WeakMap();
 
-@autobind
 class Profesores {
   constructor($firebaseObject, $firebaseArray, FURL) {
     REF.set(this, new Firebase(FURL));
@@ -15,14 +14,17 @@ class Profesores {
     firebaseArray.set(this, $firebaseArray);
     this.profesores = $firebaseArray(REF.get(this).child('profesores'));
   }
+
   @autobind
   all() {
     return this.profesores;
   }
+
   @autobind
   create(profesorData) {
     this.profesores.$add(profesorData);
   }
+
   @autobind
   getSections(pofesorID) {
     return firebaseObject.get(this)(REF.get(this).child('profesores').child(pofesorID).child('secciones'));
@@ -30,5 +32,5 @@ class Profesores {
 }
 
 Profesores.$inject = ['$firebaseObject', '$firebaseArray', 'FURL'];
-angular.module('reservacionesMulti')
-        .service('Profesores', Profesores);
+
+export default Profesores;
