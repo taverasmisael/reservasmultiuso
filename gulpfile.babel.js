@@ -74,14 +74,11 @@ const WIREDEP = wiredep.stream;
 // use `gulp` for any other gulp related calls.
 const GULP = gulpHelp(gulp);
 
-// Lint JavaScript
-GULP.task('jshint', `Lints all our JS with 'JSHINT'`,  ()=> {
-  return gulp.src(config.paths.scripts)
-              .pipe($.changed(config.temp.scripts))
-              .pipe($.plumber())
-              .pipe($.jshint())
-              .pipe($.jshint.reporter('jshint-stylish'))
-              .pipe($.jshint.reporter('fail'));
+// Lint our JS code with ESLint'
+GULP.task('lint', ()=>{
+    return gulp.src(config.paths.scripts)
+                .pipe($.eslint())
+                .pipe($.eslint.format());
 });
 
 // Transform ES6 Scripts to normla ES5 And wathc the files

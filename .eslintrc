@@ -1,0 +1,16 @@
+{
+  "extends": "google",
+  "globals": {
+    "angular": true,
+    "Firebase": true,
+    "Materialize": true,
+    "moment": true
+  },
+  "plugins": ["flow-vars"],
+  "rules": {
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1,
+    "linebreak-style": 0,
+    "strict": 0
+  }
+}
