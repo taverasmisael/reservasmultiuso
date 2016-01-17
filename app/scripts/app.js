@@ -1,5 +1,7 @@
 import moduleName as Services from './services/index';
 
+import { configuration, onRun } from './config';
+
 angular.module('reservacionesMulti', [
   'ngAnimate',
   'ngAria',
@@ -15,4 +17,6 @@ angular.module('reservacionesMulti', [
   'mtExcedReservations',
   'mtPasswordMatching',
   Service
-]);
+])
+.config(configuration)
+.run(onRun);
