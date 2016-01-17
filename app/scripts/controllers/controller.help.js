@@ -1,5 +1,5 @@
-export class HelpController {
-  constructor () {
+export default class HelpController {
+  constructor() {
     this.active();
   }
   active() {

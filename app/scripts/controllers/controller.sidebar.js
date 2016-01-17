@@ -6,7 +6,7 @@ class SidebarController {
 
     this.user = {};
     this.isAdmin = Auth.isAdmin;
-    this..options = [{
+    this.options = [{
       displayName: 'Buscar',
       icon: 'search',
       state: 'search'
@@ -28,9 +28,9 @@ class SidebarController {
 
   active() {
     console.log('Sidebaring...');
-    this.signedIn = Auth.signedIn;
+    this.signedIn = this.Auth.signedIn;
     let checkProfile = setInterval(() => {
-      this.user = Auth.user;
+      this.user = this.Auth.user;
       if (this.user.profile) {
         clearInterval(checkProfile);
       }
@@ -48,6 +48,10 @@ class SidebarController {
       .content('Has salido del Sistema')
       .position('right bottom')
     );
-    $state.go('home');
+    this.$state.go('home');
   }
 }
+
+SidebarController.$inject = ['$state', '$mdToast', 'Auth'];
+
+export default SidebarController;

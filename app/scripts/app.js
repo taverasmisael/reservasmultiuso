@@ -1,8 +1,7 @@
-import { configuration, onRun } from './config';
+import {configuration, onRun} from './config';
 
-import moduleName as Services from './services/index';
-import moduleName as Controllers form './controllers/index';
-
+import Services from './services/index';
+import Controllers from './controllers/index';
 
 angular.module('reservacionesMulti', [
   'ngAnimate',
@@ -18,7 +17,8 @@ angular.module('reservacionesMulti', [
   'mtCheckUserName',
   'mtExcedReservations',
   'mtPasswordMatching',
-  Service
+  Services,
+  Controllers
 ])
 .config(configuration)
 .run(onRun);

@@ -6,11 +6,12 @@ class NavbarController {
   }
 
   active() {
+    const condition = '.md-toolbar-tools .md-icon-button';
     console.log('Navbaring...');
-    $(document).on('click', (event)=> {
-      if (!$(event.target).closest('.md-toolbar-tools .md-icon-button').length) {
-        if(!$mdSidenav('left').isLockedOpen()){
-          $mdSidenav('left').close();
+    $(document).on('click', event => {
+      if (!$(event.target).closest(condition).length) {
+        if (!this.$mdSidenav('left').isLockedOpen()) {
+          this.$mdSidenav('left').close();
         }
       }
     });
@@ -23,4 +24,4 @@ class NavbarController {
 
 NavbarController.$inject = ['$mdSidenav', 'Auth'];
 
-export NavbarController;
+export default NavbarController;

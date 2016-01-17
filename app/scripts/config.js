@@ -1,6 +1,4 @@
-configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvide'
-  r, 'TMPDIR'
-]
+configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvide', 'TMPDIR'];
 
 export function configuration($stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, TMPDIR) {
   $locationProvider.html5Mode(true);
@@ -65,7 +63,7 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
     });
 }
 
-onRun.$inject = ['$timeout', '$rootScope', 'amMoment', '$state', '$mdToast', 'Auth']
+onRun.$inject = ['$timeout', '$rootScope', 'amMoment', '$state', '$mdToast', 'Auth'];
 
 export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
   amMoment.changeLocale('es');
@@ -85,11 +83,9 @@ export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
   });
 }
 
-
 function _getForbidenStates(url) {
   // Here you can add as many as you routes you need with permisions or loggedIn users
   let forbidenUrls = ['/create/', '/user/', '/manage-users/'];
 
   return forbidenUrls.indexOf(url) >= 0;
 }
-})();

@@ -5,7 +5,7 @@ const dialogOptions = {
   clickOutsideToClose: false,
   parent: angular.element(document.body)
 };
-class UserController {
+class UsersController {
   constructor($mdMedia, $mdToast, $mdDialog, Auth, profiles) {
     this.$mdMedia = $mdMedia;
     this.$mdToast = $mdToast;
@@ -18,13 +18,30 @@ class UserController {
     this.active();
   }
 
+  _dialogComplete(respuesta) {
+    this.$mdToast.show(
+      this.$mdToast.simple()
+      .content(respuesta)
+      .position('right bottom')
+    );
+  }
+
+  _dialogAbort(err) {
+    this.$mdToast.show(
+      this.$mdToast.simple()
+      .content(err)
+      .position('right bottom')
+    );
+    console.error(err);
+  }
   active() {
-    this.profiles = profiles;
+    console.log('Pie... What were you waiting for?');
+    this.profiles = this.profiles;
   }
 
   editProfile(event, profileId) {
     this.Auth.getProfile(profileId).$loaded()
-      .then((response) => {
+      .then(response => {
         let config = {
           event: event,
           locals: {
@@ -35,9 +52,9 @@ class UserController {
         let editDialog = $.extends(config, dialogOptions);
 
         this.$mdDialog.show(editDialog)
-          .then(_dialogComplete)
-          .catch(_dialogAbort);
-      }).catch((err) => console.error(err));
+          .then(this._dialogComplete)
+          .catch(this._dialogAbort);
+      }).catch(err => console.error(err));
   }
 
   createUser(event) {
@@ -51,8 +68,8 @@ class UserController {
     let createDialog = $.extend(config, dialogOptions);
 
     this.$mdDialog.show(createDialog)
-      .then(_dialogComplete)
-      .catch(_dialogAbort);
+      .then(this._dialogComplete)
+      .catch(this._dialogAbort);
   }
 
   deleteUser(event, uid) {
@@ -63,13 +80,13 @@ class UserController {
       targetEvent: event,
       ok: 'Estoy Seguro',
       cancel: 'No deseo eliminarlo'
-    }
-    let confirm = this.$mdDialog.confirm(warinig);
+    };
+    let confirm = this.$mdDialog.confirm(warning);
 
     this.$mdDialog.show(confirm)
       .then(this.Auth.removeUser(uid))
-      .then(_dialogComplete('Usuario Eliminado'))
-      .catch((err) => console.error(err));
+      .then(this._dialogComplete('Usuario Eliminado'))
+      .catch(err => console.error(err));
   }
 
   arrangeTable(order) {
@@ -79,22 +96,4 @@ class UserController {
 
 UsersController.$inject = ['$mdMedia', '$mdToast', '$mdDialog', 'Auth', 'profiles'];
 
-export UserController;
-
-function _dialogComplete(respuesta) {
-  $mdToast.show(
-    $mdToast.simple()
-    .content(respuesta)
-    .position('right bottom')
-  );
-}
-
-function _dialogAbort(err) {
-  $mdToast.show(
-    $mdToast.simple()
-    .content(err)
-    .position('right bottom')
-  );
-  console.error(err);
-}
-}
+export default UsersController;

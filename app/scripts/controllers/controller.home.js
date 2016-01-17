@@ -8,10 +8,14 @@ class HomeController {
 
   active() {
     console.log('Active Main...');
-    Reservaciones.today().then((hoy)=> vm.reservaciones.today = hoy).catch((e)=>console.error(e));
-    Reservaciones.getCommingSoon().then((soon)=>vm.reservaciones.commingSoon = soon).catch((e)=>console.error(e));
+    this.Reservaciones.today()
+    .then(hoy => this.reservaciones.today = hoy)
+    .catch(e => console.error(e));
+    this.Reservaciones.getCommingSoon()
+    .then(soon => this.reservaciones.commingSoon = soon)
+    .catch(e => console.error(e));
   }
 }
 HomeController.$inject = ['Reservaciones'];
 
-export HomeController;
+export default HomeController;

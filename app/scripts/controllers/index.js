@@ -8,9 +8,9 @@ import SearchController from './controller.search';
 import SidebarController from './controller.sidebar';
 import UsersController from './controller.users';
 
-let moduleName = 'ServicesReservaciones';
+let Controllers = 'ControllersReservaciones';
 
-angular.module(moduleName, [])
+angular.module(Controllers, [])
   .controller('AdminController', AdminController)
   .controller('AuthController', AuthController)
   .controller('DialogController', DialogController)
@@ -21,4 +21,4 @@ angular.module(moduleName, [])
   .controller('SidebarController', SidebarController)
   .controller('UsersController', UsersController);
 
-export default moduleName;
+export default Controllers;

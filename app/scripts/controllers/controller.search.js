@@ -17,13 +17,13 @@ class SearchController {
 
   searchByProfesor(profesor) {
     this.Search.searchReservationsOf(profesor.$id)
-      .then((data) => {
+      .then(data => {
         this.query.heading = `${profesor.name}  ${profesor.lastname}`;
-        if (!data.length) {
-          this.query.message = `No hay reservaciones para ${this.query.heading}`;
-        } else {
+        if (data.length) {
           this.query.message = '';
           this.query.results = data;
+        } else {
+          this.query.message = `No hay reservaciones para ${this.query.heading}`;
         }
 
         this.query.needsDate = true;
@@ -31,15 +31,15 @@ class SearchController {
   }
 
   searchByDate(date) {
-    Search.searchReservacionByDate(date)
-      .then((data) => {
+    this.Search.searchReservacionByDate(date)
+      .then(data => {
         this.query.heading = date.toLocaleDateString();
 
-        if (!data.length) {
-          this.query.message = `No hay reservaciones para ${this.query.heading}`;
-        } else {
+        if (data.length) {
           this.query.message = '';
           this.query.results = data;
+        } else {
+          this.query.message = `No hay reservaciones para ${this.query.heading}`;
         }
 
         this.query.needsDate = false;
@@ -47,18 +47,16 @@ class SearchController {
   }
 
   searchByPeriod(period) {
-    let {
-      start, end
-    } = period;
+    let {start, end} = period;
 
-    Search.searchReservacionByPeriod(start, end)
-      .then((data) => {
+    this.Search.searchReservacionByPeriod(start, end)
+      .then(data => {
         this.query.heading = `Periodo del ${start.toLocaleDateString()} al ${end.toLocaleDateString()}`;
-        if (!data.length) {
-          this.query.message = `No hay reservaciones para ${this.query.heading}`;
-        } else {
+        if (data.length) {
           this.query.message = '';
           this.query.results = data;
+        } else {
+          this.query.message = `No hay reservaciones para ${this.query.heading}`;
         }
 
         this.query.needsDate = true;
@@ -66,14 +64,14 @@ class SearchController {
   }
 
   queryProfesors(profesorName) {
-    let response = profesorName ? vm.profesorsList.filter(_createFilterFor(profesorName)) : vm.profesorsList;
+    let response = profesorName ? this.profesorsList.filter(_createFilterFor(profesorName)) : this.profesorsList;
     return response;
   }
 }
 
 SearchController.$inject = ['Utilities', 'Profesores', 'Search'];
 
-export SearchController;
+export default SearchController;
 
 function _errHndl(err) {
   console.error(err);
@@ -81,9 +79,9 @@ function _errHndl(err) {
 
 function _mdDatePickerFix() {
   setTimeout(function() {
-    var datePicker = $('.md-datepicker-input-container'),
-      datePickerInput = datePicker.find('input'),
-      datePickerButton = datePicker.find('button');
+    let datePicker = $('.md-datepicker-input-container');
+    let datePickerInput = datePicker.find('input');
+    let datePickerButton = datePicker.find('button');
     datePickerInput.on('focus', function(event) {
       event.preventDefault();
       datePickerButton.trigger('click');

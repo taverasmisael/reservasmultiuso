@@ -16,21 +16,23 @@ class DialogController {
     this.selectedUser = this.currentUser;
   }
 
-  saveUser (user2save) {
+  saveUser(user2save) {
     let username = user2save.username;
 
-    user2save.isAdmin = Boolean(parseInt(user2save.isAdmin));
+    user2save.isAdmin = Boolean(parseInt(user2save.isAdmin, 10));
     if (this.editing) {
       this.Auth.updateProfile(user2save)
-        .then(()=> this.saveDialog(`${username} actualizado!`)).catch((err)=>console.error(err));
+        .then(() => this.saveDialog(`${username} actualizado!`))
+        .catch(err => console.error(err));
     } else {
       this.Auth.register(user2save)
-        .then(()=> this.saveDialog(`${username} creado con exito`)).catch((err)=>{
+        .then(() => this.saveDialog(`${username} creado con exito`))
+        .catch(err => {
           console.error(err);
           if (err.code === 'EMAIL_TAKEN') {
             this.proccessStatus = 'El correo electronico ya esta registrado';
           }
-        })
+        });
     }
   }
 
@@ -42,6 +44,6 @@ class DialogController {
   }
 }
 
-DialogController.$inject = ['$mdDialog', 'currentUser', 'Auth', 'state']
+DialogController.$inject = ['$mdDialog', 'currentUser', 'Auth', 'state'];
 
-export DialogController;
+export default DialogController;

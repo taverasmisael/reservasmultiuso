@@ -1,8 +1,8 @@
 const timepickerOptions = {
-  'scrollDefault': '8:00am',
-  'minTime': '8:00am',
-  'maxTime': '8:00pm',
-  'forceRoundTime': true
+  scrollDefault: '8:00am',
+  minTime: '8:00am',
+  maxTime: '8:00pm',
+  forceRoundTime: true
 };
 
 class AdminController {
@@ -32,10 +32,30 @@ class AdminController {
     this.today = new Date();
     this.exceptionMode = false;
     _mdDatePickerFix();
-    this.newReservationData = {}
+    this.newReservationData = {};
     this.minReservatinoDate = moment().subtract(2, 'day')._d;
     $('#newReservationDataStarts').timepicker(timepickerOptions);
     $('#newReservationDataEnds').timepicker(timepickerOptions);
+  }
+
+  checkAvailability(date, start, end) {
+    start = this.$filter('amParse')(start, 'HH:mmA');
+    end = this.$filter('amParse')(start, 'HH:mmA');
+    this.Search.checkAvailability(date, start, end)
+      .then(() => {
+        this.creationForm.$setValidity('confirmTime', true);
+        this.creationForm.$setValidity('endTime', true);
+        this.creationForm.$setValidity('startTime', true);
+      })
+      .catch(err => {
+        if (err.name === 'ENDS_TOO_LATE') {
+          this.creationForm.$setValidity('endTime', false);
+        } else if (err.name === 'START_AT_SAME_TIME') {
+          this.creationForm.$setValidity('startTime', false);
+        } else {
+          this.creationForm.$setValidity('confirmTime', false);
+        }
+      });
   }
 
   exonerate() {
@@ -56,10 +76,10 @@ class AdminController {
   }
 
   createReservacion(reservationData, nrdProfesor) {
-    let newReservation = _transformData(reservationData);
+    let newReservation = this._transformData(reservationData);
     this.Reservaciones.create(newReservation, nrdProfesor, this.exceptionMode)
       .then(() => {
-        let fromNow = moment().to(newReservatino.date);
+        let fromNow = moment().to(newReservation.date);
         this.$mdToast.show(
             this.$mdToast.simple()
             .content(`Reservacion ${fromNow}`))
@@ -67,19 +87,18 @@ class AdminController {
         this.newReservationData = {};
         this.selectedProfesor = {};
       }).catch(_errHdlr);
-
   }
   _transformData(data) {
     let filteredTimes = {
-      starts: this.$filter('amParse')(data.starts, 'HH:mmA')
+      starts: this.$filter('amParse')(data.starts, 'HH:mmA'),
       ends: this.$filter('amParse')(data.ends, 'HH:mmA')
     };
 
-    let { starts, ends } = filteredTimes;
+    let {starts, ends} = filteredTimes;
 
     data.date = this.Utilities.fixDate(data.date);
     data.starts = this.Utilities.fixTime(data.date, starts);
-    data.ends = this.Utilities.fixTime(data.date, starts);
+    data.ends = this.Utilities.fixTime(data.date, ends);
     data.materia = _getSelectedSection().materia;
 
     return data;
@@ -88,13 +107,13 @@ class AdminController {
 
 AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Search', 'Profesores'];
 
-export AdminController;
+export default AdminController;
 
 function _mdDatePickerFix() {
   setTimeout(function() {
-    let datePicker = $('.md-datepicker-input-container'),
-      datePickerInput = datePicker.find('input'),
-      datePickerButton = datePicker.find('button');
+    let datePicker = $('.md-datepicker-input-container');
+    let datePickerInput = datePicker.find('input');
+    let datePickerButton = datePicker.find('button');
     datePickerInput.on('focus', function(event) {
       event.preventDefault();
       datePickerButton.trigger('click');
@@ -113,26 +132,6 @@ function _getSelectedSection() {
   return this.availableSections.filter(function(seccion) {
     return seccion.id === this.newReservationData.section;
   });
-}
-
-function checkAvailability(date, start, end) {
-  start = this.$filter('amParse')(start, 'HH:mmA');
-  end = this.$filter('amParse')(start, 'HH:mmA');
-  this.Search.checkAvailability(date, start, end)
-    .then(() => {
-      this.creationForm.$setValidity('confirmTime', true);
-      this.creationForm.$setValidity('endTime', true);
-      this.creationForm.$setValidity('startTime', true);
-    })
-    .catch((err) => {
-      if (err.name === 'ENDS_TOO_LATE') {
-        this.creationForm.$setValidity('endTime', false);
-      } else if (err.name === 'START_AT_SAME_TIME') {
-        this.creationForm.$setValidity('startTime', false);
-      } else {
-        this.creationForm.$setValidity('confirmTime', false);
-      }
-    });
 }
 
 function _errHdlr(err) {

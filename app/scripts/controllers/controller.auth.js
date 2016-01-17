@@ -17,11 +17,10 @@ class AuthController {
     };
 
     this.Auth.login(user)
-      .then(()=> $state.go('home'))
-      .catch((err)=> vm.proccessStatus = err.message);
+      .then(() => this.state.go('home'))
+      .catch(err => this.proccessStatus = err.message);
   }
 }
 AuthController.$inject = ['$scope', '$state', 'Auth'];
 
-export AuthController;
-
+export default AuthController;
