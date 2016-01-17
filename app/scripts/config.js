@@ -1,5 +1,14 @@
-configuration.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$mdThemingProvide', 'TMPDIR'];
+configuration.$inject = ['$stateProvider', '$urlRouterProvider',
+'$locationProvider', '$mdThemingProvide', 'TMPDIR'];
 
+/**
+ * The main Angular Configurartion For Routes and mdThemes
+ * @param  {Object} $stateProvider     Defining States/Routes
+ * @param  {Object} $urlRouterProvider Redirections For Other Routes
+ * @param  {Object} $locationProvider  To eneable HTML5MODE
+ * @param  {Object} $mdThemingProvider Configuring Color Palete
+ * @param  {String} TMPDIR             Tepmlates Directory
+ */
 export function configuration($stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, TMPDIR) {
   $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise('/');
@@ -63,8 +72,18 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
     });
 }
 
-onRun.$inject = ['$timeout', '$rootScope', 'amMoment', '$state', '$mdToast', 'Auth'];
+onRun.$inject = ['$timeout', '$rootScope', 'amMoment', '$state',
+'$mdToast', 'Auth'];
 
+/**
+ * This Function Will Run Everytime Angular Instatiate the app
+ * @param  {Function} $timeout   JsTimeout function with ngSuperPowers
+ * @param  {Object} $rootScope The main container of our app
+ * @param  {Object} amMoment   ngMoment for Dates
+ * @param  {Object} $state     Is the provider of our States
+ * @param  {Function} $mdToast   ngMaterial Toast Service
+ * @param  {Service} Auth       Authentication service
+ */
 export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
   amMoment.changeLocale('es');
   $rootScope.$state = $state;
@@ -83,8 +102,14 @@ export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
   });
 }
 
+/**
+ * Restrict Acces to Certain Routes
+ * @param  {String} url the url Provided by the State
+ * @return {Boolean}     Return if the URL is on the forbidenUrls
+ */
 function _getForbidenStates(url) {
-  // Here you can add as many as you routes you need with permisions or loggedIn users
+  // Here you can add as many as you routes
+  // you need with permisions or loggedIn users
   let forbidenUrls = ['/create/', '/user/', '/manage-users/'];
 
   return forbidenUrls.indexOf(url) >= 0;
