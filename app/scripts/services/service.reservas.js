@@ -12,14 +12,15 @@ class Reservaciones {
     this.Utilities = Utilities;
     this.Search = Search;
     REF.set(this, new Firebase(FURL));
-    this.reservaciones = firebaseArray.get(this)(REF.get(this).child('reservaciones'));
+    this.reservaciones = $firebaseArray(REF.get(this).child('reservaciones'));
     this.hoy = Utilities.fixDate(new Date());
     this.setReservationData = function(data) {
+      let {name, lastname} = Auth.user.profile;
       data.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
       data.status = 'active';
       data.creator = Auth.user.profile.username;
       data.creatorEmail = Auth.user.profile.email;
-      data.creatorFullName = Auth.user.profile.name + ' ' + Auth.user.profile.lastname;
+      data.creatorFullName = `${name}  ${lastname}`;
 
       return data;
     };
@@ -71,7 +72,8 @@ class Reservaciones {
 
   @autobind
   today() {
-    return firebaseArray.get(this)(REF.get(this).child('reservaciones').orderByChild('date')
+    return firebaseArray.get(this)(REF.get(this)
+      .child('reservaciones').orderByChild('date')
       .equalTo(this.hoy.valueOf())).$loaded();
   }
 
@@ -79,12 +81,14 @@ class Reservaciones {
   getCommingSoon() {
     const tomorrow = moment(this.hoy).add(1, 'day')._d.valueOf();
 
-    return firebaseArray.get(this)(REF.get(this).child('reservaciones').startAt(tomorrow)).$loaded();
+    return firebaseArray.get(this)(REF.get(this)
+      .child('reservaciones').startAt(tomorrow)).$loaded();
   }
 
   @autobind
   findById(reservacionID) {
-    return firebaseObject.get(this)(REF.get(this).child('reservaciones').child(reservacionID)).$loaded();
+    return firebaseObject.get(this)(REF.get(this)
+      .child('reservaciones').child(reservacionID)).$loaded();
   }
 
   @autobind
@@ -124,6 +128,7 @@ class Reservaciones {
   }
 }
 
-Reservaciones.$inject = ['$firebaseObject', '$firebaseArray', 'Auth', 'Utilities', 'Search', 'FURL'];
+Reservaciones.$inject = ['$firebaseObject', '$firebaseArray', 'Auth',
+'Utilities', 'Search', 'FURL'];
 
 export default Reservaciones;

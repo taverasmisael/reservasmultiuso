@@ -22,7 +22,8 @@ class Search {
 
   @autobind
   searchProfesorByCedula(cedula) {
-    return firebaseObject.get(this)(PROFEREF.get(this).orderByChild('cedula').equalTo(cedula)).$loaded();
+    return firebaseObject.get(this)(PROFEREF.get(this)
+          .orderByChild('cedula').equalTo(cedula)).$loaded();
   }
 
   @autobind
@@ -42,7 +43,8 @@ class Search {
   @autobind
   searchProfesorInMonth(profesorId, date) {
     let start = this.Utilities.fixDate(moment(date).date(1)._d).valueOf();
-    let end = this.Utilities.fixDate(moment(start).month(start.getMonth() + 1)._d).valueOf();
+    let nextMes = start.getMonth() + 1;
+    let end = this.Utilities.fixDate(moment(start).month(nextMes)._d).valueOf();
 
     let reservacionesEnMes = new Promise((resolve, reject) => {
       firebaseArray.get(this)(RESERVREF.get(this).orderByChild('date')
@@ -68,7 +70,8 @@ class Search {
   @autobind
   searchReservacionByDate(date) {
     let fixedDate = this.Utilities.fixDate(date).valueOf();
-    return firebaseArray.get(this)(RESERVREF.get(this).orderByChild('date').equalTo(fixedDate)).$loaded();
+    return firebaseArray.get(this)(RESERVREF.get(this)
+        .orderByChild('date').equalTo(fixedDate)).$loaded();
   }
 
   @autobind
@@ -76,12 +79,14 @@ class Search {
     let fixedStart = this.Utilities.fixDate(start).valueOf();
     let fixedEnd = this.Utilities.fixDate(end).valueOf();
 
-    return firebaseArray.get(this)(RESERVREF.get(this).orderByChild('date').startAt(fixedStart).endAt(fixedEnd)).$loaded();
+    return firebaseArray.get(this)(RESERVREF.get(this)
+        .orderByChild('date').startAt(fixedStart).endAt(fixedEnd)).$loaded();
   }
 
   @autobind
   searchReservationsOf(profesorId) {
-    return firebaseArray.get(this)(RESERVREF.get(this).orderByChild('profesor').equalTo(profesorId)).$loaded();
+    return firebaseArray.get(this)(RESERVREF.get(this)
+        .orderByChild('profesor').equalTo(profesorId)).$loaded();
   }
 
   @autobind
@@ -103,7 +108,7 @@ class Search {
               return true;
             } else if (start.isBefore(res.starts) && end.isAfter(res.starts)) {
               errMessage.name = 'ENDS_TOO_LATE';
-              errMessage.message = 'The reservation you check colides with other';
+              errMessage.message = 'Your reservation colides with other';
               return true;
             } else {
               return false;
