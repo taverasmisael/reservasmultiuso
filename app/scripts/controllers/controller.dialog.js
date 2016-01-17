@@ -3,8 +3,8 @@ class DialogController {
     this.$mdDialog = $mdDialog;
     this.currentUser = currentUser;
     this.Auth = Auth;
-
-    this.heading = `${state.charAt(0).toUpperCase()} ${state.slice(1).toLowerCase()} usuario`;
+    let State = `${state.charAt(0).toUpperCase()} ${state.slice(1).toLowerCase()}`;
+    this.heading = `${State} usuario`;
     this.editing = state.toLowerCase() === 'editando';
     this.proccessStatus = '';
 

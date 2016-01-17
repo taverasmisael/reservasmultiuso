@@ -71,7 +71,9 @@ class AdminController {
   }
 
   queryProfesors(profesorName) {
-    let response = profesorName ? this.profesorsList.filter(_createFilterFor(profesorName)) : this.profesorsList;
+    let response = profesorName ?
+          this.profesorsList.filter(_createFilterFor(profesorName)) :
+          this.profesorsList;
     return response;
   }
 
@@ -105,10 +107,14 @@ class AdminController {
   }
 }
 
-AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities', 'Reservaciones', 'Search', 'Profesores'];
+AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities',
+'Reservaciones', 'Search', 'Profesores'];
 
 export default AdminController;
 
+/**
+ * This Function Add trigger on .md-datapicker-input-container:focus
+ */
 function _mdDatePickerFix() {
   setTimeout(function() {
     let datePicker = $('.md-datepicker-input-container');
@@ -121,19 +127,33 @@ function _mdDatePickerFix() {
   }, 250);
 }
 
+/**
+ * Function For Filtering Profesors
+ * @param  {String} query the Profesor Name
+ * @return {Boolean}       Returns if the Profesor was found
+ */
 function _createFilterFor(query) {
   let capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
   return function filterFn(profesor) {
-    return (profesor.name.indexOf(capitalcaseQuery) === 0) || (profesor.lastname.indexOf(capitalcaseQuery) === 0);
+    return (profesor.name.indexOf(capitalcaseQuery) === 0) ||
+           (profesor.lastname.indexOf(capitalcaseQuery) === 0);
   };
 }
 
+/**
+ * Return `materia` for the selected Section number
+ * @return {Boolean} Returns if found the section
+ */
 function _getSelectedSection() {
   return this.availableSections.filter(function(seccion) {
     return seccion.id === this.newReservationData.section;
   });
 }
 
+/**
+ * Just Log Errors From Promise in console
+ * @param  {Error} err An error returned by a Promise
+ */
 function _errHdlr(err) {
   console.error(err);
 }

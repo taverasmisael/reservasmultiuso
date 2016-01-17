@@ -27,7 +27,7 @@ class SearchController {
         }
 
         this.query.needsDate = true;
-      }).catch(_errHndl);
+      }).catch(_errHdlr);
   }
 
   searchByDate(date) {
@@ -43,15 +43,16 @@ class SearchController {
         }
 
         this.query.needsDate = false;
-      }).catch(_errHndl);
+      }).catch(_errHdlr);
   }
 
   searchByPeriod(period) {
     let {start, end} = period;
+    let head = `${start.toLocaleDateString()} al ${end.toLocaleDateString()}`;
 
     this.Search.searchReservacionByPeriod(start, end)
       .then(data => {
-        this.query.heading = `Periodo del ${start.toLocaleDateString()} al ${end.toLocaleDateString()}`;
+        this.query.heading = `Periodo del ${head}`;
         if (data.length) {
           this.query.message = '';
           this.query.results = data;
@@ -60,11 +61,13 @@ class SearchController {
         }
 
         this.query.needsDate = true;
-      }).catch(_errHndl);
+      }).catch(_errHdlr);
   }
 
   queryProfesors(profesorName) {
-    let response = profesorName ? this.profesorsList.filter(_createFilterFor(profesorName)) : this.profesorsList;
+    let response = profesorName ?
+      this.profesorsList.filter(_createFilterFor(profesorName)) :
+      this.profesorsList;
     return response;
   }
 }
@@ -73,10 +76,9 @@ SearchController.$inject = ['Utilities', 'Profesores', 'Search'];
 
 export default SearchController;
 
-function _errHndl(err) {
-  console.error(err);
-}
-
+/**
+ * This Function Add trigger on .md-datapicker-input-container:focus
+ */
 function _mdDatePickerFix() {
   setTimeout(function() {
     let datePicker = $('.md-datepicker-input-container');
@@ -89,9 +91,23 @@ function _mdDatePickerFix() {
   }, 250);
 }
 
+/**
+ * Function For Filtering Profesors
+ * @param  {String} query the Profesor Name
+ * @return {Boolean}       Returns if the Profesor was found
+ */
 function _createFilterFor(query) {
-  var capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
+  let capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
   return function filterFn(profesor) {
-    return (profesor.name.indexOf(capitalcaseQuery) === 0) || (profesor.lastname.indexOf(capitalcaseQuery) === 0);
+    return (profesor.name.indexOf(capitalcaseQuery) === 0) ||
+           (profesor.lastname.indexOf(capitalcaseQuery) === 0);
   };
+}
+
+/**
+ * Just Log Errors From Promise in console
+ * @param  {Error} err An error returned by a Promise
+ */
+function _errHdlr(err) {
+  console.error(err);
 }
