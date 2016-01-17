@@ -139,7 +139,4 @@ class Auth {
 
 Auth.$inject = ['$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
 
-angular.module('reservacionesMulti')
-  .service('Auth', Auth);
-
 export default Auth;

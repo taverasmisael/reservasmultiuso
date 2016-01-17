@@ -1,5 +1,5 @@
 configuration.$inject = ['$stateProvider', '$urlRouterProvider',
-'$locationProvider', '$mdThemingProvide', 'TMPDIR'];
+'$locationProvider', '$mdThemingProvider', 'TPLDIR'];
 
 /**
  * The main Angular Configurartion For Routes and mdThemes
@@ -7,9 +7,9 @@ configuration.$inject = ['$stateProvider', '$urlRouterProvider',
  * @param  {Object} $urlRouterProvider Redirections For Other Routes
  * @param  {Object} $locationProvider  To eneable HTML5MODE
  * @param  {Object} $mdThemingProvider Configuring Color Palete
- * @param  {String} TMPDIR             Tepmlates Directory
+ * @param  {String} TPLDIR             Tepmlates Directory
  */
-export function configuration($stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, TMPDIR) {
+export function configuration($stateProvider, $urlRouterProvider, $locationProvider, $mdThemingProvider, TPLDIR) {
   $locationProvider.html5Mode(true);
   $urlRouterProvider.otherwise('/');
   $mdThemingProvider
@@ -20,37 +20,37 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
   $stateProvider
     .state('home', {
       url: '/',
-      templateUrl: TMPDIR + 'main.tpl.html',
+      templateUrl: TPLDIR + 'main.tpl.html',
       controller: 'HomeController',
       controllerAs: 'HomeCtrl'
     })
     .state('search', {
       url: '/search/',
-      templateUrl: TMPDIR + 'search.tpl.html',
+      templateUrl: TPLDIR + 'search.tpl.html',
       controller: 'SearchController',
       controllerAs: 'SearchCtrl'
     })
     .state('create', {
       url: '/create/',
-      templateUrl: TMPDIR + 'create.tpl.html',
+      templateUrl: TPLDIR + 'create.tpl.html',
       controller: 'AdminController',
       controllerAs: 'AdminCtrl'
     })
     .state('help', {
       url: '/about/',
-      templateUrl: TMPDIR + 'help.tpl.html',
+      templateUrl: TPLDIR + 'help.tpl.html',
       controller: 'HelpController',
       controllerAs: 'HelpCtrl'
     })
     .state('login', {
       url: '/login/',
-      templateUrl: TMPDIR + 'login.tpl.html',
+      templateUrl: TPLDIR + 'login.tpl.html',
       controller: 'AuthController',
       controllerAs: 'AuthCtrl'
     })
     .state('profile', {
       url: '/user/',
-      templateUrl: TMPDIR + 'userconfig.tpl.html',
+      templateUrl: TPLDIR + 'userconfig.tpl.html',
       controller: 'UsersController',
       controllerAs: 'UsersCtrl',
       resolve: {
@@ -61,7 +61,7 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
     })
     .state('manage', {
       url: '/manage-users/',
-      templateUrl: TMPDIR + 'manageusers.tpl.html',
+      templateUrl: TPLDIR + 'manageusers.tpl.html',
       controller: 'UsersController',
       controllerAs: 'UsersCtrl',
       resolve: {

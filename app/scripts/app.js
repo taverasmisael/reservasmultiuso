@@ -13,12 +13,13 @@ angular.module('reservacionesMulti', [
   'angularMoment',
   'ui.router',
   'firebase',
-  'mtUtilities',
   'mtCheckUserName',
   'mtExcedReservations',
   'mtPasswordMatching',
   Services,
   Controllers
 ])
+.constant('TPLDIR', 'views/')
+.constant('FURL', 'https://reservasmultiuso.firebaseio.com')
 .config(configuration)
 .run(onRun);
