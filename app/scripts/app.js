@@ -1,7 +1,7 @@
 import {configuration, onRun} from './config';
 
-import Services from './services/index';
-import Controllers from './controllers/index';
+import {default as Services} from './services/index';
+import {default as Controllers} from './controllers/index';
 
 angular.module('reservacionesMulti', [
   'ngAnimate',
