@@ -1,53 +1,47 @@
-(function() {
-    'use strict';
-    angular.module('reservacionesMulti')
-        .controller('DialogController', DialogController);
+class DialogController {
+  constructor($mdDialog, currentUser, Auth, state) {
+    this.$mdDialog = $mdDialog;
+    this.currentUser = currentUser;
+    this.Auth = Auth;
 
-    DialogController.$inject = ['$mdDialog', 'currentUser', 'Auth', 'state'];
+    this.heading = `${state.charAt(0).toUpperCase()} ${state.slice(1).toLowerCase()} usuario`;
+    this.editing = state.toLowerCase() === 'editando';
+    this.proccessStatus = '';
 
-    function DialogController($mdDialog, currentUser, Auth, state) {
-        var vm = this;
-        vm.guardar = guardarDialog;
-        vm.headding = state.charAt(0).toUpperCase() + state.slice(1).toLowerCase() + ' usuario';
-        vm.editing = state.toLowerCase() === 'editando' || false;
-        vm.cancelar = cancelDialog;
-        vm.saveUser = saveUser;
-        vm.processStatus = '';
+    this.active();
+  }
 
+  active() {
+    console.log('Dialoging...');
+    this.selectedUser = this.currentUser;
+  }
 
-        active();
+  saveUser (user2save) {
+    let username = user2save.username;
 
-        function active() {
-            console.log('Activating Dialog....');
-            vm.selectedUser = currentUser;
-        }
-
-        function saveUser (user2save) {
-          user2save.isAdmin = Boolean(parseInt(user2save.isAdmin));
-          if (vm.editing) {
-            Auth.updateProfile(user2save).then(function () {
-              guardarDialog(user2save.username + ' salvado');
-            }).catch(function (err) {
-              console.log(err);
-            });
-          } else {
-            Auth.register(user2save).then(function () {
-              guardarDialog(user2save.username + ' creado con exito');
-            }).catch(function (err) {
-              console.log(err);
-              if (err.code === 'EMAIL_TAKEN') {
-                vm.processStatus = 'El correo electronico está en uso';
-              }
-            });
+    user2save.isAdmin = Boolean(parseInt(user2save.isAdmin));
+    if (this.editing) {
+      this.Auth.updateProfile(user2save)
+        .then(()=> this.saveDialog(`${username} actualizado!`)).catch((err)=>console.error(err));
+    } else {
+      this.Auth.register(user2save)
+        .then(()=> this.saveDialog(`${username} creado con exito`)).catch((err)=>{
+          console.error(err);
+          if (err.code === 'EMAIL_TAKEN') {
+            this.proccessStatus = 'El correo electronico ya esta registrado';
           }
-        }
-
-        function cancelDialog(respuesta) {
-            $mdDialog.cancel(respuesta);
-        }
-
-        function guardarDialog(respuesta) {
-            $mdDialog.hide(respuesta);
-        }
+        })
     }
-})();
+  }
+
+  cancelDialog(reason) {
+    this.$mdDialog.cancel(reason);
+  }
+  saveDialog(reason) {
+    this.$mdDialog.hide(reason);
+  }
+}
+
+DialogController.$inject = ['$mdDialog', 'currentUser', 'Auth', 'state']
+
+export DialogController;
