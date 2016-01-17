@@ -1,6 +1,8 @@
-import moduleName as Services from './services/index';
-
 import { configuration, onRun } from './config';
+
+import moduleName as Services from './services/index';
+import moduleName as Controllers form './controllers/index';
+
 
 angular.module('reservacionesMulti', [
   'ngAnimate',
