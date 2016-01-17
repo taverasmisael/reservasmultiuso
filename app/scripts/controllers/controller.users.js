@@ -1,93 +1,100 @@
-(function() {
-    'use strict';
-    angular.module('reservacionesMulti')
-        .controller('UsersController', UsersController);
+const dialogOptions = {
+  controller: 'DialogController',
+  controllerAs: 'DialogCtrl',
+  templateUrl: 'views/dialogs/users.dlg.html',
+  clickOutsideToClose: false,
+  parent: angular.element(document.body)
+};
+class UserController {
+  constructor($mdMedia, $mdToast, $mdDialog, Auth, profiles) {
+    this.$mdMedia = $mdMedia;
+    this.$mdToast = $mdToast;
+    this.$mdDialog = $mdDialog;
+    this.Auth = Auth;
+    this.profiles = profiles;
 
-    UsersController.$inject = ['$mdMedia', '$mdToast', '$mdDialog', 'Auth', 'profiles'];
+    this.tableOrder = 'name';
 
-    function UsersController($mdMedia, $mdToast, $mdDialog, Auth, profiles) {
-        var vm = this;
-        var dialogOptions = {
-            controller: 'DialogController',
-            controllerAs: 'DialogCtrl',
-            templateUrl: 'views/dialogs/users.dlg.html',
-            clickOutsideToClose: false,
-            parent: angular.element(document.body)
+    this.active();
+  }
+
+  active() {
+    this.profiles = profiles;
+  }
+
+  editProfile(event, profileId) {
+    this.Auth.getProfile(profileId).$loaded()
+      .then((response) => {
+        let config = {
+          event: event,
+          locals: {
+            currentUser: response,
+            state: 'editando'
+          }
         };
-        vm.editProfile = editProfile;
-        vm.createUser = createUser;
-        vm.deleteUser = deleteUser;
-        vm.arrangeTable = arrangeTable;
-        vm.tableOrder = 'name';
+        let editDialog = $.extends(config, dialogOptions);
 
-        active();
+        this.$mdDialog.show(editDialog)
+          .then(_dialogComplete)
+          .catch(_dialogAbort);
+      }).catch((err) => console.error(err));
+  }
 
-        function active() {
-            vm.profiles = profiles;
-        }
+  createUser(event) {
+    let config = {
+      event: event,
+      locals: {
+        currentUser: {},
+        state: 'creando'
+      }
+    };
+    let createDialog = $.extend(config, dialogOptions);
 
-        function editProfile(event, id) {
-            Auth.getProfile(id).$loaded().then(function(response) {
-                var editDialog = $.extend({}, dialogOptions);
-                editDialog.event = event;
-                editDialog.locals = {
-                    currentUser: response,
-                    state: 'editando'
-                };
-                $mdDialog.show(editDialog).then(_dialogComplete).catch(_dialogAbort);
-            }).catch(function(err) {
-                console.log(err);
-            });
-        }
+    this.$mdDialog.show(createDialog)
+      .then(_dialogComplete)
+      .catch(_dialogAbort);
+  }
 
-        function createUser (event) {
-          var createDialog = $.extend({}, dialogOptions);
-          createDialog.event = event;
-          createDialog.locals = {
-              currentUser: {},
-              state: 'creando'
-          };
-          $mdDialog.show(createDialog).then(_dialogComplete).catch(_dialogAbort);
-        }
-
-        function deleteUser (event, uid) {
-          var confirm = $mdDialog.confirm({
-                              title: '¡Atención!',
-                              content: '¿Está seguro que desea elminar este usuario?',
-                              ariaLabel:'Confirmar: Eliminar Usuario',
-                              targetEvent: event,
-                              ok: 'Estoy Seguro',
-                              cancel: 'No deseo eliminarlo'
-                              });
-          $mdDialog.show(confirm).then(function () {
-            Auth.removeUser(uid).then(_dialogComplete('Usuario Eliminado')).catch(_dialogAbort);
-          });
-        }
-
-        function arrangeTable (order) {
-          vm.tableOrder = order;
-        }
-
-
-/**
-  * Private Functions *
-*/
-
-        function _dialogComplete(respuesta) {
-            $mdToast.show(
-                $mdToast.simple()
-                .content(respuesta)
-                .position('right bottom')
-            );
-        }
-
-        function _dialogAbort(err) {
-            $mdToast.show(
-                $mdToast.simple()
-                .content(err)
-                .position('right bottom')
-            );
-            console.log(err);
-        }
+  deleteUser(event, uid) {
+    let warning = {
+      title: '¡Atención!',
+      content: '¿Está seguro que desea elminar este usuario?',
+      ariaLabel: 'Confirmar: Eliminar Usuario',
+      targetEvent: event,
+      ok: 'Estoy Seguro',
+      cancel: 'No deseo eliminarlo'
     }
-})();
+    let confirm = this.$mdDialog.confirm(warinig);
+
+    this.$mdDialog.show(confirm)
+      .then(this.Auth.removeUser(uid))
+      .then(_dialogComplete('Usuario Eliminado'))
+      .catch((err) => console.error(err));
+  }
+
+  arrangeTable(order) {
+    this.tableOrder = order;
+  }
+}
+
+UsersController.$inject = ['$mdMedia', '$mdToast', '$mdDialog', 'Auth', 'profiles'];
+
+export UserController;
+
+function _dialogComplete(respuesta) {
+  $mdToast.show(
+    $mdToast.simple()
+    .content(respuesta)
+    .position('right bottom')
+  );
+}
+
+function _dialogAbort(err) {
+  $mdToast.show(
+    $mdToast.simple()
+    .content(err)
+    .position('right bottom')
+  );
+  console.error(err);
+}
+}
