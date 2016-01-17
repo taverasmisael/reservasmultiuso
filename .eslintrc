@@ -11,7 +11,7 @@
     "$": true,
     "jQuery": false
   },
-  "plugins": ["flow-vars"],
+  "plugins": ["flow-vars", "babel"],
   "parser": "babel-eslint",
   "rules": {
     "flow-vars/define-flow-type": 1,

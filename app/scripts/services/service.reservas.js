@@ -1,6 +1,6 @@
-const REF = new WeakMap(),
-  firebaseObject = new WeakMap(),
-  firebaseArray = new WeakMap();
+const REF = new WeakMap();
+const firebaseObject = new WeakMap();
+const firebaseArray = new WeakMap();
 
 class Reservaciones {
   constructor($firebaseObject, $firebaseArray, Auth, Utilities, Search, FURL) {
@@ -24,18 +24,18 @@ class Reservaciones {
     this.disableRange = function(date, start, end) {
       let promise = new Promise((resolve, reject) => {
         let disabledList = [];
-        Search.reservacionByDate(date).then((reservas) => {
-          let filtered = reservas.filter((res) => (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts));
+        Search.reservacionByDate(date).then(reservas => {
+          let filtered = reservas.filter(res => (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts));
           for (let r of filtered) {
             disabledList.push(r.$id);
           }
 
           resolve(disabledList);
-        }).catch((error) => {
+        }).catch(error => {
           reject(error);
           console.log(error);
         });
-      })
+      });
 
       return promise;
     };
@@ -43,7 +43,7 @@ class Reservaciones {
     this.makeReservation = function(data, profesor) {
       let promise = new Promise((resolve, reject) => {
         this.reservaciones.$add(data)
-          .then((ref) => {
+          .then(ref => {
             let key = ref.key();
             let reservacion = new Firebase(FURL + 'reservaciones/' + key);
             let newUpdate = {
@@ -52,72 +52,65 @@ class Reservaciones {
             };
             reservacion.update(newUpdate);
             resolve(key);
-          }).catch((err) => {
+          }).catch(err => {
             console.log(err);
             reject(err);
           });
-      })
+      });
 
       return promise;
     };
   }
 
-  @autobind
   all() {
     return this.reservaciones;
   }
 
-  @autobind
   today() {
     return firebaseArray.get(this)(REF.get(this).child('reservaciones').orderByChild('date')
       .equalTo(this.hoy.valueOf())).$loaded();
   }
 
-  @autobind
   getCommingSoon() {
     const tomorrow = moment(this.hoy).add(1, 'day')._d.valueOf();
 
     return firebaseArray.get(this)(REF.get(this).child('reservaciones').startAt(tomorrow)).$loaded();
   }
 
-  @autobind
   findById(reservacionID) {
     return firebaseObject.get(this)(REF.get(this).child('reservaciones').child(reservacionID)).$loaded();
   }
 
-  @autobind
   remove(reservacionID) {
-    this.findById(reservacionID).then((reserv) => {
+    this.findById(reservacionID).then(reserv => {
       reserv.status = 'disabled';
       return reserv.$save;
     });
   }
 
-  @autobind
   isActive(reservacion) {
     return reservacion.status === 'active';
   }
 
-  @autobind
   create(reservacion, profesor) {
     let nuevaReservacion = this.setReservationData(reservacion);
 
     return this.makeReservation(nuevaReservacion, profesor);
-
   }
 
-  @autobind
   createWithException(reservacion, profesor) {
     let nuevaReservacion = this.setReservationData(reservacion);
     let {
       date, starts, ends
     } = reservacion;
 
-    this.disableRange(date, starts, ends).then((disabledList) => {
-      nuevaReservacion.isException = true;
-      nuevaReservacion.wereDisabled = disabledList;
-      return this.makeReservation(nuevaReservacion, profesor);
-    }).catch((e) => console.error(e));
+    this.disableRange(date, starts, ends)
+      .then(disabledList => {
+        nuevaReservacion.isException = true;
+        nuevaReservacion.wereDisabled = disabledList;
+        return this.makeReservation(nuevaReservacion, profesor);
+      })
+      .catch(e => console.error(e));
   }
 }
 

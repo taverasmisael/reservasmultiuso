@@ -1,11 +1,8 @@
-import {
-  autobind
-}
-from 'core-decorators';
+import {autobind} from 'core-decorators';
 
-const REF = new WeakMap(),
-  firebaseObject = new WeakMap(),
-  firebaseArray = new WeakMap();
+const REF = new WeakMap();
+const firebaseObject = new WeakMap();
+const firebaseArray = new WeakMap();
 
 class Profesores {
   constructor($firebaseObject, $firebaseArray, FURL) {
@@ -15,17 +12,14 @@ class Profesores {
     this.profesores = $firebaseArray(REF.get(this).child('profesores'));
   }
 
-  @autobind
   all() {
     return this.profesores;
   }
 
-  @autobind
   create(profesorData) {
     this.profesores.$add(profesorData);
   }
 
-  @autobind
   getSections(pofesorID) {
     return firebaseObject.get(this)(REF.get(this).child('profesores').child(pofesorID).child('secciones'));
   }
