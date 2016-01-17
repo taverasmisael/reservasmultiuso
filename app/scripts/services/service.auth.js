@@ -1,3 +1,5 @@
+import {autobind} from 'core-decorators';
+
 const firebaseArray = new WeakMap();
 const firebaseObject = new WeakMap();
 const REF = new WeakMap();
@@ -26,31 +28,34 @@ class Auth {
     });
   }
 
+  @autobind
   createProfile(uid, user) {
     return REF.get(this).child(uid).set(user);
   }
 
+  @autobind
   updateProfile(newinfo) {
     return newinfo.$save();
   }
 
+  @autobind
   usernameAvailable(username) {
     const USESREXISTS = {
-        name: 'USERNAME_EXIST',
-        message: `The User: "${username}" already exist in our DB.`
-      };
+      name: 'USERNAME_EXIST',
+      message: `The User: "${username}" already exist in our DB.`
+    };
 
-    let promise = new Promise ((resolve, reject)=> {
+    let promise = new Promise((resolve, reject) => {
       firebaseArray.get(this)(REF.get(this).orderByChild('username').equalTo(username)).$loaded()
         .then(data => {
           return data.length ? reject(USESREXISTS) : resolve('Usuario Disponible');
         }).catch(e => console.error(e));
     });
 
-
     return promise;
   }
 
+  @autobind
   register(user) {
     let {email, password} = user;
     let usuario = {
@@ -62,6 +67,7 @@ class Auth {
     return AUTH.get(this).$createUser(usuario).then(data => this.createProfile(data.uid, user)).catch(e => console.error(e));
   }
 
+  @autobind
   login(user) {
     let {
       username, password
@@ -85,18 +91,22 @@ class Auth {
       });
   }
 
+  @autobind
   removeuser(uid) {
     return firebaseObject.get(this)(REF.get(this).child(uid)).$remove();
   }
 
+  @autobind
   loadProfiles() {
     return firebaseArray.get(this)(REF.get(this)).$loaded();
   }
 
+  @autobind
   getProfile(uid) {
     return firebaseObject.get(this)(REF.get(this).child(uid));
   }
 
+  @autobind
   changePassword(user) {
     return AUTH.get(this).$changePassword({
       email: this.user.profile.email,
@@ -105,14 +115,17 @@ class Auth {
     });
   }
 
+  @autobind
   isAdmin() {
     return this.user.profile && this.user.profile.isAdmin;
   }
 
+  @autobind
   logout() {
     AUTH.get(this).$unauth();
   }
 
+  @autobind
   signedIn() {
     return Boolean(AUTH.get(this).$getAuth());
   }

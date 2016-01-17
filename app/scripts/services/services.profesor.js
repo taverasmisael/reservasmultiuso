@@ -12,16 +12,20 @@ class Profesores {
     this.profesores = $firebaseArray(REF.get(this).child('profesores'));
   }
 
+  @autobind
   all() {
     return this.profesores;
   }
 
+  @autobind
   create(profesorData) {
     this.profesores.$add(profesorData);
   }
 
+  @autobind
   getSections(pofesorID) {
-    return firebaseObject.get(this)(REF.get(this).child('profesores').child(pofesorID).child('secciones'));
+    return firebaseObject.get(this)(REF.get(this).child('profesores')
+      .child(pofesorID).child('secciones'));
   }
 }
 
