@@ -36,6 +36,10 @@ let config = {
             "es2015"
           ]
         },
+        browserify: {
+          entries: './app/scripts/app.js',
+          debug: true
+        },
         connect: {
             debug: true,
             fallback: './app/index.html',
@@ -58,7 +62,8 @@ let config = {
         basedir: './app',
         images: './dist/images/',
         styles: './app/styles/',
-        views: './dist/views/'
+        views: './dist/views/',
+        build: 'bundle.js'
     }
 };
 
