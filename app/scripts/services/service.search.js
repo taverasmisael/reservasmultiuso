@@ -42,9 +42,11 @@ class Search {
 
   @autobind
   searchProfesorInMonth(profesorId, date) {
-    let start = this.Utilities.fixDate(moment(date).date(1)._d).valueOf();
-    let nextMes = start.getMonth() + 1;
+    let start = this.Utilities.fixDate(moment(date).date(1)._d);
+    let nextMes = start.month() + 1;
     let end = this.Utilities.fixDate(moment(start).month(nextMes)._d).valueOf();
+    // Use the ValueOf the Date
+    start = start.valueOf();
 
     let reservacionesEnMes = new Promise((resolve, reject) => {
       firebaseArray.get(this)(RESERVREF.get(this).orderByChild('date')
