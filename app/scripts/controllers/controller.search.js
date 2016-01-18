@@ -3,7 +3,7 @@ class SearchController {
     this.Utilities = Utilities;
     this.Profesores = Profesores;
     this.Search = Search;
-    this.profesorsList = Profesores.all;
+    this.profesorsList = Profesores.all();
   }
 
   active() {
