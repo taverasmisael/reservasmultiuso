@@ -14,7 +14,7 @@ class AdminController {
     this.Search = Search;
     this.Profesores = Profesores;
 
-    this.profesorsList = Profesores.all;
+    this.profesorsList = Profesores.all();
 
     this.active();
 
@@ -29,6 +29,7 @@ class AdminController {
 
   active() {
     console.log('Administrating...');
+    console.log(this.profesorsList);
     this.today = new Date();
     this.exceptionMode = false;
     _mdDatePickerFix();

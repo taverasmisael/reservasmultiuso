@@ -12,7 +12,7 @@ class Auth {
     };
     firebaseObject.set(this, $firebaseObject);
     firebaseArray.set(this, $firebaseArray);
-    REF.set(this, new Firebase(FURL + 'profile'));
+    REF.set(this, new Firebase(FURL + '/profile'));
     AUTH.set(this, $firebaseAuth(REF.get(this)));
     AUTH.get(this).$onAuth(authData => {
       if (authData) {

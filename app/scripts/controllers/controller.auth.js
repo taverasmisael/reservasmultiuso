@@ -17,7 +17,7 @@ class AuthController {
     };
 
     this.Auth.login(user)
-      .then(() => this.state.go('home'))
+      .then(() => this.$state.go('home'))
       .catch(err => this.proccessStatus = err.message);
   }
 }

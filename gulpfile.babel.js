@@ -63,7 +63,7 @@ GULP.task('babelize:watch', 'Transform ES6 Scripts to normal ES5: watching', ()=
 GULP.task('babelize', 'Transform ES6 Scripts to normla ES5', ()=>  makeBundle(false));
 
 // Run JSHint on scripts and then babelize them
-GULP.task('scripts', (cb)=> { return runSequence('lint', 'babelize:watch', cb); });
+GULP.task('scripts', (cb)=> { return runSequence('lint', 'babelize', cb); });
 
 // Compile Our Css
 GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
