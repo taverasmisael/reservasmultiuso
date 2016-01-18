@@ -2,6 +2,7 @@ import {configuration, onRun} from './config';
 
 import {default as Services} from './services/index';
 import {default as Controllers} from './controllers/index';
+import {default as Directives} from './directives/index';
 
 angular.module('reservacionesMulti', [
   'ngAnimate',
@@ -13,9 +14,7 @@ angular.module('reservacionesMulti', [
   'angularMoment',
   'ui.router',
   'firebase',
-  'mtCheckUserName',
-  'mtExcedReservations',
-  'mtPasswordMatching',
+  Directives,
   Services,
   Controllers
 ])

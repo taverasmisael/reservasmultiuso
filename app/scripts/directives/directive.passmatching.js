@@ -1,36 +1,25 @@
-(function() {
-    'use strict';
-    angular.module('mtPasswordMatching', [])
-        .directive('mtPasswordMatch', PassMatch);
+class PassMatching {
+  constructor() {
+    this.restrict = 'A';
+    this.scope = true;
+    this.require = 'ngModel';
+  }
 
-    PassMatch.$inject = [];
+  link(scope, elem, attrs, controller) {
+    let checker = () => {
+      // Get the First Password
+      let pass1 = scope.$eval(attrs.ngModel);
 
-    function PassMatch() {
+      // Get the Second Password
+      let pass2 = scope.$eval(attrs.mtPasswordMatching);
 
-        var directive = {
-            restrict: 'A',
-            scope: true,
-            require: 'ngModel',
-            link: linkFunction
-        };
-        return directive;
+      return pass1 === pass2;
+    };
 
-        function linkFunction(scope, elem, attrs, control) {
-            var checker = function() {
+    scope.$watch(checker, match => {
+      controller.$setValidity('unique', match);
+    });
+  }
+}
 
-                //get the value of the first password
-                var e1 = scope.$eval(attrs.ngModel);
-
-                //get the value of the other password
-                var e2 = scope.$eval(attrs.mtPasswordMatch);
-                return e1 === e2;
-            };
-            scope.$watch(checker, function(n) {
-
-                //set the form control to valid if both
-                //passwords are the same, else invalid
-                control.$setValidity('unique', n);
-            });
-        }
-    }
-})();
+export default PassMatching;
