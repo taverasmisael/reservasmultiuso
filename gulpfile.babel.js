@@ -201,7 +201,6 @@ function makeBundle (isWatching) {
                       } else {
                         $.util.log($.util.colors.red('Error'), err.message);
                       }
-                      this.emit('end');
                   })
                 .pipe(source(config.output.build))
                 .pipe(buffer())
