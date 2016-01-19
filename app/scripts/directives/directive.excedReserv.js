@@ -9,6 +9,7 @@ class ExcedReservations {
 
   @autobind
   link(scope, elem, attrs, controller) {
+    console.log(controller);
     controller.$asyncValidators.mtExcedReservations = (modelValue, viewValue) => {
       let promise = new Promise((resolve, reject) => {
         if (controller.$isEmpty(modelValue)) {
@@ -21,7 +22,8 @@ class ExcedReservations {
         } else {
           this.Search.searchProfesorInMonth(profId, viewValue)
               .then(reservas => {
-                if (reservas.lenght >= 2) {
+                if (reservas.length >= 2) {
+                  console.log(`I'll run`);
                   reject(reservas);
                 } else {
                   resolve(true);
