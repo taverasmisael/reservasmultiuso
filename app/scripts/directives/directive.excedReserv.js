@@ -8,7 +8,7 @@ class ExcedReservations {
   }
 
   @autobind
-  link(scope, elem, attrs, controller,) {
+  link(scope, elem, attrs, controller) {
     controller.$asyncValidators.mtExcedReservations = (modelValue, viewValue) => {
       let promise = new Promise((resolve, reject) => {
         if (controller.$isEmpty(modelValue)) {

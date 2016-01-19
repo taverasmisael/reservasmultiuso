@@ -117,7 +117,7 @@ class Search {
             }
           });
 
-          if (filteredReservas) {
+          if (filteredReservas.length) {
             reject({
               data: filteredReservas,
               message: errMessage

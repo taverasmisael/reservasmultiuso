@@ -34,27 +34,30 @@ class AdminController {
     this.exceptionMode = false;
     _mdDatePickerFix();
     this.newReservationData = {};
-    this.minReservatinoDate = moment().subtract(2, 'day')._d;
+    this.minReservationDate = moment().subtract(2, 'day')._d;
     $('#newReservationDataStarts').timepicker(timepickerOptions);
     $('#newReservationDataEnds').timepicker(timepickerOptions);
   }
 
   checkAvailability(date, start, end) {
     start = this.$filter('amParse')(start, 'HH:mmA');
-    end = this.$filter('amParse')(start, 'HH:mmA');
+    end = this.$filter('amParse')(end, 'HH:mmA');
     this.Search.checkAvailability(date, start, end)
-      .then(() => {
+      .then(message => {
         this.creationForm.$setValidity('confirmTime', true);
         this.creationForm.$setValidity('endTime', true);
         this.creationForm.$setValidity('startTime', true);
       })
       .catch(err => {
-        if (err.name === 'ENDS_TOO_LATE') {
+        console.info(err);
+        if (err.message.name === 'ENDS_TOO_LATE') {
           this.creationForm.$setValidity('endTime', false);
-        } else if (err.name === 'START_AT_SAME_TIME') {
+        } else if (err.message.name === 'START_AT_SAME_TIME') {
           this.creationForm.$setValidity('startTime', false);
         } else {
           this.creationForm.$setValidity('confirmTime', false);
+          this.creationForm.$setValidity('endTime', true);
+          this.creationForm.$setValidity('startTime', true);
         }
       });
   }

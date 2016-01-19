@@ -7,7 +7,7 @@ import UsernameExist from './directive.usernameexist';
 let moduleName = 'DirectivesReservaciones';
 
 angular.module(moduleName, [Services])
-        .directive('mtExcedReservations', ['Search', (Search) => new ExcedReservations(Search)])
+        .directive('mtExcedReservations', ['Search', Search => new ExcedReservations(Search)])
         .directive('mtPasswordMatch', () => new PassMatching())
         .directive('mtCheckUsername', () => new UsernameExist());
 
