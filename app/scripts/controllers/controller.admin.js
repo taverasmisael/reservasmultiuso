@@ -29,7 +29,6 @@ class AdminController {
 
   active() {
     console.log('Administrating...');
-    console.log(this.profesorsList);
     this.today = new Date();
     this.exceptionMode = false;
     _mdDatePickerFix();
@@ -43,13 +42,13 @@ class AdminController {
     start = this.$filter('amParse')(start, 'HH:mmA');
     end = this.$filter('amParse')(end, 'HH:mmA');
     this.Search.checkAvailability(date, start, end)
-      .then(message => {
+      .then(() => {
         this.creationForm.$setValidity('confirmTime', true);
         this.creationForm.$setValidity('endTime', true);
         this.creationForm.$setValidity('startTime', true);
       })
       .catch(err => {
-        console.info(err);
+        console.error(err);
         if (err.message.name === 'ENDS_TOO_LATE') {
           this.creationForm.$setValidity('endTime', false);
         } else if (err.message.name === 'START_AT_SAME_TIME') {
@@ -76,8 +75,8 @@ class AdminController {
 
   queryProfesors(profesorName) {
     let response = profesorName ?
-          this.profesorsList.filter(_createFilterFor(profesorName)) :
-          this.profesorsList;
+      this.profesorsList.filter(_createFilterFor(profesorName)) :
+      this.profesorsList;
     return response;
   }
 
@@ -100,19 +99,27 @@ class AdminController {
       ends: this.$filter('amParse')(data.ends, 'HH:mmA')
     };
 
-    let {starts, ends} = filteredTimes;
+    let {
+      starts, ends
+    } = filteredTimes;
 
     data.date = this.Utilities.fixDate(data.date);
     data.starts = this.Utilities.fixTime(data.date, starts);
     data.ends = this.Utilities.fixTime(data.date, ends);
-    data.materia = _getSelectedSection().materia;
-
+    data.materia = this._getSelectedSection().materia;
     return data;
+  }
+  _getSelectedSection() {
+    let materiaName = this.availableSections.filter(seccion => {
+      return seccion.id === this.newReservationData.section;
+    });
+    return materiaName[0];
   }
 }
 
 AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities',
-'Reservaciones', 'Search', 'Profesores'];
+  'Reservaciones', 'Search', 'Profesores'
+];
 
 export default AdminController;
 
@@ -140,18 +147,8 @@ function _createFilterFor(query) {
   let capitalcaseQuery = query.charAt(0).toUpperCase() + query.slice(1).toLowerCase();
   return function filterFn(profesor) {
     return (profesor.name.indexOf(capitalcaseQuery) === 0) ||
-           (profesor.lastname.indexOf(capitalcaseQuery) === 0);
+      (profesor.lastname.indexOf(capitalcaseQuery) === 0);
   };
-}
-
-/**
- * Return `materia` for the selected Section number
- * @return {Boolean} Returns if found the section
- */
-function _getSelectedSection() {
-  return this.availableSections.filter(function(seccion) {
-    return seccion.id === this.newReservationData.section;
-  });
 }
 
 /**

@@ -15,10 +15,11 @@ class Utilities {
   }
   fixTime(date, time) {
     let _time = moment(time);
+    let _date = moment(date);
     _time.set({
-      year: date.getFullYear(),
-      month: date.getMonth(),
-      day: date.getDate()
+      year: _date.year(),
+      month: _date.month(),
+      day: _date.date()
     });
 
     return _time;

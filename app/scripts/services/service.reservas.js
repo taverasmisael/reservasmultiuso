@@ -21,6 +21,9 @@ class Reservaciones {
       data.creator = Auth.user.profile.username;
       data.creatorEmail = Auth.user.profile.email;
       data.creatorFullName = `${name}  ${lastname}`;
+      data.date = data.date.valueOf();
+      data.starts = data.starts.valueOf();
+      data.ends = data.ends.valueOf();
 
       return data;
     };
@@ -48,7 +51,7 @@ class Reservaciones {
         this.reservaciones.$add(data)
           .then(ref => {
             let key = ref.key();
-            let reservacion = new Firebase(FURL + 'reservaciones/' + key);
+            let reservacion = new Firebase(FURL + '/reservaciones/' + key);
             let newUpdate = {
               profesor: profesor.$id,
               profesorFullName: profesor.name + ' ' + profesor.lastname
@@ -107,7 +110,7 @@ class Reservaciones {
   @autobind
   create(reservacion, profesor) {
     let nuevaReservacion = this.setReservationData(reservacion);
-
+    console.log(nuevaReservacion, 'SRVRES:110');
     return this.makeReservation(nuevaReservacion, profesor);
   }
 
