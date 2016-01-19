@@ -1,26 +1,26 @@
-(function(){
-    'use strict';
-    angular.module('reservacionesMulti')
-            .controller('AuthController', AuthController);
+class AuthController {
+  constructor($scope, $state, Auth) {
+    this.$scope = $scope;
+    this.$state = $state;
+    this.Auth = Auth;
+    this.processStatus = '';
+    this.active();
+  }
 
-    AuthController.$inject = ['$scope', '$state', 'Auth'];
-    function AuthController ($scope, $state, Auth) {
-        var vm = this;
-        vm.logginUser = logginUser;
-        vm.processStatus = '';
-        active();
+  active() {
+    console.log('Authoring...');
+  }
+  logginUser(username, password) {
+    let user = {
+      username: username,
+      password: password
+    };
 
-        function active () {
-          console.log('Authoring...');
-        }
+    this.Auth.login(user)
+      .then(() => this.$state.go('profile'))
+      .catch(err => this.processStatus = err.message);
+  }
+}
+AuthController.$inject = ['$scope', '$state', 'Auth'];
 
-        function logginUser (username, password) {
-          var user = {
-            username: username,
-            password: password
-          };
-
-          Auth.login(user).then(()=> $state.go('home')).catch((err)=> vm.processStatus = err.message);
-        }
-    }
-})();
+export default AuthController;

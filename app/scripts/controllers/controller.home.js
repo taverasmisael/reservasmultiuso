@@ -1,22 +1,21 @@
-(function(){
-    'use strict';
-    angular.module('reservacionesMulti')
-            .controller('HomeController', HomeController);
+class HomeController {
+  constructor(Reservaciones) {
+    this.Reservaciones = Reservaciones;
+    this.todayDate = new Date();
+    this.reservaciones = {};
+    this.active();
+  }
 
-    HomeController.$inject = ['Reservaciones'];
+  active() {
+    console.log('Active Main...');
+    this.Reservaciones.today()
+    .then(hoy => this.reservaciones.today = hoy)
+    .catch(e => console.error(e));
+    this.Reservaciones.getCommingSoon()
+    .then(soon => this.reservaciones.commingSoon = soon)
+    .catch(e => console.error(e));
+  }
+}
+HomeController.$inject = ['Reservaciones'];
 
-    function HomeController (Reservaciones) {
-      var vm = this;
-      vm.todayDate = new Date();
-      vm.reservaciones = {};
-
-      active();
-
-      function active () {
-        console.log('Active Main...');
-
-        Reservaciones.today().then((hoy)=> vm.reservaciones.today = hoy).catch((e)=>console.error(e));
-        Reservaciones.getCommingSoon().then((soon)=>vm.reservaciones.commingSoon = soon).catch((e)=>console.error(e));
-      }
-    }
-})();
+export default HomeController;

@@ -1,38 +1,29 @@
-(function() {
-  'use strict';
-
-  angular
-    .module('mtUtilities', [])
-    .service('Utilities', Utilities);
-
-  function Utilities() {
-    var UtilitiesService = {
-      date: {
-        fix: fixMilliseconds
-      },
-      time: {
-        setDate: fixDate
-      }
-    };
-
-    return UtilitiesService;
-
-
-    function fixMilliseconds (date) {
-      var _date = new Date(date);
-      _date.setHours(12);
-      _date.setMinutes(0);
-      _date.setMilliseconds(0);
-      _date.setSeconds(0);
-
-      return _date;
-    }
-
-    function fixDate (date, time) {
-      var _time = moment(time);
-      _time.set({year: date.getFullYear(), month: date.getMonth(), day: date.getDate()});
-
-      return _time;
-    }
+class Utilities {
+  constructor() {
+    console.log('Instantiate Utilities Service');
   }
-}());
+  fixDate(date) {
+    let _date = moment(date);
+    _date.set({
+      hours: 12,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0
+    });
+
+    return _date;
+  }
+  fixTime(date, time) {
+    let _time = moment(time);
+    let _date = moment(date);
+    _time.set({
+      year: _date.year(),
+      month: _date.month(),
+      day: _date.date()
+    });
+
+    return _time;
+  }
+}
+
+export default Utilities;

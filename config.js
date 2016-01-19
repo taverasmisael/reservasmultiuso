@@ -30,7 +30,15 @@ let config = {
             browsers: AUTOPREFIXER_BROWSERS
         },
         babel: {
-          presets: ['es2015']
+          "plugins": ["transform-decorators"],
+          "presets": [
+            "stage-1",
+            "es2015"
+          ]
+        },
+        browserify: {
+          entries: './app/scripts/app.js',
+          debug: true
         },
         connect: {
             debug: true,
@@ -54,7 +62,8 @@ let config = {
         basedir: './app',
         images: './dist/images/',
         styles: './app/styles/',
-        views: './dist/views/'
+        views: './dist/views/',
+        build: 'bundle.js'
     }
 };
 

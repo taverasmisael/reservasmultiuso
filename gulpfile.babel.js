@@ -35,6 +35,13 @@ import wiredep from 'wiredep';
 
 import config from './config';
 
+// Browserify Stuffs
+import { default as source } from 'vinyl-source-stream';
+import { default as buffer } from 'vinyl-buffer';
+import browserify from 'browserify';
+import watchify from 'watchify';
+import babelify from 'babelify';
+
 /*jshint -W079 */
 const $ = gulpLoadPlugins();
 const WIREDEP = wiredep.stream;
@@ -42,34 +49,21 @@ const WIREDEP = wiredep.stream;
 // use `gulp` for any other gulp related calls.
 const GULP = gulpHelp(gulp);
 
-// Lint JavaScript
-GULP.task('jshint', `Lints all our JS with 'JSHINT'`,  ()=> {
-  return gulp.src(config.paths.scripts)
-              .pipe($.changed(config.temp.scripts))
-              .pipe($.plumber())
-              .pipe($.jshint())
-              .pipe($.jshint.reporter('jshint-stylish'))
-              .pipe($.jshint.reporter('fail'));
+// Lint our JS code with ESLint'
+GULP.task('lint', ()=>{
+    return gulp.src(config.paths.scripts)
+                .pipe($.eslint())
+                .pipe($.eslint.format());
 });
+
+// Transform ES6 Scripts to normla ES5 And wathc the files
+GULP.task('babelize:watch', 'Transform ES6 Scripts to normal ES5: watching', ()=> makeBundle(true))
 
 // Transform ES6 Scripts to normla ES5
-GULP.task('babelize', 'Transform ES6 Scripts to normla ES5', ()=> {
-  return gulp.src(config.paths.scripts)
-              .pipe($.changed(config.temp.scripts))
-              .pipe($.plumber())
-              .pipe($.sourcemaps.init())
-              .pipe($.babel(config.options.babel))
-              .pipe($.sourcemaps.write('.'))
-              .pipe(gulp.dest(config.temp.scripts))
-              .pipe($.size({
-                title: 'BabelScripts',
-                showFiles: true
-              }))
-              .pipe($.connect.reload());
-});
+GULP.task('babelize', 'Transform ES6 Scripts to normla ES5', ()=>  makeBundle(false));
 
 // Run JSHint on scripts and then babelize them
-GULP.task('scripts', (cb)=> { return runSequence('jshint', 'babelize', cb); });
+GULP.task('scripts', (cb)=> { return runSequence('lint', 'babelize', cb); });
 
 // Compile Our Css
 GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
@@ -178,7 +172,7 @@ GULP.task('concatify', `Concatenates and Minify './app' folder. Send files to pr
               .pipe(gulp.dest(config.output.basedir));
 });
 
-GULP.task('default', `runSequence('styles', ['wiredep', 'inject'], 'watch', 'serve', cb)`, (cb)=> {
+GULP.task('default', `runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb)`, (cb)=> {
    return runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb);
 });
 
@@ -189,3 +183,39 @@ GULP.task('watch', `Watch All Files and Run his Respective Task`, ()=> {
   gulp.watch(config.paths.html ,['reload']);
   gulp.watch(config.paths.bower ,['wiredep']);
 });
+
+function makeBundle (isWatching) {
+    let browserifyBundler = browserify(config.options.browserify).transform(babelify);
+    let watchifyBundler = watchify(browserifyBundler);
+    let bundler = isWatching ? watchifyBundler : browserifyBundler;
+
+    function rebundle () {
+      console.log(`[${isWatching}]: Rebundleing ${config.output.build} \n`);
+        return bundler.bundle()
+                .on('error', err => {
+                    if (err instanceof SyntaxError) {
+                      $.util.log($.util.colors.red('Syntax Error'))
+                      console.log(err.message);
+                      console.log(err.filename+":"+err.loc.line);
+                      console.log(err.codeFrame);
+                      } else {
+                        $.util.log($.util.colors.red('Error'), err.message);
+                      }
+                  })
+                .pipe(source(config.output.build))
+                .pipe(buffer())
+                .pipe($.sourcemaps.init({loadMaps: true}))
+                .pipe($.sourcemaps.write())
+                .pipe(gulp.dest(config.temp.scripts))
+                .pipe($.connect.reload())
+                .pipe($.size({
+                    title: 'Bundle'
+                    }));
+    }
+
+    if (isWatching)  {
+        bundler.on('update', rebundle);
+    }
+
+    rebundle();
+}
