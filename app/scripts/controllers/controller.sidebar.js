@@ -1,53 +1,57 @@
-(function(){
-    'use strict';
-    angular.module('reservacionesMulti')
-            .controller('SidebarController', SidebarController);
+class SidebarController {
+  constructor($state, $mdToast, Auth) {
+    this.$state = $state;
+    this.$mdToast = $mdToast;
+    this.Auth = Auth;
 
-    SidebarController.$inject = ['$state', '$mdToast', 'Auth'];
+    this.user = {};
+    this.isAdmin = Auth.isAdmin;
+    this.options = [{
+      displayName: 'Buscar',
+      icon: 'search',
+      state: 'search'
+    }, {
+      displayName: 'Lugares',
+      icon: 'place',
+      state: 'places'
+    }, {
+      displayName: 'Crear',
+      icon: 'add',
+      state: 'create'
+    }, {
+      displayName: 'Ayuda',
+      icon: 'help',
+      state: 'help'
+    }];
+    this.active();
+  }
 
-    function SidebarController ($state, $mdToast, Auth) {
-      var vm = this;
-      vm.openMenu = openMenu;
-      vm.logOut = logout;
-      vm.isAdmin = Auth.isAdmin;
-      vm.user = Auth.user;
-
-      active();
-
-      function active () {
-        console.log('So Hello from the sidebar');
-        vm.options = [
-          {
-            displayName: 'Buscar',
-            icon: 'search',
-            state: 'search'
-          },
-          {
-            displayName: 'Crear',
-            icon: 'add',
-            state: 'create'
-          },
-          {
-            displayName: 'Ayuda',
-            icon: 'help',
-            state: 'help'
-          }
-        ];
-        vm.signedIn = Auth.signedIn;
+  active() {
+    console.log('Sidebaring...');
+    this.signedIn = this.Auth.signedIn;
+    let checkProfile = setInterval(() => {
+      this.user = this.Auth.user;
+      if (this.user.profile) {
+        clearInterval(checkProfile);
       }
+    }, 500);
+  }
 
-      function openMenu ($mdOpenMenu, ev) {
-        $mdOpenMenu(ev);
-      }
+  openMenu($mdOpenMenu, event) {
+    $mdOpenMenu(event);
+  }
 
-      function logout () {
-        Auth.logout();
-        $mdToast.show(
-          $mdToast.simple()
-          .content('Has salido del Sistema')
-          .position('right bottom')
-        );
-        $state.go('home');
-      }
-    }
-})();
+  logout() {
+    this.Auth.logout();
+    this.$mdToast.show(
+      this.$mdToast.simple()
+      .content('Has salido del Sistema')
+      .position('right bottom')
+    );
+    this.$state.go('home');
+  }
+}
+
+SidebarController.$inject = ['$state', '$mdToast', 'Auth'];
+
+export default SidebarController;

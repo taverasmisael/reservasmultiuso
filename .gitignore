@@ -63,6 +63,7 @@ $RECYCLE.BIN/
 /node_modules
 /app/vendor
 /vendor
+app/jspm_packages
 
 # Ignoremsos el Directorio de Distribucion por ahora
 /dist

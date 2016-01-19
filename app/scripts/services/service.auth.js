@@ -1,170 +1,142 @@
-(function() {
-    'use strict';
-    angular.module('reservacionesMulti')
-        .service('Auth', Auth);
+import {autobind} from 'core-decorators';
 
-    Auth.$inject = ['$q', '$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
+const firebaseArray = new WeakMap();
+const firebaseObject = new WeakMap();
+const REF = new WeakMap();
+const AUTH = new WeakMap();
 
-    function Auth($q, $firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
-
-        var ref = new Firebase(FURL),
-            auth = $firebaseAuth(ref);
-
-        var AuthService = {
-            user: {
-                profile: {}
-            },
-            createProfile: createProfile,
-            updateProfile: updateProfile,
-            usernameAvailable: usernameAvailable,
-            register: register,
-            login: login,
-            removeUser: removeUser,
-            loadProfiles: getAllProfiles,
-            getProfile: getProfileById,
-            changePassword: changePassword,
-            isAdmin: function () {
-              return AuthService.user.profile ? AuthService.user.profile.isAdmin : false;
-            },
-            logout: function() {
-                auth.$unauth();
-            },
-            signedIn: function() {
-                return !!AuthService.user.provider;
-            }
-        };
-
-        auth.$onAuth(setUserData);
-        return AuthService;
-
-
-        /**
-         * Funcion encargada de crear un perfil en blanco por cada nuevo usuario
-         * @param  {String} uid  uid in firebaseAuthDB
-         * @param  {Object} user username and email REQUIRED
-         * @return {NOTHING}      Firebase Added entry
-         */
-        function createProfile(uid, user) {
-            var profile = {
-                username: user.username,
-                email: user.email,
-                picture: '',
-                name: user.name,
-                lastname: user.lastname,
-                isAdmin: user.isAdmin
-            };
-            return ref.child('profile').child(uid).set(profile);
+class Auth {
+  constructor($firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
+    this.user = {
+      profile: {}
+    };
+    firebaseObject.set(this, $firebaseObject);
+    firebaseArray.set(this, $firebaseArray);
+    REF.set(this, new Firebase(FURL + '/profile'));
+    AUTH.set(this, $firebaseAuth(REF.get(this)));
+    AUTH.get(this).$onAuth(authData => {
+      if (authData) {
+        this.user = authData;
+        let profile = this.getProfile(authData.uid);
+        this.user.profile = profile;
+      } else {
+        this.user = {};
+        if (this.user.profile) {
+          this.user.profile.$destroy();
         }
+      }
+    });
+  }
 
-        function updateProfile (newinfo) {
-          return newinfo.$save();
+  @autobind
+  createProfile(uid, user) {
+    return REF.get(this).child(uid).set(user);
+  }
+
+  @autobind
+  updateProfile(newinfo) {
+    return newinfo.$save();
+  }
+
+  @autobind
+  usernameAvailable(username) {
+    const USESREXISTS = {
+      name: 'USERNAME_EXIST',
+      message: `The User: "${username}" already exist in our DB.`
+    };
+    const USERFREE = `"${username}" Disponible`;
+
+    let promise = new Promise((resolve, reject) => {
+      firebaseArray.get(this)(REF.get(this).orderByChild('username')
+        .equalTo(username)).$loaded()
+        .then(data => {
+          return data.length ? reject(USESREXISTS) : resolve(USERFREE);
+        }).catch(e => console.error(e));
+    });
+
+    return promise;
+  }
+
+  @autobind
+  register(user) {
+    let {email, password} = user;
+    let usuario = {
+      email: email,
+      password: password
+    };
+    delete user.password;
+    delete user.password2;
+    return AUTH.get(this).$createUser(usuario)
+      .then(data => this.createProfile(data.uid, user));
+  }
+
+  @autobind
+  login(user) {
+    let {
+      username, password
+    } = user;
+
+    const INVALIDUSERNAME = {
+      name: 'INVALID_USERNAME',
+      message: `The User: "${username} doesn't exist"`
+    };
+
+    return firebaseArray.get(this)(REF.get(this)
+      .orderByChild('username').equalTo(username))
+      .$loaded()
+      .then(data => {
+        if (data.length >= 1) {
+          console.log(data);
+          return AUTH.get(this).$authWithPassword({
+            email: data[0].email,
+            password: password
+          });
+        } else {
+          throw INVALIDUSERNAME;
         }
+      });
+  }
 
-        /**
-         * Checar si el Nombre de usuario existe en la Base de Datos
-         * @param  {string} username El nombre de usuario a buscar
-         * @return {promise}          promesa con el resultado TRUE or FALSE
-         */
-        function usernameAvailable(username) {
-            var $d = $q.defer();
-            var userExistsError = {
-              name: 'USERNAME_EXISTS',
-              message: 'The User: "'+ username +'" already exist'
-            };
-            $firebaseArray(ref.child('profile').orderByChild('username').equalTo(username))
-              .$loaded().then(function(data) {
-                  if (data.length) {
-                   $d.reject(userExistsError);
-                 } else {
-                  $d.resolve('Usuario Disponible');
-                }
-              }).catch(function(err) {
-                  $d.reject(err);
-              });
+  @autobind
+  removeUser(uid) {
+    return firebaseObject.get(this)(REF.get(this).child(uid)).$remove();
+  }
 
-            return $d.promise;
-        }
+  @autobind
+  loadProfiles() {
+    return firebaseArray.get(this)(REF.get(this)).$loaded();
+  }
 
-        /**
-         * Funcion para registrar usuarios nuevos
-         * @param  {Object} user emai, password username REQUIRED
-         * @return {Object}      CreateProfile()
-         */
-        function register(user) {
-            return auth.$createUser({
-                email: user.email,
-                password: user.password
-            }).then(function(data) {
-                return AuthService.createProfile(data.uid, user);
-            });
-        }
+  @autobind
+  getProfile(uid) {
+    return firebaseObject.get(this)(REF.get(this).child(uid));
+  }
 
-        /**
-         * Funcion para Logear usuarios y autenticarlos
-         * @param  {Object} user email, username, password REQUIRED
-         * @return {Object}      Un objeto con los datos del Usuario
-         */
-        function login(user) {
-            return $firebaseArray(ref.child('profile').orderByChild('username')
-                    .equalTo(user.username)).$loaded()
-                .then(function(data) {
-                  if (data.length >0) {
-                    user.email = data[0].email;
-                    return auth.$authWithPassword({
-                        email: user.email,
-                        password: user.password
-                    });
-                  } else {
-                    throw {
-                      name: 'INVALID_USERNAME',
-                      message: 'The User: "'+ user.username +'" Doesn\'t exist'
-                    };
-                  }
-                });
-        }
+  @autobind
+  changePassword(user) {
+    return AUTH.get(this).$changePassword({
+      email: this.user.profile.email,
+      oldPassword: user.oldpass,
+      newPassword: user.newpass
+    });
+  }
 
+  @autobind
+  isAdmin() {
+    return this.user.profile && this.user.profile.isAdmin;
+  }
 
-        function removeUser (uid) {
-          return $firebaseObject(ref.child('profile').child(uid)).$remove();
-        }
+  @autobind
+  logout() {
+    AUTH.get(this).$unauth();
+  }
 
+  @autobind
+  signedIn() {
+    return Boolean(AUTH.get(this).$getAuth());
+  }
+}
 
-        /**
-         * Funcion para cambiar el password del Usuario
-         * @param  {Object} user oldpass, newpass REQUIRED
-         * @return {NOTHING}      Contraseña Cambiada con exito
-         */
-        function changePassword(user) {
-            return auth.$changePassword({
-                email: AuthService.user.profile.email,
-                oldPassword: user.oldpass,
-                newPassword: user.newpass
-            });
-        }
+Auth.$inject = ['$firebaseAuth', '$firebaseObject', '$firebaseArray', 'FURL'];
 
-        function getAllProfiles () {
-          return $firebaseArray(ref.child('profile')).$loaded();
-        }
-
-        function getProfileById (uid) {
-          return $firebaseObject(ref.child('profile').child(uid));
-        }
-
-        /**
-         * Funcion encargada de Guardar los Datos del Usuario en el servicio
-         * @param {Object} authData Todos los datos para autenticar el usuario
-         */
-        function setUserData(authData) {
-            if (authData) {
-                angular.copy(authData, AuthService.user);
-                var profile = $firebaseObject(ref.child('profile').child(authData.uid));
-                AuthService.user.profile = profile;
-            } else {
-                angular.copy({}, AuthService.user);
-                if (AuthService && AuthService.user.profile) {
-                    AuthService.user.profile.$destroy();
-                }
-            }
-        }
-    }
-})();
+export default Auth;

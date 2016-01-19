@@ -1,42 +1,40 @@
-(function() {
-    'use strict';
-    angular.module('mtCheckUserName', [])
-        .directive('mtCheckUsername', mtCheckUsername);
+import {autobind} from 'core-decorators';
 
-    mtCheckUsername.$inject = ['$q', 'Auth'];
+class UsernameExist {
+  constructor(Auth) {
+    this.restrict = 'A';
+    this.scope = true;
+    this.require = 'ngModel';
+    this.Auth = Auth;
+  }
 
-    function mtCheckUsername($q, Auth) {
-        var directive = {
-            link: linkFunc,
-            require: 'ngModel',
-            restrict: 'A',
-            scope: true
-        };
-
-        return directive;
-
-        function linkFunc(scope, el, attrs, ctrl) {
-            ctrl.$asyncValidators.mtCheckUsername = function(modelValue, viewValue) {
-                var $d = $q.defer();
-                if (ctrl.$isEmpty(modelValue)) {
-                    // consider empty models to be valid
-                    $d.reject(false);
-                }
-                if (Boolean(parseInt(attrs.mtCheckUsername))) {
-                    var username = viewValue;
-                    Auth.usernameAvailable(username).then(function(response) {
-                        $d.resolve(response);
-                    }).catch(function(err) {
-                        if (err.name === 'USERNAME_EXISTS') {
-                            $d.reject('UserName Exists');
-                        }
-                    });
-                } else {
-                    $d.resolve(true);
-                }
-
-                return $d.promise;
-            };
+  @autobind
+  link(scope, elem, attrs, controller) {
+    controller.$asyncValidators.mtCheckUsername = (modelValue, viewValue) => {
+      let promise = new Promise((resolve, reject) => {
+        if (controller.$isEmpty(modelValue)) {
+          // consider empty models to be valid
+          reject(false);
         }
-    }
-})();
+        if (Boolean(parseInt(attrs.mtCheckUsername, 10))) {
+          let username = viewValue;
+          this.Auth.usernameAvailable(username)
+            .then(response => {
+              resolve(response);
+            }).catch(err => {
+              if (err.name === 'USERNAME_EXIST') {
+                reject('UserName Exists');
+              }
+            });
+        } else {
+          resolve(true);
+        }
+      });
+      return promise;
+    };
+  }
+}
+
+UsernameExist.$inject = ['Auth'];
+
+export default UsernameExist;

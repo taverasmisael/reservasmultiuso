@@ -1,177 +1,137 @@
-(function() {
-    'use strict';
-    angular.module('reservacionesMulti')
-        .service('Reservaciones', Reservaciones);
+import {autobind} from 'core-decorators';
 
-    Reservaciones.$inject = ['$q', '$firebaseObject', '$firebaseArray', 'Auth', 'Utilities', 'Search', 'FURL'];
+const REF = new WeakMap();
+const firebaseObject = new WeakMap();
+const firebaseArray = new WeakMap();
 
-    function Reservaciones($q, $firebaseObject, $firebaseArray, Auth, Utilities, Search, FURL) {
-        var ref = new Firebase(FURL),
-            reservaciones = $firebaseArray(ref.child('reservaciones')),
-            _hoy = new Date();
-        var hoy = Utilities.date.fix(_hoy);
+class Reservaciones {
+  constructor($firebaseObject, $firebaseArray, Auth, Utilities, Search, FURL) {
+    firebaseObject.set(this, $firebaseObject);
+    firebaseArray.set(this, $firebaseArray);
+    this.Auth = Auth;
+    this.Utilities = Utilities;
+    this.Search = Search;
+    REF.set(this, new Firebase(FURL));
+    this.reservaciones = $firebaseArray(REF.get(this).child('reservaciones'));
+    this.hoy = Utilities.fixDate(new Date());
+    this.setReservationData = function(data) {
+      let {name, lastname} = Auth.user.profile;
+      data.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
+      data.status = 'active';
+      data.creator = Auth.user.profile.username;
+      data.creatorEmail = Auth.user.profile.email;
+      data.creatorFullName = `${name}  ${lastname}`;
+      data.date = data.date.valueOf();
+      data.starts = data.starts.valueOf();
+      data.ends = data.ends.valueOf();
 
-        var ReservacionesService = {
-            all: reservaciones,
-            today: getToday,
-            getCommingSoon: getCommingSoon,
-            findById: findById,
-            create: create,
-            remove: remove,
-            isActive: isActive
-        };
-        return ReservacionesService;
+      return data;
+    };
+    this.disableRange = function(date, start, end) {
+      let promise = new Promise((resolve, reject) => {
+        let disabledList = [];
+        Search.reservacionByDate(date).then(reservas => {
+          let filtered = reservas.filter(res => (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts));
+          for (let r of filtered) {
+            disabledList.push(r.$id);
+          }
 
-        /**
-         * Function that retrurn todays Reservation
-         * @return {Promise} A promise that is resolved with Today Reservations
-         */
-        function getToday() {
-            var $d = $q.defer();
+          resolve(disabledList);
+        }).catch(error => {
+          reject(error);
+          console.log(error);
+        });
+      });
 
-            $firebaseArray(ref.child('reservaciones').orderByChild('date')
-                    .startAt(hoy.valueOf()).endAt(hoy.valueOf()))
-                .$loaded().then(function(reservaciones) {
-                    $d.resolve(reservaciones);
-                }).catch(function(err) {
-                    $d.reject(err);
-                });
+      return promise;
+    };
 
-            return $d.promise;
-        }
+    this.makeReservation = function(data, profesor) {
+      let promise = new Promise((resolve, reject) => {
+        this.reservaciones.$add(data)
+          .then(ref => {
+            let key = ref.key();
+            let reservacion = new Firebase(FURL + '/reservaciones/' + key);
+            let newUpdate = {
+              profesor: profesor.$id,
+              profesorFullName: profesor.name + ' ' + profesor.lastname
+            };
+            reservacion.update(newUpdate);
+            resolve(key);
+          }).catch(err => {
+            console.log(err);
+            reject(err);
+          });
+      });
 
-        /**
-         * The function that return all reservations from tomorrow on
-         * @return {Promise} A promise resolved with all reservations from tomorrow on
-         */
-        function getCommingSoon() {
-            var $d = $q.defer(),
-                tomorrow = moment(hoy).add(1, 'day')._d.valueOf();
+      return promise;
+    };
+  }
 
-            $firebaseArray(ref.child('reservaciones').orderByChild('date')
-                .startAt(tomorrow)).$loaded().then(function(reservaciones) {
-                $d.resolve(reservaciones);
-            }).catch(function(err) {
-                $d.reject(err);
-            });
+  @autobind
+  all() {
+    return this.reservaciones;
+  }
 
-            return $d.promise;
-        }
+  @autobind
+  today() {
+    return firebaseArray.get(this)(REF.get(this)
+      .child('reservaciones').orderByChild('date')
+      .equalTo(this.hoy.valueOf())).$loaded();
+  }
 
-        function findById(reservacionID) {
-            return $firebaseObject(ref.child('reservaciones').child(reservacionID));
-        }
+  @autobind
+  getCommingSoon() {
+    const tomorrow = moment(this.hoy).add(1, 'day')._d.valueOf();
 
-        /**
-         * The Function that provides the Creation Functionality based on some conditions
-         * @param  {Object} nuevaReservacion This contains the main information about the reservation
-         * @param  {Object} nrProfesor       All information of the profesor that is applying
-         * @param  {Boolean} exception        It tells if its an exception or not so it can procede
-         * @return {Promis}                  The promise is resolved with a Boolean once all procedure is done.
-         */
-        function create(nuevaReservacion, nrProfesor, exception) {
-            var $d = $q.defer();
+    return firebaseArray.get(this)(REF.get(this)
+      .child('reservaciones').orderByChild('date').startAt(tomorrow)).$loaded();
+  }
 
-            // Add serverInformation to the new reservation
-            nuevaReservacion.TIMESTAMP = Firebase.ServerValue.TIMESTAMP;
-            nuevaReservacion.status = 'active';
-            nuevaReservacion.creator = Auth.user.profile.username;
-            nuevaReservacion.creatorEmail = Auth.user.profile.email;
-            nuevaReservacion.creatorFullName = Auth.user.profile.name + ' ' + Auth.user.profile.lastname;
-            if (exception) {
-                // if exception => we disable all reservation that may interfere with it and...
-                _disableReservations(nuevaReservacion.date, nuevaReservacion.starts, nuevaReservacion.ends)
-                    .then(function(dList) {
-                        // ... then we say that its an exception and save the
-                        // reserationsId that where Disabled for this could happen
-                        nuevaReservacion.isException = true;
-                        nuevaReservacion.wereDisabled = dList;
-                        // And now, we can make our reservation
-                        _makeReservation(nuevaReservacion, nrProfesor).then(function() {
-                            $d.resolve(true);
-                        }).catch(function(err) {
-                            $d.reject(err);
-                        });
-                    }).catch(function(err) {
-                        $d.reject(err);
-                    });
-            } else {
-                _makeReservation(nuevaReservacion, nrProfesor).then(function() {
-                    $d.resolve(true);
-                }).catch(function(err) {
-                    $d.reject(err);
-                });
-            }
-            return $d.promise;
-        }
+  @autobind
+  findById(reservacionID) {
+    return firebaseObject.get(this)(REF.get(this)
+      .child('reservaciones').child(reservacionID)).$loaded();
+  }
 
-        function remove(id) {
-            findById(id).$loaded().then(function (reserv) {
-              reserv.status = 'disabled';
-              return reserv.$save();
-            });
-        }
+  @autobind
+  remove(reservacionID) {
+    this.findById(reservacionID).then(reserv => {
+      reserv.status = 'disabled';
+      return reserv.$save;
+    });
+  }
 
-        function isActive(reservacion) {
-            return reservacion.status === 'active';
-        }
+  @autobind
+  isActive(reservacion) {
+    return reservacion.status === 'active';
+  }
 
+  @autobind
+  create(reservacion, profesor) {
+    let nuevaReservacion = this.setReservationData(reservacion);
+    console.log(nuevaReservacion, 'SRVRES:110');
+    return this.makeReservation(nuevaReservacion, profesor);
+  }
 
-        // Really Private Functions
+  @autobind
+  createWithException(reservacion, profesor) {
+    let nuevaReservacion = this.setReservationData(reservacion);
+    let {
+      date, starts, ends
+    } = reservacion;
 
-        /**
-         * Function who really add Reservation to DataBase
-         * @param  {Object} data     The reservation itself with all data needed
-         * @param  {Object} profesor All Profesor Information that for save the reservation
-         * @return {Promise}          Promise Boolean Resolved once the reservation is done
-         */
-        function _makeReservation(data, profesor) {
-            var $d = $q.defer();
+    this.disableRange(date, starts, ends)
+      .then(disabledList => {
+        nuevaReservacion.isException = true;
+        nuevaReservacion.wereDisabled = disabledList;
+        return this.makeReservation(nuevaReservacion, profesor);
+      })
+      .catch(e => console.error(e));
+  }
+}
 
-            reservaciones.$add(data)
-                .then(function(ref) {
-                    var key = ref.key();
-                    var reservacion = new Firebase(FURL + 'reservaciones/' + key);
-                    var newUpdate = {
-                        profesor: profesor.$id,
-                        profesorFullName: profesor.name + ' ' + profesor.lastname
-                    };
-                    reservacion.update(newUpdate);
-                    $d.resolve(true);
-                }).catch(function(err) {
-                    console.log(err);
-                    $d.reject(false);
-                });
+Reservaciones.$inject = ['$firebaseObject', '$firebaseArray', 'Auth',
+'Utilities', 'Search', 'FURL'];
 
-            return $d.promise;
-        }
-
-
-        /**
-         * Function for Masivily disable reservation in a range
-         * @param  {Date} date  An date day where we'll look for disable on...
-         * @param  {Date} start ... at this point (hour)...
-         * @param  {Date} end   ... to this point (hour)
-         * @return {Promise}       This promise will be resolve with disabeledIds
-         */
-        function _disableReservations(date, start, end) {
-            var $d = $q.defer();
-            var disabledList = [];
-            Search.reservacion.byDate(date).then(function(reservas) {
-                var filteredReservations = reservas.filter(function(res) {
-                    return (start >= res.starts && start <= res.ends) || (start <= res.starts && end >= res.starts);
-                });
-                for (var i = 0; i < filteredReservations.length; i += 1) {
-                  remove(filteredReservations[i].$id);
-                  disabledList.push(filteredReservations[i].$id);
-                }
-
-                $d.resolve(disabledList);
-            });
-
-            return $d.promise;
-
-        }
-
-    }
-})();
+export default Reservaciones;

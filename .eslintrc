@@ -1,0 +1,22 @@
+{
+  "extends": "google",
+  "env": {
+  "browser": true
+  },
+  "globals": {
+    "angular": true,
+    "Firebase": true,
+    "Materialize": true,
+    "moment": true,
+    "$": true,
+    "jQuery": false
+  },
+  "plugins": ["flow-vars", "babel"],
+  "parser": "babel-eslint",
+  "rules": {
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1,
+    "linebreak-style": 0,
+    "strict": 0
+  }
+}

@@ -1,14 +1,8 @@
-(function(){
-    'use strict';
-    angular.module('reservacionesMulti')
-            .controller('HelpController', HelpController);
-
-    HelpController.$inject = [];
-    function HelpController () {
-        active();
-
-        function active () {
-          console.log('Helping...');
-        }
-    }
-})();
+export default class HelpController {
+  constructor() {
+    this.active();
+  }
+  active() {
+    console.log('Helping...');
+  }
+}
