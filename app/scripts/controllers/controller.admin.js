@@ -86,9 +86,9 @@ class AdminController {
       .then(() => {
         let fromNow = moment().to(newReservation.date);
         this.$mdToast.show(
-            this.$mdToast.simple()
-            .content(`Reservacion ${fromNow}`))
-          .position('right bottom');
+          this.$mdToast.simple()
+          .content(`Reservacion ${fromNow}`)
+          .position('right bottom'));
         this.newReservationData = {};
         this.selectedProfesor = {};
       }).catch(_errHdlr);
