@@ -1,9 +1,10 @@
+import {autobind} from 'core-decorators';
 class DialogController {
   constructor($mdDialog, currentUser, Auth, state) {
     this.$mdDialog = $mdDialog;
     this.currentUser = currentUser;
     this.Auth = Auth;
-    let State = `${state.charAt(0).toUpperCase()} ${state.slice(1).toLowerCase()}`;
+    let State = `${state.charAt(0).toUpperCase()}${state.slice(1).toLowerCase()}`;
     this.heading = `${State} usuario`;
     this.editing = state.toLowerCase() === 'editando';
     this.proccessStatus = '';
@@ -11,11 +12,13 @@ class DialogController {
     this.active();
   }
 
+  @autobind
   active() {
     console.log('Dialoging...');
     this.selectedUser = this.currentUser;
   }
 
+  @autobind
   saveUser(user2save) {
     let username = user2save.username;
 
@@ -36,9 +39,12 @@ class DialogController {
     }
   }
 
+  @autobind
   cancelDialog(reason) {
     this.$mdDialog.cancel(reason);
   }
+
+  @autobind
   saveDialog(reason) {
     this.$mdDialog.hide(reason);
   }
