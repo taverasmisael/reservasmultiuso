@@ -98,7 +98,7 @@ class Auth {
   }
 
   @autobind
-  removeuser(uid) {
+  removeUser(uid) {
     return firebaseObject.get(this)(REF.get(this).child(uid)).$remove();
   }
 

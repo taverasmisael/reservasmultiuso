@@ -1,4 +1,7 @@
-import {autobind} from 'core-decorators';
+import {
+  autobind
+}
+from 'core-decorators';
 const dialogOptions = {
   controller: 'DialogController',
   controllerAs: 'DialogCtrl',
@@ -19,13 +22,15 @@ class UsersController {
     this.active();
   }
 
-  @autobind
+  @
+  autobind
   active() {
     console.log('Pie... What were you waiting for?');
     this.profiles = this.profiles;
   }
 
-  @autobind
+  @
+  autobind
   editProfile(event, profileId) {
     console.log('Editemos');
     this.Auth.getProfile(profileId).$loaded()
@@ -45,7 +50,8 @@ class UsersController {
       }).catch(err => console.error(err));
   }
 
-  @autobind
+  @
+  autobind
   createUser(event) {
     let config = {
       event: event,
@@ -61,7 +67,8 @@ class UsersController {
       .catch(this._dialogAbort);
   }
 
-  @autobind
+  @
+  autobind
   deleteUser(event, uid) {
     let warning = {
       title: '¡Atención!',
@@ -74,17 +81,22 @@ class UsersController {
     let confirm = this.$mdDialog.confirm(warning);
 
     this.$mdDialog.show(confirm)
-      .then(this.Auth.removeUser(uid))
-      .then(this._dialogComplete('Usuario Eliminado'))
+      .then(() => {
+        return this.Auth.removeUser(uid)
+          .then(this._dialogComplete('Usuario Eliminado'))
+          .catch(err => console.error(err));
+      })
       .catch(err => console.error(err));
   }
 
-  @autobind
+  @
+  autobind
   arrangeTable(order) {
     this.tableOrder = order;
   }
 
-  @autobind
+  @
+  autobind
   _dialogComplete(respuesta) {
     this.$mdToast.show(
       this.$mdToast.simple()
@@ -93,7 +105,8 @@ class UsersController {
     );
   }
 
-  @autobind
+  @
+  autobind
   _dialogAbort(err) {
     this.$mdToast.show(
       this.$mdToast.simple()
