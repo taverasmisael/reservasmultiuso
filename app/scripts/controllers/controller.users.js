@@ -1,3 +1,4 @@
+import {autobind} from 'core-decorators';
 const dialogOptions = {
   controller: 'DialogController',
   controllerAs: 'DialogCtrl',
@@ -18,28 +19,15 @@ class UsersController {
     this.active();
   }
 
-  _dialogComplete(respuesta) {
-    this.$mdToast.show(
-      this.$mdToast.simple()
-      .content(respuesta)
-      .position('right bottom')
-    );
-  }
-
-  _dialogAbort(err) {
-    this.$mdToast.show(
-      this.$mdToast.simple()
-      .content(err)
-      .position('right bottom')
-    );
-    console.error(err);
-  }
+  @autobind
   active() {
     console.log('Pie... What were you waiting for?');
     this.profiles = this.profiles;
   }
 
+  @autobind
   editProfile(event, profileId) {
+    console.log('Editemos');
     this.Auth.getProfile(profileId).$loaded()
       .then(response => {
         let config = {
@@ -49,14 +37,15 @@ class UsersController {
             state: 'editando'
           }
         };
-        let editDialog = $.extends(config, dialogOptions);
-
+        let editDialog = $.extend(config, dialogOptions);
+        console.log(config);
         this.$mdDialog.show(editDialog)
           .then(this._dialogComplete)
           .catch(this._dialogAbort);
       }).catch(err => console.error(err));
   }
 
+  @autobind
   createUser(event) {
     let config = {
       event: event,
@@ -72,6 +61,7 @@ class UsersController {
       .catch(this._dialogAbort);
   }
 
+  @autobind
   deleteUser(event, uid) {
     let warning = {
       title: '¡Atención!',
@@ -89,8 +79,28 @@ class UsersController {
       .catch(err => console.error(err));
   }
 
+  @autobind
   arrangeTable(order) {
     this.tableOrder = order;
+  }
+
+  @autobind
+  _dialogComplete(respuesta) {
+    this.$mdToast.show(
+      this.$mdToast.simple()
+      .content(respuesta)
+      .position('right bottom')
+    );
+  }
+
+  @autobind
+  _dialogAbort(err) {
+    this.$mdToast.show(
+      this.$mdToast.simple()
+      .content(err)
+      .position('right bottom')
+    );
+    console.error(err);
   }
 }
 

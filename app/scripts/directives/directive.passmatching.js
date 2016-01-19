@@ -2,17 +2,16 @@ class PassMatching {
   constructor() {
     this.restrict = 'A';
     this.scope = true;
-    this.require = 'ngModel';
+    this.require = '^ngModel';
   }
 
   link(scope, elem, attrs, controller) {
     let checker = () => {
       // Get the First Password
-      let pass1 = scope.$eval(attrs.ngModel);
+      let pass1 = controller.$modelValue
 
       // Get the Second Password
-      let pass2 = scope.$eval(attrs.mtPasswordMatching);
-
+      let pass2 = scope.$eval(attrs.mtPasswordMatch);
       return pass1 === pass2;
     };
 

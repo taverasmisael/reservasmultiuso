@@ -1,3 +1,5 @@
+import {autobind} from 'core-decorators';
+
 class UsernameExist {
   constructor(Auth) {
     this.restrict = 'A';
@@ -6,6 +8,7 @@ class UsernameExist {
     this.Auth = Auth;
   }
 
+  @autobind
   link(scope, elem, attrs, controller) {
     controller.$asyncValidators.mtCheckUsername = (modelValue, viewValue) => {
       let promise = new Promise((resolve, reject) => {
@@ -19,16 +22,15 @@ class UsernameExist {
             .then(response => {
               resolve(response);
             }).catch(err => {
-              if (err.name === 'USERNAME_EXISTS') {
+              if (err.name === 'USERNAME_EXIST') {
                 reject('UserName Exists');
               }
             });
         } else {
           resolve(true);
         }
-
-        return promise;
       });
+      return promise;
     };
   }
 }
