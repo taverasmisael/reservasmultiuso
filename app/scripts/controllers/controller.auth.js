@@ -17,8 +17,8 @@ class AuthController {
     };
 
     this.Auth.login(user)
-      .then(() => this.$state.go('home'))
-      .catch(err => this.proccessStatus = err.message);
+      .then(() => this.$state.go('profile'))
+      .catch(err => this.processStatus = err.message);
   }
 }
 AuthController.$inject = ['$scope', '$state', 'Auth'];
