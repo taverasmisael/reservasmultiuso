@@ -64,11 +64,10 @@ class Auth {
       email: email,
       password: password
     };
-    delete user.email;
     delete user.password;
+    delete user.password2;
     return AUTH.get(this).$createUser(usuario)
-      .then(data => this.createProfile(data.uid, user))
-      .catch(e => console.error(e));
+      .then(data => this.createProfile(data.uid, user));
   }
 
   @autobind
@@ -86,7 +85,8 @@ class Auth {
       .orderByChild('username').equalTo(username))
       .$loaded()
       .then(data => {
-        if (data.length) {
+        if (data.length >= 1) {
+          console.log(data);
           return AUTH.get(this).$authWithPassword({
             email: data[0].email,
             password: password

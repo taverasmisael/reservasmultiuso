@@ -7,7 +7,7 @@ class DialogController {
     let State = `${state.charAt(0).toUpperCase()}${state.slice(1).toLowerCase()}`;
     this.heading = `${State} usuario`;
     this.editing = state.toLowerCase() === 'editando';
-    this.proccessStatus = '';
+    this.processStatus = '';
 
     this.active();
   }
@@ -33,7 +33,7 @@ class DialogController {
         .catch(err => {
           console.error(err);
           if (err.code === 'EMAIL_TAKEN') {
-            this.proccessStatus = 'El correo electronico ya esta registrado';
+            this.processStatus = 'El correo electronico ya esta registrado';
           }
         });
     }

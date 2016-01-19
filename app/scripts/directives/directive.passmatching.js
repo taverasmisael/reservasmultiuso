@@ -8,7 +8,7 @@ class PassMatching {
   link(scope, elem, attrs, controller) {
     let checker = () => {
       // Get the First Password
-      let pass1 = controller.$modelValue
+      let pass1 = controller.$viewValue
 
       // Get the Second Password
       let pass2 = scope.$eval(attrs.mtPasswordMatch);
