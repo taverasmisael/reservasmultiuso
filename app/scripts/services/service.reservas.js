@@ -85,7 +85,7 @@ class Reservaciones {
     const tomorrow = moment(this.hoy).add(1, 'day')._d.valueOf();
 
     return firebaseArray.get(this)(REF.get(this)
-      .child('reservaciones').startAt(tomorrow)).$loaded();
+      .child('reservaciones').orderByChild('date').startAt(tomorrow)).$loaded();
   }
 
   @autobind

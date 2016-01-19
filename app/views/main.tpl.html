@@ -7,7 +7,7 @@
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
-              <h3>{{ reserv.profesorFullName }}</h3>
+              <h3><strong>{{ reserv.profesorFullName }}</strong></h3>
               <h4>{{ reserv.materia + ' - ' +reserv.section }}</h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
@@ -27,7 +27,7 @@
           <ng-md-icon icon="school"></ng-md-icon>
           <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
             <div class="profesor" flex layout-padding  layout="column" layout-align="center start">
-              <h3>{{ reserv.profesorFullName }}</h3>
+              <h3><strong>{{ reserv.profesorFullName }}</strong></h3>
               <h4><time datetime="{{ reserv.date }}">{{ reserv.date | date: 'shortDate'}}</time></h4>
             </div>
             <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
