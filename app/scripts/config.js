@@ -30,6 +30,12 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
       controller: 'SearchController',
       controllerAs: 'SearchCtrl'
     })
+    .state('places', {
+      url: '/places/',
+      templateUrl: TPLDIR + 'places.tpl.html',
+      controller: 'PlacesController',
+      controllerAs: 'PlacesCtrl'
+    })
     .state('create', {
       url: '/create/',
       templateUrl: TPLDIR + 'create.tpl.html',
