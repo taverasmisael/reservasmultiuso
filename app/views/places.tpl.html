@@ -1,1 +1,66 @@
-<h1>Hello in places</h1>
+<md-content layout="row" layout-sm="column" layout-padding layout-align="start space-between" class="view-places">
+  <section id="places-list" flex-gt-sm="40" layout="column" layout-fill>
+    <md-subheader>
+      <h3>Lista de Lugares</h3>
+    </md-subheader>
+    <md-list-item class="md-2-line" flex layout-align="center center">
+      <ng-md-icon icon="local_attraction"></ng-md-icon>
+      <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
+        <div class="" flex layout-padding layout="column" layout-align="center start">
+          <h3>Salón Multiusos</h3>
+          <p>Capacidad: <strong>60</strong></p>
+        </div>
+        <div class="" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+          <p>Edificio 1</p>
+          <p>Primer Nivel</p>
+        </div>
+      </div>
+    </md-list-item>
+  </section>
+  <section id="places-results" flex-gt-sm="50" flex-offset="10" layout="column">
+    <md-content layout-fill layout="column" layout-align="center center" ng-if="SearchCtrl.query.message">
+      <h3>Selecciona un Lugar</h3>
+    </md-content>
+    <md-content layout-fill layout="column">
+      <md-subheader layout-align="center end">
+        <div layout="row" layout-align="center center">
+          <h3 flex>Tarjeta de Nombre del Lugar</h3>
+          <md-button class="md-icon-button" aria-label="Imprimir">
+            <ng-md-icon icon="print"></ng-md-icon>
+          </md-button>
+        </div>
+        <div layout="row" layout-align="center center">
+          <div flex layout="row" class="place-info__location">
+            <ng-md-icon icon="place"></ng-md-icon>
+            <p flex>Ubicación: Edificio 1 Planta 1</p>
+          </div>
+          <div layout="row" layout-align="center center">
+            <p flex>Facilidades: </p>
+            <div layout="row" class="place-info__features__container">
+              <ng-md-icon icon="speaker"></ng-md-icon>
+              <ng-md-icon icon="keyboard_voice"></ng-md-icon>
+              <ng-md-icon icon="laptop_mac"></ng-md-icon>
+            </div>
+          </div>
+        </div>
+      </md-subheader>
+      <md-divider></md-divider>
+      <md-list>
+        <md-list-item class="md-3-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
+          <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
+            <div class="profesor" flex layout-padding layout="column" layout-align="center start">
+              <strong>{{ ::reserv.materia }} - {{ ::reserv.section }}</strong>
+              <span>{{ ::reserv.profesorFullName }}</span>
+              <span>{{ ::reserv.creator }}</span>
+            </div>
+            <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
+              <time datetime="{{ ::reserv.date }}">{{ ::reserv.date | date: 'shortDate' }}</time>
+              <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>
+              <time datetime="6:00 pm">{{ ::reserv.ends | date:'shortTime' }}</time>
+            </div>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </section>
+</md-content>

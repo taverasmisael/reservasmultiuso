@@ -33,10 +33,10 @@
     <meta name="msapplication-TileColor" content="#03345D">
     <!-- build:css styles/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="vendor/angular-material/angular-material.css" />
       <link rel="stylesheet" href="vendor/angular-material-data-table/dist/md-data-table.min.css" />
       <link rel="stylesheet" href="vendor/angular-material-icons/angular-material-icons.css" />
       <link rel="stylesheet" href="vendor/jt.timepicker/jquery.timepicker.css" />
+      <link rel="stylesheet" href="vendor/angular-material/angular-material.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
@@ -70,7 +70,7 @@
       <md-content flex layout="row">
         <div ng-controller="SidebarController as SidebarCtrl" ng-include="'views/partials/partial.sidebar.html'">
         </div>
-        <md-content flex layout-padding layout="column" ui-view>
+        <md-content flex layout="column" ui-view>
           <div layout-align="center center" layout-fill layout="row" style="height: 100vh;">
             <md-progress-circular class="md-accent md-hue-3" md-mode="indeterminate" md-diameter="60"></md-progress-circular>
           </div>

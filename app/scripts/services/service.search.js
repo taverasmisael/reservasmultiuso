@@ -104,17 +104,20 @@ class Search {
       this.searchReservacionByDate(date)
         .then(reservas => {
           let filteredReservas = reservas.filter(res => {
+            let answer;
             if (start.isSame(res.starts) || start.isBetween(res.starts, res.ends)) {
               errMessage.name = 'START_AT_SAME_TIME';
               errMessage.message = 'Both reservations has same or closer time';
-              return true;
+              answer = true;
             } else if (start.isBefore(res.starts) && end.isAfter(res.starts)) {
               errMessage.name = 'ENDS_TOO_LATE';
               errMessage.message = 'Your reservation colides with other';
-              return true;
+              answer = true;
             } else {
-              return false;
+              answer = false;
             }
+
+            return answer;
           });
 
           if (filteredReservas.length) {
