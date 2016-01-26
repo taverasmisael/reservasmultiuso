@@ -11,14 +11,14 @@
     <md-list flex>
       <md-subheader>
         <span flex>Lista de lugares</span>
-        <md-button flex class="md-icon-button" ng-click="doSecondaryAction($event)" aria-label="Agregar Lugar">
+        <md-button flex class="md-icon-button" ng-click="PlacesCtrl.addPlace($event)" aria-label="Agregar Lugar">
           <ng-md-icon icon="add"></ng-md-icon>
         </md-button>
       </md-subheader>
-      <md-list-item ng-click="goToPerson(person.name, $event)">
+      <md-list-item ng-click="PlacesCtrl.selectPlace('place')">
         <ng-md-icon icon="store" class="avatar"></ng-md-icon>
         <p>Nombre del Lugar</p>
-        <ng-md-icon icon="delete" ng-click="doSecondaryAction($event)" aria-label="Reservar aqui" class="md-secondary md-warn"></ng-md-icon>
+        <ng-md-icon icon="delete" ng-click="PlacesCtrl.deletePlace('id')" aria-label="Eliminar Lugar" class="md-secondary md-warn"></ng-md-icon>
       </md-list-item>
     </md-list>
   </div>
@@ -31,18 +31,18 @@
             <div layout="row" class="md-subhead">
               <md-input-container md-no-float class="md-block special-case">
                 <ng-md-icon icon="people"></ng-md-icon>
-                <input type="text" value="60 personas" placeholder="Cantidad de Personas" disabled>
+                <input type="text" value="60 personas" placeholder="Cantidad de Personas" ng-disabled="!PlacesCtrl.editing">
               </md-input-container>
               <md-input-container md-no-float class="md-block special-case">
                 <ng-md-icon icon="place"></ng-md-icon>
-                <input type="text" value="Edificio 1, 1er Nivel" placeholder="Ubicación" disabled>
+                <input type="text" value="Edificio 1, 1er Nivel" placeholder="Ubicación" ng-disabled="!PlacesCtrl.editing">
               </md-input-container>
             </div>
           </md-card-title-text>
         </md-card-title>
         <md-card-actions layout="row" layout-align="start center">
         <small flex>Creado Por: <em>Misael Taveras</em></small>
-          <md-button aria-label="Editar Lugar" class="md-icon-button">
+          <md-button aria-label="Editar Lugar" ng-click="PlacesCtrl.editing = !PlacesCtrl.editing" class="md-icon-button">
             <md-tooltip md-direction="top">
               Editar
             </md-tooltip>
