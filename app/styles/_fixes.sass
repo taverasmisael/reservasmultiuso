@@ -1,16 +1,18 @@
 a
   text-decoration: none
 
-.md-warn
-  color: color($warnColor, 'darken-2')
-  font-weight: 700
+.md
+  &-warn, &-primary &-accent
+    font-weight: 700
+  &-warn
+    color: color($warnColor, 'accent-2')
+  &-primary
+    color: color($primaryColor, 'accent-2')
+  &-accent
+    color: color($accentColor, 'accent-2')
 // Class For ngMdIcons with custom size
 ng-md-icon
   color: rgba(0,0,0,0.54)
-  &.md-warn
-    color: rgba(color($warnColor, 'lighten-1'), 0.54)
-    &:hover
-      color: rgba(color($warnColor, 'lighten-1'), 1)
 .ng-md-icon-special
   margin: 0
   width: auto
@@ -24,6 +26,12 @@ ng-md-icon
   @include media('>=600px')
     top: 4.2%
 
+
+// md-inputs
+md-input-container.special-case
+  margin: 0 !important
+  & input
+    width: 75%
 
 md-sidenav, .md-sidenav
   overflow: hidden
@@ -92,3 +100,6 @@ md-datepicker
   min-height: 100%
   width: 100%
   min-width: 100%
+
+.big-search
+  width: 95% !important

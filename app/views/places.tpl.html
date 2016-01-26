@@ -1,16 +1,19 @@
 <md-toolbar layout-fill>
   <div layout-fill layout="row" layout-align="center center" class="md-toolbar-tools">
-    <md-input-container flex md-no-float class="md-block">
+    <md-input-container layout-fill md-no-float class="md-block big-search">
       <ng-md-icon icon="search"></ng-md-icon>
-      <input ng-model="PlaceCtrl.query" type="search" placeholder="Algun Lugar...">
+      <input ng-model="PlaceCtrl.query" type="search" placeholder="Buscar Lugar...">
     </md-input-container>
   </div>
 </md-toolbar>
 <md-content class="md-padding" layout-xs="column" layout="row">
   <div layout-fill flex="45">
     <md-list flex>
-      <md-subheader class="md-no-sticky">Lista de lugares <span flex></span>
-        <ng-md-icon icon="add" ng-click="doSecondaryAction($event)" aria-label="Agregar Lugar" class="md-accent md-hue-3"></ng-md-icon>
+      <md-subheader>
+        <span flex>Lista de lugares</span>
+        <md-button flex class="md-icon-button" ng-click="doSecondaryAction($event)" aria-label="Agregar Lugar">
+          <ng-md-icon icon="add"></ng-md-icon>
+        </md-button>
       </md-subheader>
       <md-list-item ng-click="goToPerson(person.name, $event)">
         <ng-md-icon icon="store" class="avatar"></ng-md-icon>
@@ -20,5 +23,45 @@
     </md-list>
   </div>
   <div layout-fill flex="45" flex-offset="5">
+    <md-content class="md-padding">
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Nombre del Lugar</span>
+            <div layout="row" class="md-subhead">
+              <md-input-container md-no-float class="md-block special-case">
+                <ng-md-icon icon="people"></ng-md-icon>
+                <input type="text" value="60 personas" placeholder="Cantidad de Personas" disabled>
+              </md-input-container>
+              <md-input-container md-no-float class="md-block special-case">
+                <ng-md-icon icon="place"></ng-md-icon>
+                <input type="text" value="Edificio 1, 1er Nivel" placeholder="Ubicación" disabled>
+              </md-input-container>
+            </div>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="start center">
+        <small flex>Creado Por: <em>Misael Taveras</em></small>
+          <md-button aria-label="Editar Lugar" class="md-icon-button">
+            <md-tooltip md-direction="top">
+              Editar
+            </md-tooltip>
+            <ng-md-icon icon="edit" class=""></ng-md-icon>
+          </md-button>
+          <md-button aria-label="Eliminar Lugar" class="md-warn md-icon-button">
+            <md-tooltip md-direction="top">
+              Eliminar
+            </md-tooltip>
+            <ng-md-icon icon="delete" class="md-warn"></ng-md-icon>
+          </md-button>
+          <md-button aria-label="Reservar Lugar" class="md-primary md-icon-button">
+            <md-tooltip md-direction="top">
+              Reservar
+            </md-tooltip>
+            <ng-md-icon icon="forward" class="md-primary"></ng-md-icon>
+          </md-button>
+        </md-card-actions>
+      </md-card>
+    </md-content>
   </div>
 </md-content>
