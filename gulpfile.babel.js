@@ -70,9 +70,6 @@ GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
   return gulp.src(config.paths.styles)
               .pipe($.plumber())
               .pipe($.sourcemaps.init())
-              .pipe($.changed(config.temp.styles, {
-                extension: '.css'
-              }))
               .pipe($.sass(config.options.styles))
               .pipe($.autoprefixer(config.options.autoprefixer))
               .pipe($.sourcemaps.write('.'))
@@ -173,7 +170,7 @@ GULP.task('concatify', `Concatenates and Minify './app' folder. Send files to pr
 });
 
 GULP.task('default', `runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb)`, (cb)=> {
-   return runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb);
+   return runSequence('clean', 'styles', 'scripts', 'watch', 'reload', 'serve', cb);
 });
 
 // Watch All Files
