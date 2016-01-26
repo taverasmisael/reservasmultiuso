@@ -77,7 +77,8 @@ GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
               .pipe(gulp.dest(config.temp.styles))
               .pipe($.size({
                 title: 'Styles'
-              }));
+              }))
+              .pipe($.connect.reload());
 });
 
 
@@ -90,19 +91,6 @@ GULP.task('wiredep', `Inject Bower components to the 'index.html'`, ()=> {
               .pipe($.size({
                 title: 'Wiredep'
               }));
-});
-
-// Your Dependencies Injected
-GULP.task('inject', `Inject our own files to the 'index.html'`, ()=> {
-  let combinedPaths = config.paths.scripts.concat(config.paths.styles);
-  let sources = gulp.src(combinedPaths, config.options.inject);
-  return gulp.src(config.index)
-              .pipe($.plumber())
-              .pipe($.inject(sources))
-              .pipe($.size({
-                title: 'Inject'
-              }))
-              .pipe(gulp.dest(config.output.basedir));
 });
 
 // Reload Server on `*.html` changes
@@ -134,7 +122,8 @@ GULP.task('images', `Minify and Copy Images`, ()=> {
               .pipe($.size({
                 title: 'Images'
               }))
-              .pipe(gulp.dest(config.output.images));
+              .pipe(gulp.dest(config.output.images))
+              .pipe($.connect.reload());
 });
 
 // Clean output directory
