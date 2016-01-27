@@ -60,7 +60,7 @@
             </md-tooltip>
             <ng-md-icon icon="{{PlacesCtrl.currentCancelIcon}}" class="md-warn"></ng-md-icon>
           </md-button>
-          <md-button aria-label="{{PlacesCtrl.modeSaveMessage}} Lugar" class="md-icon-button md-primary" type="submit" ng-disabled="!(PlacesCtrl.currentPlace && PlacesCtrl.editing && !PlacesCtrl.placeForm.$invalid)">
+          <md-button aria-label="{{PlacesCtrl.modeSaveMessage}} Lugar" class="md-icon-button md-primary" type="submit" ng-disabled="!(PlacesCtrl.currentPlace && !PlacesCtrl.placeForm.$invalid || PlacesCtrl.editing)">
             <md-tooltip md-direction="top">
               {{PlacesCtrl.modeSaveMessage}}
             </md-tooltip>

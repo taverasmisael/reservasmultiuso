@@ -39,13 +39,16 @@ class Places {
 
   @autobind
   edit(placeId, newInfo) {
-    let place = firebaseObject.get(this)(REF.get(this).child(placeId));
-    let {capacity, location} = newInfo;
+    let place = REF.get(this).child(placeId);
+    let {name, capacity, location} = newInfo;
     // Set Exacts Values for our place
-    place.capacity = capacity;
-    place.location = location;
+    let toSave = {
+      name: name,
+      capacity: capacity,
+      location: location
+    };
 
-    return place.$save();
+    return place.update(toSave);
   }
 
   @autobind

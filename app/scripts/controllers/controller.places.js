@@ -20,7 +20,8 @@ class PlacesController {
   resetModes() {
     console.info('Reseting Modes...');
     this.editing = false;
-    this.currentSaveIcon = 'add';
+    this.creating = false;
+    this.currentSaveIcon = 'edit';
     this.modeSaveMessage = 'Editar';
     this.modeCancelMessage = 'Eliminar';
     this.currentCancelIcon = 'delete';
@@ -51,20 +52,19 @@ class PlacesController {
     this.currentCancelIcon = 'cancel';
     this.modeCancelMessage = 'Cancelar';
     this.editing = true;
+    this.creating = true;
     this.currentPlace = {};
   }
 
   @autobind
   changeMode() {
-    if (this.editing) {
+    if (this.creating) {
       // If is Saving/Inactive
       this.savePlace(this.currentPlace);
-    } else {
-      // If is active
-      this.currentSaveIcon = 'save';
-      this.modeSaveMessage = 'Guardar';
-      this.currentCancelIcon = 'cancel';
-      this.modeCancelMessage = 'Cancelar';
+    } else if (!(this.editing && this.creating)) {
+      if (this.editing) {
+        this.editPlace(this.currentPlace.$id, this.currentPlace);
+      }
       this.editing = !this.editing;
     }
   }
@@ -94,10 +94,10 @@ class PlacesController {
   @autobind
   editPlace(placeId, newData) {
     this.Places.edit(placeId, newData)
-      .then(ref => {
+      .then(() => {
         this.$mdToast.show(
           this.$mdToast.simple()
-          .content(`Lugar ${ref.key} guardado`)
+          .content(`Lugar ${newData.name} guardado`)
           .position('right bottom'));
       })
       .catch(console.error.bind(console));
