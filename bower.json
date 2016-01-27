@@ -37,6 +37,7 @@
     "angular-moment": "1.0.0-beta.3",
     "jt.timepicker": "timepicker#~1.8.5",
     "angular-messages": "~1.4.8",
-    "include-media": "~1.4.2"
+    "include-media": "~1.4.2",
+    "svg-morpheus": "~0.1.8"
   }
 }
