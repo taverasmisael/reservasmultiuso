@@ -11,7 +11,7 @@
     <md-list flex>
       <md-subheader>
         <span flex>Lista de lugares</span>
-        <md-button flex class="md-icon-button" ng-click="PlacesCtrl.addPlace($event)" aria-label="Agregar Lugar">
+        <md-button class="md-icon-button" ng-click="PlacesCtrl.addPlace($event)" aria-label="Agregar Lugar">
           <ng-md-icon icon="add"></ng-md-icon>
         </md-button>
       </md-subheader>
@@ -27,38 +27,35 @@
       <md-card>
         <md-card-title>
           <md-card-title-text>
-            <span class="md-headline">Nombre del Lugar</span>
+            <md-input-container md-no-float class="md-block md-headline special-case">
+              <input type="text" ng-model="PlacesCtrl.currentPlace.name" required md-minlength="10" minlength="10" placeholder="Nombre del Lugar" ng-disabled="!PlacesCtrl.editing">
+            </md-input-container>
             <div layout="row" class="md-subhead">
               <md-input-container md-no-float class="md-block special-case">
                 <ng-md-icon icon="people"></ng-md-icon>
-                <input type="text" value="60 personas" placeholder="Cantidad de Personas" ng-disabled="!PlacesCtrl.editing">
+                <input type="text" ng-model="PlacesCtrl.currentPlace.capacity" required md-minlength="2" minlength="2" md-maxlength="4" maxlength="4" placeholder="Cantidad de Personas" ng-disabled="!PlacesCtrl.editing">
               </md-input-container>
               <md-input-container md-no-float class="md-block special-case">
                 <ng-md-icon icon="place"></ng-md-icon>
-                <input type="text" value="Edificio 1, 1er Nivel" placeholder="Ubicación" ng-disabled="!PlacesCtrl.editing">
+                <input type="text" ng-model="PlacesCtrl.currentPlace.location" required md-minlength="10" minlength="10" placeholder="Ubicación" ng-disabled="!PlacesCtrl.editing">
               </md-input-container>
             </div>
           </md-card-title-text>
         </md-card-title>
         <md-card-actions layout="row" layout-align="start center">
         <small flex>Creado Por: <em>Misael Taveras</em></small>
-          <md-button aria-label="Editar Lugar" ng-click="PlacesCtrl.editing = !PlacesCtrl.editing" class="md-icon-button">
+          <md-button aria-label="{{PlacesCtrl.modeCancelMessage}} Lugar" class="md-warn md-icon-button">
             <md-tooltip md-direction="top">
-              Editar
+              {{PlacesCtrl.modeCancelMessage}}
             </md-tooltip>
-            <ng-md-icon icon="edit" class=""></ng-md-icon>
+            <ng-md-icon icon="{{PlacesCtrl.currentCancelIcon}}" class="md-warn"></ng-md-icon>
           </md-button>
-          <md-button aria-label="Eliminar Lugar" class="md-warn md-icon-button">
+          <md-button aria-label="{{PlacesCtrl.modeSaveMessage}} Lugar" ng-click="PlacesCtrl.changeMode()" class="md-icon-button md-primary">
             <md-tooltip md-direction="top">
-              Eliminar
+              {{PlacesCtrl.modeSaveMessage}}
             </md-tooltip>
-            <ng-md-icon icon="delete" class="md-warn"></ng-md-icon>
+            <ng-md-icon icon="{{PlacesCtrl.currentSaveIcon}}" options='{"duration": 375}' class="md-primary"></ng-md-icon>
           </md-button>
-          <md-button aria-label="Reservar Lugar" class="md-primary md-icon-button">
-            <md-tooltip md-direction="top">
-              Reservar
-            </md-tooltip>
-            <ng-md-icon icon="forward" class="md-primary"></ng-md-icon>
           </md-button>
         </md-card-actions>
       </md-card>

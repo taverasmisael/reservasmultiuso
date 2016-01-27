@@ -1,11 +1,15 @@
 import {autobind} from 'core-decorators';
 
 class PlacesController {
-  constructor($mdToast Places) {
+  constructor($mdToast, Places) {
     this.Places = Places;
     this.$mdToast = $mdToast;
-    this.active();
     this.editing = false;
+    this.currentSaveIcon = 'edit';
+    this.modeSaveMessage = 'Editar';
+    this.currentCancelIcon = 'delete';
+    this.currentPlace = {};
+    this.active();
   }
 
   @autobind
@@ -15,6 +19,34 @@ class PlacesController {
       this.places = lugares;
     })
     .catch(console.error.bind(console));
+  }
+
+  @autobind
+  addPlace(event) {
+    console.log(event);
+    this.currentSaveIcon = 'save';
+    this.modeSaveMessage = 'Guardar';
+    this.modeCancelMessage = 'Cancelar';
+    this.editing = true;
+    this.currentPlace = {};
+  }
+
+  @autobind
+  changeMode() {
+    if (this.editing) {
+      // If is inactive
+      this.currentSaveIcon = 'edit';
+      this.modeSaveMessage = 'Editar';
+      this.currentCancelIcon = 'delete';
+      this.modeCancelMessage = 'Eliminar';
+    } else {
+      // If is active
+      this.currentSaveIcon = 'save';
+      this.modeSaveMessage = 'Guardar';
+      this.currentCancelIcon = 'cancel';
+      this.modeCancelMessage = 'Cancelar';
+    }
+    this.editing = !this.editing;
   }
 
   @autobind
@@ -42,7 +74,7 @@ class PlacesController {
       .then(() => {
         this.$mdToast.show(
           this.$mdToast.simple()
-          .content(`${this.currentPlace.name} Elminado`)
+          .content(`${placeId} Elminado`)
           .position('right bottom'));
       })
       .catch(console.error.bind(console));
