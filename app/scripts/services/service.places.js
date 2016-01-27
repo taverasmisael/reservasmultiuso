@@ -21,7 +21,7 @@ class Places {
 
   @autobind
   get(placeId) {
-    return firebaseObject.get(this)(REF.get(this).child(placeId));
+    return firebaseObject.get(this)(REF.get(this).child(placeId)).$loaded();
   }
 
   @autobind
