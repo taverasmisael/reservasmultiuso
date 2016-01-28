@@ -35,6 +35,8 @@ md-input-container.special-case
   margin: 0 !important
   & input
     width: 75%
+md-autocomplete.special-case md-input-container
+  padding: 1rem 0 0 0
 
 md-toolbar input[type="search"]
   color: white
@@ -42,45 +44,29 @@ md-toolbar input[type="search"]
 md-sidenav, .md-sidenav
   overflow: hidden
 
-// DatePicker
-.md-datepicker-calendar-pane.md-pane-open
-  background: white
-  border: none
-  .md-calendar-date.md-calendar-selected-date > span
-    background: color($primaryColor, "darken-1")
-    border-radius: 50%
-    color: white !important
-  .md-calendar-date.md-calendar-date-today > span
-    border: 1px solid color($primaryColor, "darken-1")
-    border-radius: 50%
-    color: color($primaryColor, "darken-1") !important
-  // Fix Crash on date-today and selected-date are the same
-  .md-calendar-date.md-calendar-date-today.md-calendar-selected-date > span
-    color: white !important
-  .md-calendar-date.md-calendar-date-disabled > span
-    color: color("grey", "lighten-1")
 
-md-datepicker
-  &.ng-valid
-    border-color: rgba(0, 0, 0, 0.117647)
-  &.ng-invalid
-    .md-datepicker-input-container
-      border-color: color($warnColor, "base")
-      border-width: 2px
-  .md-datepicker-input-container
-    flex: 1
-    box-sizing: border-box
-  .md-datepicker-button
-    width: 36px
-    margin: -0.5rem !important
-    md-icon
-      width: 36px
-      height: 36px
+// md-datepicker.special-case .md-datepicker-calendar-icon
+//   width: 28px
+//   height: 28px
+// md-datepicker
+//   &.ng-valid
+//     border-color: rgba(0, 0, 0, 0.117647)
+//   &.ng-invalid
+//     .md-datepicker-input-container
+//       border-color: color($warnColor, "base")
+//       border-width: 2px
+//   .md-datepicker-input-container
+//     flex: 1
+//     box-sizing: border-box
+//   .md-datepicker-button
+//     width: 36px
+//     margin: -0.5rem !important
+//     md-icon
+//       width: 36px
+//       height: 36px
 
 
 // Layouts
-
-
 .layout-row > .layout-fill
   // Reset Defaults
   width: auto
