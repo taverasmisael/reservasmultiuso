@@ -22,14 +22,19 @@
         </md-select>
       </div>
       <div layout="row" layout-align="start center" layout-padding layout-fill>
-        <md-datepicker flex md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" name="newReservationDataDate" required="true" mt-exced-reservations ng-model-options="{allowInvalid: true}" profid="{{ AdminCtrl.nrd.profesor.$id }}" class="special-case"></md-datepicker>
+        <md-datepicker flex="grow" md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" name="newReservationDataDate" required="true" mt-exced-reservations ng-model-options="{allowInvalid: true}" profid="{{ AdminCtrl.nrd.profesor.$id }}" class="special-case"></md-datepicker>
+        <md-select flex="grow" required="true" name="newReservationDataPlace" ng-model="AdminCtrl.newReservationData.place" aria-label="Lugares para reservar" placeholder="Lugares">
+            <md-option ng-repeat="place in AdminCtrl.places" value="{{place.id}}">
+                {{place.name}} para {{place.capacity}}
+            </md-option>
+        </md-select>
       </div>
-      <div layout="row" layout-padding layout-fill>
-        <md-input-container md-no-float class="md-block special-case">
+      <div layout="row" layout-align="start center" layout-padding layout-fill>
+        <md-input-container layout-padding flex="grow" md-no-float class="md-block special-case">
           <ng-md-icon icon="schedule"></ng-md-icon>
           <input id="newReservationDataStarts" name="newReservationDataStarts" type="text" integer required ng-model="AdminCtrl.newReservationData.starts" ng-pattern="/^(0?[1-9]|1[012])(:[0-5]\d)[APap][mM]$/" placeholder="Hora de inicio">
         </md-input-container>
-        <md-input-container md-no-float class="md-block special-case">
+        <md-input-container layout-padding flex="grow" md-no-float class="md-block special-case">
           <ng-md-icon icon="schedule"></ng-md-icon>
           <input id="newReservationDataEnds" name="newReservationDataEnds" type="text" integer required ng-model="AdminCtrl.newReservationData.ends" mt-time placeholder="Hora de fin">
         </md-input-container>
