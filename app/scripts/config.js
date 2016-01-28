@@ -95,11 +95,19 @@ export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
   $rootScope.$state = $state;
   $rootScope.$on('$stateChangeStart', function(event, toState) {
     $timeout(() => {
-      if (_getForbidenStates(toState.url) && !Auth.signedIn()) {
+      if (_requireLoginLevel(toState.url) && !Auth.signedIn()) {
         event.preventDefault();
         $mdToast.show(
           $mdToast.simple()
           .content('No tiene Permiso para acceder a esta área')
+          .position('right bottom')
+        );
+        $state.go('home');
+      } else if (_requireAdminLevel(toState.url) && !Auth.user.profile.isAdmin) {
+        event.preventDefault();
+        $mdToast.show(
+          $mdToast.simple()
+          .content('Necesitas ser Administrador para acceder a esta área')
           .position('right bottom')
         );
         $state.go('home');
@@ -113,10 +121,23 @@ export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
  * @param  {String} url the url Provided by the State
  * @return {Boolean}     Return if the URL is on the forbidenUrls
  */
-function _getForbidenStates(url) {
+function _requireLoginLevel(url) {
   // Here you can add as many as you routes
   // you need with permisions or loggedIn users
-  let forbidenUrls = ['/create/', '/user/', '/manage-users/'];
+  let forbidenUrls = ['/create/', '/user/'];
+
+  return forbidenUrls.indexOf(url) >= 0;
+}
+
+/**
+ * Restrict Acces to Certain Routes to no admin
+ * @param  {String} url the url Provided by the State
+ * @return {Boolean}     Return if the URL is on the forbidenUrls
+ */
+function _requireAdminLevel(url) {
+  // Here you can add as many as you routes
+  // you need with permisions or loggedIn users
+  let forbidenUrls = ['/places/', '/manage-users/'];
 
   return forbidenUrls.indexOf(url) >= 0;
 }

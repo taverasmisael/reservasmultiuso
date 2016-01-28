@@ -38,7 +38,7 @@
     <!-- Inicio de la lista de opciones disponibles -->
     <md-list>
         <md-subheader class="md-no-sticky">Acciones</md-subheader>
-        <md-list-item class="md-1-line" ng-repeat="option in SidebarCtrl.options">
+        <md-list-item class="md-1-line" ng-repeat="option in SidebarCtrl.options" ng-if="option.restriction || SidebarCtrl.user.profile.isAdmin">
             <a ui-sref="{{option.state}}" ui-sref-active="md-active" class="md-list-item-text" md-ink-ripple flex layout="row" ng-class="{'md-offset': $index == 2 }">
                 <ng-md-icon icon="{{ option.icon }}"></ng-md-icon>
                 <p flex style="padding-left: 2rem;">{{ option.displayName }}</p>
