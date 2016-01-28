@@ -8,6 +8,32 @@ meses atras, pero con un mayor enfoque y mas conocimientos.
 
 Contara con soporte local y optimizacion en las tareas.
 
+## ¿Cómo usar Reservas Multiuso?
+
+#### Requisitos
+
+* [NodeJs](https://nodejs.org/en/) instalado
+
+
+## Vamos a ello
+Es muy sencillo, solo debes clonar este repositorio con
+  ```
+    git clone https://github.com/taverasmisael/reservasmultiuso.git reservas
+  ```
+entrar al directorio con `cd reservas` y desde allí ejecutar:
+  ```
+    npm install && bower install
+  ```
+
+Una vez hecho esto, es simplemente correr el script `start` con el comando:
+  ```
+    npm run start
+  ```
+
+Y abrir en el navegador la url [localhost:8080](http://localhost:8080) y listo.
+
+Hay un ejemplo vivo corriendo [justo aqui](http://reservasmultiuso.firebaseapp.com)
+
 
 ## Aun en face BETA :disappointed:
 Muy apesar de que llevamos el proyecto avanzando tan rapido como podemos, hay varios aspectos a considerar aun.
@@ -26,5 +52,7 @@ Entre otras, si encuentras algun otro fallo o alguna nueva implementación que c
 las nubes y serán actualizadas en tiempo real en todos nuestros dispositivos (Aunque el diseño aun no se ha adaptado para ser FullResponsive).
 
 * SelfHosted: Solo descarga y pon a correr tu servidor, y listo; tu app será tuya y solo tuya.
+
+* Una app que sigue los lineamientos de las últimas tecnologías en el ambiente JS (pensando aún en implementar Angular2)
 
 Y mucho más en camino
