@@ -40,7 +40,7 @@ class UsersController {
             state: 'editando'
           }
         };
-        let editDialog = $.extend(config, dialogOptions);
+        let editDialog = Object.assign(config, dialogOptions);
         console.log(config);
         this.$mdDialog.show(editDialog)
           .then(this._dialogComplete)
@@ -57,7 +57,7 @@ class UsersController {
         state: 'creando'
       }
     };
-    let createDialog = $.extend(config, dialogOptions);
+    let createDialog = Object.assign(config, dialogOptions);
 
     this.$mdDialog.show(createDialog)
       .then(this._dialogComplete)

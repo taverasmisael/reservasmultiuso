@@ -1,5 +1,6 @@
 class SidebarController {
-  constructor($state, $mdToast, Auth) {
+  constructor($scope, $state, $mdToast, Auth) {
+    this.$scope = $scope;
     this.$state = $state;
     this.$mdToast = $mdToast;
     this.Auth = Auth;
@@ -9,18 +10,22 @@ class SidebarController {
     this.options = [{
       displayName: 'Buscar',
       icon: 'search',
+      restriction: true,
       state: 'search'
     }, {
       displayName: 'Lugares',
       icon: 'place',
+      restriction: false,
       state: 'places'
     }, {
       displayName: 'Crear',
       icon: 'add',
+      restriction: true,
       state: 'create'
     }, {
       displayName: 'Ayuda',
       icon: 'help',
+      restriction: true,
       state: 'help'
     }];
     this.active();
@@ -29,12 +34,10 @@ class SidebarController {
   active() {
     console.log('Sidebaring...');
     this.signedIn = this.Auth.signedIn;
-    let checkProfile = setInterval(() => {
-      this.user = this.Auth.user;
-      if (this.user.profile) {
-        clearInterval(checkProfile);
-      }
-    }, 500);
+
+    this.$scope.$watch(() => this.Auth.user, newval => {
+      this.user = newval;
+    });
   }
 
   openMenu($mdOpenMenu, event) {
@@ -52,6 +55,6 @@ class SidebarController {
   }
 }
 
-SidebarController.$inject = ['$state', '$mdToast', 'Auth'];
+SidebarController.$inject = ['$scope', '$state', '$mdToast', 'Auth'];
 
 export default SidebarController;

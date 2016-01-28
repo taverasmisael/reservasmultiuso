@@ -76,6 +76,7 @@ class Auth {
       username, password
     } = user;
 
+    let answer;
     const INVALIDUSERNAME = {
       name: 'INVALID_USERNAME',
       message: `The User: "${username} doesn't exist"`
@@ -86,14 +87,14 @@ class Auth {
       .$loaded()
       .then(data => {
         if (data.length >= 1) {
-          console.log(data);
-          return AUTH.get(this).$authWithPassword({
+          answer = AUTH.get(this).$authWithPassword({
             email: data[0].email,
             password: password
           });
         } else {
           throw INVALIDUSERNAME;
         }
+        return answer;
       });
   }
 

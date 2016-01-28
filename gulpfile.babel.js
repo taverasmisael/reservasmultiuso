@@ -70,9 +70,6 @@ GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
   return gulp.src(config.paths.styles)
               .pipe($.plumber())
               .pipe($.sourcemaps.init())
-              .pipe($.changed(config.temp.styles, {
-                extension: '.css'
-              }))
               .pipe($.sass(config.options.styles))
               .pipe($.autoprefixer(config.options.autoprefixer))
               .pipe($.sourcemaps.write('.'))
@@ -80,7 +77,8 @@ GULP.task('styles', `Compile all our '*.{sass,scss}' files`, ()=> {
               .pipe(gulp.dest(config.temp.styles))
               .pipe($.size({
                 title: 'Styles'
-              }));
+              }))
+              .pipe($.connect.reload());
 });
 
 
@@ -93,19 +91,6 @@ GULP.task('wiredep', `Inject Bower components to the 'index.html'`, ()=> {
               .pipe($.size({
                 title: 'Wiredep'
               }));
-});
-
-// Your Dependencies Injected
-GULP.task('inject', `Inject our own files to the 'index.html'`, ()=> {
-  let combinedPaths = config.paths.scripts.concat(config.paths.styles);
-  let sources = gulp.src(combinedPaths, config.options.inject);
-  return gulp.src(config.index)
-              .pipe($.plumber())
-              .pipe($.inject(sources))
-              .pipe($.size({
-                title: 'Inject'
-              }))
-              .pipe(gulp.dest(config.output.basedir));
 });
 
 // Reload Server on `*.html` changes
@@ -137,7 +122,8 @@ GULP.task('images', `Minify and Copy Images`, ()=> {
               .pipe($.size({
                 title: 'Images'
               }))
-              .pipe(gulp.dest(config.output.images));
+              .pipe(gulp.dest(config.output.images))
+              .pipe($.connect.reload());
 });
 
 // Clean output directory
@@ -173,7 +159,7 @@ GULP.task('concatify', `Concatenates and Minify './app' folder. Send files to pr
 });
 
 GULP.task('default', `runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb)`, (cb)=> {
-   return runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb);
+   return runSequence('clean', 'styles', 'scripts', 'watch', 'reload', 'serve', cb);
 });
 
 // Watch All Files

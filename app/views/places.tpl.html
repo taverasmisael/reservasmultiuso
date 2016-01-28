@@ -1,0 +1,77 @@
+<md-toolbar layout-fill>
+  <div layout-fill layout="row" layout-align="center center" class="md-toolbar-tools">
+    <md-input-container layout-fill md-no-float class="md-block big-search">
+      <ng-md-icon icon="search"></ng-md-icon>
+      <input ng-model="PlacesCtrl.query.name" type="search" placeholder="Buscar Lugar...">
+    </md-input-container>
+    <md-button ng-click="PlacesCtrl.query = {}" aria-label="Reiniciar Busqueda" class="md-icon-button clear-search">
+      <ng-md-icon flex icon="close"></ng-md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+<md-content class="md-padding" layout-xs="column" layout="row">
+  <div layout-fill flex="45">
+    <md-list flex>
+      <md-subheader>
+        <span flex>Lista de lugares</span>
+        <md-button class="md-icon-button" ng-click="PlacesCtrl.addPlace($event)" aria-label="Agregar Lugar">
+          <ng-md-icon icon="add"></ng-md-icon>
+        </md-button>
+      </md-subheader>
+      <md-list-item ng-click="PlacesCtrl.selectPlace(place.$id)" ng-repeat="place in PlacesCtrl.places | filter: PlacesCtrl.query">
+        <ng-md-icon icon="store" class="avatar"></ng-md-icon>
+        <p>{{place.name}}</p>
+        <ng-md-icon icon="delete" ng-click="PlacesCtrl.deletePlace(place.$id)" aria-label="Eliminar Lugar" class="md-secondary md-warn"></ng-md-icon>
+      </md-list-item>
+    </md-list>
+  </div>
+  <div layout-fill flex="45" flex-offset="5">
+    <form name="PlacesCtrl.placeForm" ng-submit="PlacesCtrl.changeMode()" class="md-padding">
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <md-input-container md-no-float class="md-block md-headline special-case">
+              <input type="text" name="nombreDelLugar" ng-model="PlacesCtrl.currentPlace.name" required md-minlength="10" minlength="10" placeholder="Nombre del Lugar" ng-disabled="!PlacesCtrl.editing">
+              <div ng-messages="PlacesCtrl.placeForm.nombreDelLugar.$error">
+                <div ng-message="minlength">El nombre debe tener 10 cáracteres minimo</div>
+              </div>
+            </md-input-container>
+            <div layout="row" class="md-subhead">
+              <md-input-container md-no-float class="md-block special-case">
+                <ng-md-icon icon="people"></ng-md-icon>
+                <input type="text" ng-pattern="/^\d+$/" name="capacidadDelLugar" ng-model="PlacesCtrl.currentPlace.capacity" required md-minlength="2" minlength="2" md-maxlength="4" maxlength="4" placeholder="Cantidad de Personas" ng-disabled="!PlacesCtrl.editing">
+                <div ng-messages="PlacesCtrl.placeForm.capacidadDelLugar.$error">
+                  <div ng-message="minlength">Use cifras de 2 digitos</div>
+                  <div ng-message="pattern">El campo es solo numerico.</div>
+                </div>
+              </md-input-container>
+              <md-input-container md-no-float class="md-block special-case">
+                <ng-md-icon icon="place"></ng-md-icon>
+                <input type="text" name="ubicacionDelLugar" ng-model="PlacesCtrl.currentPlace.location" required md-minlength="10" minlength="10" placeholder="Ubicación" ng-disabled="!PlacesCtrl.editing">
+                <div ng-messages="PlacesCtrl.placeForm.ubicacionDelLugar.$error">
+                  <div ng-message="minlength">El Lugar debe tener 10 cáracteres minimo</div>
+                </div>
+              </md-input-container>
+            </div>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="start center">
+          <small flex ng-if="PlacesCtrl.currentPlace.creatorFullName">Creado Por: <em>{{PlacesCtrl.currentPlace.creatorFullName}}</em></small>
+          <md-button aria-label="{{PlacesCtrl.modeCancelMessage}} Lugar" ng-click="PlacesCtrl.cancelMode()" class="md-warn md-icon-button" ng-disabled="!(PlacesCtrl.currentPlace.capacity || PlacesCtrl.editing)">
+            <md-tooltip md-direction="top">
+              {{PlacesCtrl.modeCancelMessage}}
+            </md-tooltip>
+            <ng-md-icon icon="{{PlacesCtrl.currentCancelIcon}}" class="md-warn"></ng-md-icon>
+          </md-button>
+          <md-button aria-label="{{PlacesCtrl.modeSaveMessage}} Lugar" class="md-icon-button md-primary" type="submit" ng-disabled="!(PlacesCtrl.currentPlace && !PlacesCtrl.placeForm.$invalid || PlacesCtrl.editing)">
+            <md-tooltip md-direction="top">
+              {{PlacesCtrl.modeSaveMessage}}
+            </md-tooltip>
+            <ng-md-icon icon="{{PlacesCtrl.currentSaveIcon}}" options='{"duration": 375}' class="md-primary"></ng-md-icon>
+          </md-button>
+          </md-button>
+        </md-card-actions>
+      </md-card>
+    </form>
+  </div>
+</md-content>
