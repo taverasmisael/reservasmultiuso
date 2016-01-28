@@ -18,7 +18,9 @@ class Places {
 
   @autobind
   all() {
-    return this.places.$loaded();
+    let activePlaces = firebaseArray.get(this)(REF.get(this)
+      .orderByChild('status').equalTo('active'));
+    return activePlaces.$loaded();
   }
 
   @autobind
@@ -51,9 +53,11 @@ class Places {
     return place.update(toSave);
   }
 
+  // Removes don't really removes only set place.status to 'disabled'
   @autobind
   remove(placeId) {
-    return firebaseObject.get(this)(REF.get(this).child(placeId)).$remove();
+    let place = REF.get(this).child(placeId);
+    return place.update({status: 'disabled'});
   }
 }
 
