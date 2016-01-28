@@ -136,28 +136,6 @@ GULP.task('clean', `Remove Files from 'dist'`, (cb)=> {
           });
 });
 
-// This function will be deprecated on future versions, so no relay on it
-GULP.task('concatify', `Concatenates and Minify './app' folder. Send files to production`, ()=> {
-  let assets = $.useref.assets();
-  return gulp.src(config.index)
-              .pipe(assets)
-              .pipe($.if('*.js', $.uglify()))
-              .pipe($.size({
-                title: 'Minifyed JS'
-              }))
-              .pipe($.if('*.css', $.csso()))
-              .pipe($.size({
-                title: 'Minifyed CSS'
-              }))
-              .pipe(assets.restore())
-              .pipe($.useref())
-              .pipe($.if('*.html', $.minifyHtml()))
-              .pipe($.size({
-                title: 'Minifyed HTML'
-              }))
-              .pipe(gulp.dest(config.output.basedir));
-});
-
 GULP.task('default', `runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb)`, (cb)=> {
    return runSequence('clean', 'styles', 'scripts', 'watch', 'reload', 'serve', cb);
 });
