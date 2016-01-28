@@ -2,8 +2,11 @@
   <div layout-fill layout="row" layout-align="center center" class="md-toolbar-tools">
     <md-input-container layout-fill md-no-float class="md-block big-search">
       <ng-md-icon icon="search"></ng-md-icon>
-      <input ng-model="PlaceCtrl.query" type="search" placeholder="Buscar Lugar...">
+      <input ng-model="PlacesCtrl.query.name" type="search" placeholder="Buscar Lugar...">
     </md-input-container>
+    <md-button ng-click="PlacesCtrl.query = {}" aria-label="Reiniciar Busqueda" class="md-icon-button clear-search">
+      <ng-md-icon flex icon="close"></ng-md-icon>
+    </md-button>
   </div>
 </md-toolbar>
 <md-content class="md-padding" layout-xs="column" layout="row">
@@ -15,7 +18,7 @@
           <ng-md-icon icon="add"></ng-md-icon>
         </md-button>
       </md-subheader>
-      <md-list-item ng-click="PlacesCtrl.selectPlace(place.$id)" ng-repeat="place in PlacesCtrl.places">
+      <md-list-item ng-click="PlacesCtrl.selectPlace(place.$id)" ng-repeat="place in PlacesCtrl.places | filter: PlacesCtrl.query">
         <ng-md-icon icon="store" class="avatar"></ng-md-icon>
         <p>{{place.name}}</p>
         <ng-md-icon icon="delete" ng-click="PlacesCtrl.deletePlace(place.$id)" aria-label="Eliminar Lugar" class="md-secondary md-warn"></ng-md-icon>
