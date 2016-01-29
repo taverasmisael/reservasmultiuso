@@ -109,7 +109,8 @@ class Reservaciones {
 
   @autobind
   create(reservacion, profesor) {
-    let nuevaReservacion = this.setReservationData(reservacion);
+    let resevCopy = Object.assign({}, reservacion);
+    let nuevaReservacion = this.setReservationData(resevCopy);
     console.log(nuevaReservacion, 'SRVRES:110');
     return this.makeReservation(nuevaReservacion, profesor);
   }

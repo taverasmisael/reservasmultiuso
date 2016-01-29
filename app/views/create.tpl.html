@@ -24,7 +24,7 @@
       <div layout="row" layout-align="start center" layout-padding layout-fill>
         <md-datepicker flex="grow" md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" name="newReservationDataDate" required="true" mt-exced-reservations ng-model-options="{allowInvalid: true}" profid="{{ AdminCtrl.nrd.profesor.$id }}" class="special-case"></md-datepicker>
         <md-select flex="grow" required="true" name="newReservationDataPlace" ng-model="AdminCtrl.newReservationData.place" aria-label="Lugares para reservar" placeholder="Lugares">
-            <md-option ng-repeat="place in AdminCtrl.places" value="{{place.id}}">
+            <md-option ng-repeat="place in AdminCtrl.places" value="{{place.$id}}">
                 {{place.name}} para {{place.capacity}}
             </md-option>
         </md-select>
