@@ -1,5 +1,3 @@
-import {autobind} from 'core-decorators';
-
 class SearchController {
   constructor(Utilities, Profesores, Search, Places) {
     this.Utilities = Utilities;

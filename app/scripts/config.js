@@ -112,7 +112,7 @@ export function onRun($timeout, $rootScope, amMoment, $state, $mdToast, Auth) {
         );
         $state.go('home');
       }
-    }, 1000);
+    }, 1500);
   });
 }
 
