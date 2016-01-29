@@ -6,16 +6,19 @@ const timepickerOptions = {
 };
 
 class AdminController {
-  constructor($scope, $mdToast, $filter, Utilities, Reservaciones, Search, Profesores) {
+  constructor($scope, $mdToast, $filter, Utilities, Reservaciones, Search, Profesores, Places) {
     this.$mdToast = $mdToast;
     this.$filter = $filter;
     this.Utilities = Utilities;
     this.Reservaciones = Reservaciones;
     this.Search = Search;
     this.Profesores = Profesores;
+    this.Places = Places;
 
     this.profesorsList = Profesores.all();
-
+    Places.all()
+      .then(places => this.places = places)
+      .catch(console.error.bind(console));
     this.active();
 
     $scope.$watch(() => {
@@ -38,10 +41,10 @@ class AdminController {
     $('#newReservationDataEnds').timepicker(timepickerOptions);
   }
 
-  checkAvailability(date, start, end) {
-    start = this.$filter('amParse')(start, 'HH:mmA');
-    end = this.$filter('amParse')(end, 'HH:mmA');
-    this.Search.checkAvailability(date, start, end)
+  checkAvailability({place, date, starts, ends}) {
+    starts = this.$filter('amParse')(starts, 'HH:mmA');
+    ends = this.$filter('amParse')(ends, 'HH:mmA');
+    this.Places.checkPlace(place, date, starts, ends)
       .then(() => {
         this.creationForm.$setValidity('confirmTime', true);
         this.creationForm.$setValidity('endTime', true);
@@ -90,7 +93,8 @@ class AdminController {
           .content(`Reservacion ${fromNow}`)
           .position('right bottom'));
         this.newReservationData = {};
-        this.selectedProfesor = {};
+        this.selectedProfesor = null;
+        this.nrd = {};
       }).catch(_errHdlr);
   }
   _transformData(data) {
@@ -107,18 +111,24 @@ class AdminController {
     data.starts = this.Utilities.fixTime(data.date, starts);
     data.ends = this.Utilities.fixTime(data.date, ends);
     data.materia = this._getSelectedSection().materia;
+    data.placeName = this._getPlaceName(data.place);
+    console.log(data);
     return data;
   }
+
   _getSelectedSection() {
-    let materiaName = this.availableSections.filter(seccion => {
+    return this.availableSections.filter(seccion => {
       return seccion.id === this.newReservationData.section;
-    });
-    return materiaName[0];
+    })[0];
+  }
+
+  _getPlaceName(placeId) {
+    return this.places.filter(place => place.$id === placeId)[0].name;
   }
 }
 
 AdminController.$inject = ['$scope', '$mdToast', '$filter', 'Utilities',
-  'Reservaciones', 'Search', 'Profesores'
+  'Reservaciones', 'Search', 'Profesores', 'Places'
 ];
 
 export default AdminController;

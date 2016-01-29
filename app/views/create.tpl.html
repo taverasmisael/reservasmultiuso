@@ -4,8 +4,8 @@
     <md-divider></md-divider>
     <form layout="column" layout-align="center end" layout-padding layout-fill name="AdminCtrl.creationForm" ng-submit="AdminCtrl.createReservacion(AdminCtrl.newReservationData, AdminCtrl.nrd.profesor)">
       <div layout="row" layout-align="start center" layout-padding layout-fill>
-        <div layout="row" layout-align="start center" flex="70">
-          <ng-md-icon icon="person" size="36" class="ng-md-icon-special"></ng-md-icon>
+        <div layout="row" layout-align="start center" flex="grow">
+          <ng-md-icon icon="person" size="30" class="ng-md-icon-special"></ng-md-icon>
           <md-autocomplete flex required md-input-name="profesorSearch" md-input-minlength="2" md-selected-item="AdminCtrl.nrd.profesor" md-search-text="AdminCtrl.selectedProfesor" md-items="profe in AdminCtrl.queryProfesors(AdminCtrl.selectedProfesor)" md-item-text="profe.name" md-floating-label="Lista de Profesores" md-select-on-match="true" md-selected-item-change="AdminCtrl.fillSections()" class="special-case">
               <md-item-template ng-cloak>
                   <span md-highlight-text="AdminCtrl.selectedProfesor.value">{{profe.lastname + ', ' + profe.name}}</span>
@@ -15,7 +15,7 @@
                </md-not-found>
           </md-autocomplete>
         </div>
-        <md-select ng-disabled="!AdminCtrl.availableSections" required="true" name="newReservationDataSection" flex="20" flex-offset="5" ng-model="AdminCtrl.newReservationData.section" aria-label="Secciones del Profesor" placeholder="Secciones">
+        <md-select ng-disabled="!AdminCtrl.availableSections" required="true" name="newReservationDataSection" flex="grow" flex-offset="5" ng-model="AdminCtrl.newReservationData.section" aria-label="Secciones del Profesor" placeholder="Secciones">
             <md-option ng-repeat="section in AdminCtrl.availableSections" value="{{section.id}}">
                 {{section.id}} - {{section.materia | limitTo: 25}}
             </md-option>
@@ -24,28 +24,28 @@
       <div layout="row" layout-align="start center" layout-padding layout-fill>
         <md-datepicker flex="grow" md-min-date="AdminCtrl.minReservationDate" ng-model="AdminCtrl.newReservationData.date" md-placeholder="Selecciona la fecha" name="newReservationDataDate" required="true" mt-exced-reservations ng-model-options="{allowInvalid: true}" profid="{{ AdminCtrl.nrd.profesor.$id }}" class="special-case"></md-datepicker>
         <md-select flex="grow" required="true" name="newReservationDataPlace" ng-model="AdminCtrl.newReservationData.place" aria-label="Lugares para reservar" placeholder="Lugares">
-            <md-option ng-repeat="place in AdminCtrl.places" value="{{place.id}}">
+            <md-option ng-repeat="place in AdminCtrl.places" value="{{place.$id}}">
                 {{place.name}} para {{place.capacity}}
             </md-option>
         </md-select>
       </div>
       <div layout="row" layout-align="start center" layout-padding layout-fill>
         <md-input-container layout-padding flex="grow" md-no-float class="md-block special-case">
-          <ng-md-icon icon="schedule"></ng-md-icon>
+          <ng-md-icon icon="schedule" size="30" class="ng-md-icon-special"></ng-md-icon>
           <input id="newReservationDataStarts" name="newReservationDataStarts" type="text" integer required ng-model="AdminCtrl.newReservationData.starts" ng-pattern="/^(0?[1-9]|1[012])(:[0-5]\d)[APap][mM]$/" placeholder="Hora de inicio">
         </md-input-container>
         <md-input-container layout-padding flex="grow" md-no-float class="md-block special-case">
-          <ng-md-icon icon="schedule"></ng-md-icon>
+          <ng-md-icon icon="schedule" size="30" class="ng-md-icon-special"></ng-md-icon>
           <input id="newReservationDataEnds" name="newReservationDataEnds" type="text" integer required ng-model="AdminCtrl.newReservationData.ends" mt-time placeholder="Hora de fin">
         </md-input-container>
-        <md-button class="md-icon-button" type="button" ng-click="AdminCtrl.checkAvailability(AdminCtrl.newReservationData.date, AdminCtrl.newReservationData.starts, AdminCtrl.newReservationData.ends)" ng-disabled="!(AdminCtrl.newReservationData.date && AdminCtrl.newReservationData.starts && AdminCtrl.newReservationData.ends)">
+        <md-button class="md-icon-button" type="button" flex="15" ng-click="AdminCtrl.checkAvailability(AdminCtrl.newReservationData)" ng-disabled="!(AdminCtrl.newReservationData.date && AdminCtrl.newReservationData.starts && AdminCtrl.newReservationData.ends && AdminCtrl.newReservationData.place)">
           <ng-md-icon icon="autorenew"></ng-md-icon>
           <md-tooltip md-direction="top">Verificar Disponibilidad</md-tooltip>
         </md-button>
       </div>
-        <div layout="row" layout-padding layout-fill>
-          <md-input-container layout="row" md-no-float flex class="special-case">
-          <ng-md-icon icon="note_add" class="name"></ng-md-icon>
+        <div layout="row" layout-align="start center" layout-padding layout-fill>
+          <md-input-container md-no-float flex="grow" class="special-case">
+          <ng-md-icon icon="note_add" size="30" class="ng-md-icon-special"></ng-md-icon>
           <input flex type="text" ng-model="AdminCtrl.newReservationData.notes" name="newReservationDataNotas"maxlength="60" placeholder="Notas">
         </md-input-container>
         </div>
@@ -53,10 +53,10 @@
         <div flex layout="column" role="alert">
           <div ng-messages="AdminCtrl.creationForm.$error" ng-if="AdminCtrl.creationForm.$invalid" role="alert">
             <div ng-message="mtExcedReservations">Este profesor <strong>tiene 2 reservaciones</strong> en este mes</div>
-            <div ng-message="pattern">El formato de <strong>la hora</strong> es incorrecto</div>
-            <div ng-message="endTime">Intenta cambiar la hora de finalizacion a una más temprano</div>
-            <div ng-message="startTime">A esta hora ya existe una reservación.</div>
-            <div ng-message="confirmTime">Debes confirmar si está disponible a esa hora</div>
+            <div ng-message="pattern">El formato de <strong>la hora</strong> es incorrecto.</div>
+            <div ng-message="endTime">Intenta cambiar la hora de finalizacion a una más temprano. O cambie el lugar</div>
+            <div ng-message="startTime">A esta hora ya existe una reservación. O cambie el lugar</div>
+            <div ng-message="confirmTime">Debes confirmar si está disponible a esa hora.</div>
           </div>
           <div ng-if="(AdminCtrl.nrd.profesor.hasException && !AdminCtrl.creationForm.$error.pattern && !AdminCtrl.creationForm.$error.required) && AdminCtrl.creationForm.$invalid">
             <md-button type="button" md-no-ink class="md-primary" ng-click="AdminCtrl.exonerate()">¿Desea agregar una excepción?</md-button>
