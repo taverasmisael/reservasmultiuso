@@ -41,10 +41,10 @@ class AdminController {
     $('#newReservationDataEnds').timepicker(timepickerOptions);
   }
 
-  checkAvailability(date, start, end) {
-    start = this.$filter('amParse')(start, 'HH:mmA');
-    end = this.$filter('amParse')(end, 'HH:mmA');
-    this.Search.checkAvailability(date, start, end)
+  checkAvailability({place, date, starts, ends}) {
+    starts = this.$filter('amParse')(starts, 'HH:mmA');
+    ends = this.$filter('amParse')(ends, 'HH:mmA');
+    this.Places.checkPlace(place, date, starts, ends)
       .then(() => {
         this.creationForm.$setValidity('confirmTime', true);
         this.creationForm.$setValidity('endTime', true);
