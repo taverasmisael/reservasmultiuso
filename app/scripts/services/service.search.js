@@ -90,52 +90,6 @@ class Search {
     return firebaseArray.get(this)(RESERVREF.get(this)
         .orderByChild('profesor').equalTo(profesorId)).$loaded();
   }
-
-  @autobind
-  checkAvailability(date, start, end) {
-    let errMessage = {
-      name: '',
-      message: ''
-    };
-    start = this.Utilities.fixTime(date, start);
-    end = this.Utilities.fixTime(date, end);
-
-    let response = new Promise((resolve, reject) => {
-      this.searchReservacionByDate(date)
-        .then(reservas => {
-          let filteredReservas = reservas.filter(res => {
-            let answer;
-            if (start.isSame(res.starts) || start.isBetween(res.starts, res.ends)) {
-              errMessage.name = 'START_AT_SAME_TIME';
-              errMessage.message = 'Both reservations has same or closer time';
-              answer = true;
-            } else if (start.isBefore(res.starts) && end.isAfter(res.starts)) {
-              errMessage.name = 'ENDS_TOO_LATE';
-              errMessage.message = 'Your reservation colides with other';
-              answer = true;
-            } else {
-              answer = false;
-            }
-
-            return answer;
-          });
-
-          if (filteredReservas.length) {
-            reject({
-              data: filteredReservas,
-              message: errMessage
-            });
-          } else {
-            resolve({
-              data: [],
-              message: 'No colitions found'
-            });
-          }
-        });
-    });
-
-    return response;
-  }
 }
 
 Search.$inject = ['$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
