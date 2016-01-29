@@ -99,54 +99,6 @@
             </div>
           </md-list-item>
         </md-list>
-          <md-list>
-          <md-list-item class="md-3-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
-            <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
-              <div class="profesor" flex layout-padding layout="column" layout-align="center start">
-                <strong>{{ ::reserv.materia }} - {{ ::reserv.section }}</strong>
-                <span>{{ ::reserv.profesorFullName }}</span>
-                <span>{{ ::reserv.creator }}</span>
-              </div>
-              <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
-                <time datetime="{{ ::reserv.date }}">{{ ::reserv.date | date: 'shortDate' }}</time>
-                <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>
-                <time datetime="6:00 pm">{{ ::reserv.ends | date:'shortTime' }}</time>
-              </div>
-            </div>
-          </md-list-item>
-        </md-list>
-          <md-list>
-          <md-list-item class="md-3-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
-            <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
-              <div class="profesor" flex layout-padding layout="column" layout-align="center start">
-                <strong>{{ ::reserv.materia }} - {{ ::reserv.section }}</strong>
-                <span>{{ ::reserv.profesorFullName }}</span>
-                <span>{{ ::reserv.creator }}</span>
-              </div>
-              <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
-                <time datetime="{{ ::reserv.date }}">{{ ::reserv.date | date: 'shortDate' }}</time>
-                <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>
-                <time datetime="6:00 pm">{{ ::reserv.ends | date:'shortTime' }}</time>
-              </div>
-            </div>
-          </md-list-item>
-        </md-list>
-          <md-list>
-          <md-list-item class="md-3-line" flex layout-align="center center" ng-repeat="reserv in SearchCtrl.query.results">
-            <div class="md-list-item-text" layout="row" layout-sm="column" layout-align="center start">
-              <div class="profesor" flex layout-padding layout="column" layout-align="center start">
-                <strong>{{ ::reserv.materia }} - {{ ::reserv.section }}</strong>
-                <span>{{ ::reserv.profesorFullName }}</span>
-                <span>{{ ::reserv.creator }}</span>
-              </div>
-              <div class="fecha" layout-padding layout-sm="row" layout="column" layout-align="center end" layout-align="center start">
-                <time datetime="{{ ::reserv.date }}">{{ ::reserv.date | date: 'shortDate' }}</time>
-                <time datetime="04:00 pm">{{ ::reserv.starts | date:'shortTime' }}<span hide-gt-sm> -&nbsp;</span></time>
-                <time datetime="6:00 pm">{{ ::reserv.ends | date:'shortTime' }}</time>
-              </div>
-            </div>
-          </md-list-item>
-        </md-list>
       </md-content>
     </div>
     <md-content layout-fill layout="column" layout-align="center center" ng-if="!SearchCtrl.query.message && !SearchCtrl.query.heading">
