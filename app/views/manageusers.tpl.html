@@ -1,34 +1,36 @@
-<md-content layout="column" layout-fill layout-padding>
-  <md-data-table-toolbar>
-    <h2 class="md-title">Lista de Usuarios {{UsersCtrl.selectedProfiles}}</h2>
+<md-content layout="column" layout-fill>
+  <md-toolbar class="md-table-toolbar md-default">
+    <div class="md-toolbar-tools">
+      <h2 class="md-title">Lista de Usuarios {{UsersCtrl.selectedProfiles}}</h2>
     <span flex></span>
     <md-button ui-sref="profile" class="md-icon-button" aria-label="Mi perfil">
       <md-tooltip md-direction="top">Mi Perfil</md-tooltip>
-      <ng-md-icon icon="person"></ng-md-icon>
+      <ng-md-icon icon="person" class="md-primary"></ng-md-icon>
     </md-button>
     <md-button class="md-icon-button" ng-click="UsersCtrl.createUser($event)" aria-label="Agregar Usuario">
       <md-tooltip md-direction="top">Agregar Usuario</md-tooltip>
-      <ng-md-icon icon="add"></ng-md-icon>
+      <ng-md-icon icon="add" class="md-primary"></ng-md-icon>
     </md-button>
-  </md-data-table-toolbar>
-  <md-data-table-container>
-    <table md-data-table>
-      <thead md-order="UsersCtrl.tableOrder" md-trigger="UsersCtrl.arrangeTable">
-        <tr>
-          <th name="Nombre" order-by="name"></th>
-          <th name="Apellido" order-by="lastname"></th>
-          <th name="Usuario" order-by="useraname"></th>
-          <th name="Admin" order-by="isAdmin"></th>
-          <th name="UID" order-by="$id"></th>
+    </div>
+  </md-toolbar>
+  <md-table-container>
+    <table md-table>
+      <thead md-head md-order="UsersCtrl.tableOrder" md-on-reorder="UsersCtrl.arrangeTable">
+        <tr md-row>
+          <th md-column name="Nombre" md-order-by="name">Name</th>
+          <th md-column name="Apellido" md-order-by="lastname">Apellido</th>
+          <th md-column name="Usuario" md-order-by="username">Username</th>
+          <th md-column name="Admin" md-order-by="isAdmin">Admin</th>
+          <th md-column name="UID" md-order-by="$id">UID</th>
         </tr>
       </thead>
       <tbody>
-        <tr md-auto-select ng-repeat="profile in UsersCtrl.profiles | orderBy: UsersCtrl.tableOrder">
-          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.name}}</td>
-          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.lastname}}</td>
-          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.username}}</td>
-          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.isAdmin ? 'Si' : 'No'}}</td>
-          <td ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.$id}}</td>
+        <tr md-row md-auto-select ng-repeat="profile in UsersCtrl.profiles | orderBy: UsersCtrl.tableOrder">
+          <td md-cell ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.name}}</td>
+          <td md-cell ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.lastname}}</td>
+          <td md-cell ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.username}}</td>
+          <td md-cell ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.isAdmin ? 'Si' : 'No'}}</td>
+          <td md-cell ng-click="UsersCtrl.editProfile($event, profile.$id)">{{profile.$id}}</td>
           <td>
             <md-button class="md-icon-button md-warn" ng-click="UsersCtrl.deleteUser($event, profile.$id)" aria-label="Eliminar Usuario">
               <md-tooltip md-direction="top">Eliminar a {{profile.username}}</md-tooltip>
