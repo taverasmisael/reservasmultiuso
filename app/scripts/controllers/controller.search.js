@@ -1,8 +1,14 @@
+import {autobind} from 'core-decorators';
+
 class SearchController {
-  constructor(Utilities, Profesores, Search) {
+  constructor(Utilities, Profesores, Search, Places) {
     this.Utilities = Utilities;
     this.Profesores = Profesores;
     this.Search = Search;
+    this.Places = Places;
+    Places.all()
+      .then(places => this.places = places)
+      .catch(console.error.bind(console));
     this.profesorsList = Profesores.all();
   }
 
@@ -18,7 +24,7 @@ class SearchController {
   searchByProfesor(profesor) {
     this.Search.searchReservationsOf(profesor.$id)
       .then(data => {
-        this.query.heading = `${profesor.name}  ${profesor.lastname}`;
+        this.query.heading = ` de ${profesor.name}  ${profesor.lastname}`;
         if (data.length) {
           this.query.message = '';
           this.query.results = data;
@@ -27,13 +33,13 @@ class SearchController {
         }
 
         this.query.needsDate = true;
-      }).catch(_errHdlr);
+      }).catch(console.error.bind(console));
   }
 
   searchByDate(date) {
     this.Search.searchReservacionByDate(date)
       .then(data => {
-        this.query.heading = date.toLocaleDateString();
+        this.query.heading = `para el ${date.toLocaleDateString()}`;
 
         if (data.length) {
           this.query.message = '';
@@ -43,7 +49,7 @@ class SearchController {
         }
 
         this.query.needsDate = false;
-      }).catch(_errHdlr);
+      }).catch(console.error.bind(console));
   }
 
   searchByPeriod(period) {
@@ -52,7 +58,7 @@ class SearchController {
 
     this.Search.searchReservacionByPeriod(start, end)
       .then(data => {
-        this.query.heading = `Periodo del ${head}`;
+        this.query.heading = `para el periodo del ${head}`;
         if (data.length) {
           this.query.message = '';
           this.query.results = data;
@@ -61,7 +67,25 @@ class SearchController {
         }
 
         this.query.needsDate = true;
-      }).catch(_errHdlr);
+      }).catch(console.error.bind(console));
+  }
+
+  searchByPlace(placeId) {
+    let placeName = this._getPlaceName(placeId);
+    let head = `${placeName}`;
+
+    this.Search.searchReservacionByPlace(placeId)
+      .then(data => {
+        this.query.heading = `en el ${head}`;
+        if (data.length) {
+          this.query.message = '';
+          this.query.results = data;
+        } else {
+          this.query.message = `No hay reservaciones para ${this.query.heading}`;
+        }
+
+        this.query.needsDate = true;
+      }).catch(console.error.bind(console));
   }
 
   queryProfesors(profesorName) {
@@ -70,9 +94,14 @@ class SearchController {
       this.profesorsList;
     return response;
   }
+
+  _getPlaceName(placeId) {
+    console.log(this.places);
+    return this.places.filter(place => place.$id === placeId)[0].name;
+  }
 }
 
-SearchController.$inject = ['Utilities', 'Profesores', 'Search'];
+SearchController.$inject = ['Utilities', 'Profesores', 'Search', 'Places'];
 
 export default SearchController;
 
@@ -102,12 +131,4 @@ function _createFilterFor(query) {
     return (profesor.name.indexOf(capitalcaseQuery) === 0) ||
            (profesor.lastname.indexOf(capitalcaseQuery) === 0);
   };
-}
-
-/**
- * Just Log Errors From Promise in console
- * @param  {Error} err An error returned by a Promise
- */
-function _errHdlr(err) {
-  console.error(err);
 }

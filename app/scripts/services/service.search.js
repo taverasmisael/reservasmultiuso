@@ -90,6 +90,12 @@ class Search {
     return firebaseArray.get(this)(RESERVREF.get(this)
         .orderByChild('profesor').equalTo(profesorId)).$loaded();
   }
+
+  @autobind
+  searchReservacionByPlace(placeId) {
+    return firebaseArray.get(this)(RESERVREF.get(this)
+          .orderByChild('place').equalTo(placeId)).$loaded();
+  }
 }
 
 Search.$inject = ['$firebaseObject', '$firebaseArray', 'Utilities', 'FURL'];
