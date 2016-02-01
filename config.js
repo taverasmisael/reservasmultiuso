@@ -37,6 +37,7 @@ let config = {
       debug: true,
       fallback: './app/index.html',
       livereload: true,
+      port: 8080,
       root: ['./.tmp/', './app/']
     },
     inject: {

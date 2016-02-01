@@ -32,6 +32,7 @@ import runSequence from 'run-sequence';
 
 import del from 'del';
 import wiredep from 'wiredep';
+import opn from 'opn';
 
 import config from './config';
 
@@ -136,8 +137,10 @@ GULP.task('clean', `Remove Files from 'dist'`, (cb)=> {
           });
 });
 
+GULP.task('open', `Simplies open http://localhost:${config.options.connect.port}`, () => opn(`http://localhost:${config.options.connect.port}`));
+
 GULP.task('default', `runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb)`, (cb)=> {
-   return runSequence('clean', 'styles', 'scripts', 'watch', 'reload', 'serve', cb);
+   return runSequence('clean', 'styles', 'scripts', 'watch', 'reload', 'serve', 'open', cb);
 });
 
 // Watch All Files
