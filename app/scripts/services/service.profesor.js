@@ -27,6 +27,11 @@ class Profesores {
     return firebaseObject.get(this)(REF.get(this).child('profesores')
       .child(pofesorID).child('secciones'));
   }
+
+  @autobind
+  get(profesorId) {
+    return firebaseObject.get(this)(REF.get(this).child('profesores').child(profesorId)).$loaded();
+  }
 }
 
 Profesores.$inject = ['$firebaseObject', '$firebaseArray', 'FURL'];

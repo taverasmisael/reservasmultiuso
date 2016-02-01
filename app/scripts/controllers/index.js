@@ -8,6 +8,7 @@ import SearchController from './controller.search';
 import SidebarController from './controller.sidebar';
 import UsersController from './controller.users';
 import PlacesController from './controller.places';
+import ProfesorsController from './controller.profesor';
 
 let moduleName = 'ControllersReservaciones';
 
@@ -21,6 +22,7 @@ angular.module(moduleName, [])
   .controller('SearchController', SearchController)
   .controller('SidebarController', SidebarController)
   .controller('UsersController', UsersController)
-  .controller('PlacesController', PlacesController);
+  .controller('PlacesController', PlacesController)
+  .controller('ProfesorsController', ProfesorsController);
 
 export default moduleName;
