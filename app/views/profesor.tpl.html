@@ -10,19 +10,19 @@
   </div>
 </md-toolbar>
 <md-content class="md-padding" layout-xs="column" layout="row">
-  <section flex="45" layout="column" style="overflow:hidden;height:50vh">
+  <section layout-fill layout-padding flex="50" flex-xs="100" layout="column" style="overflow:hidden;height:50vh">
     <md-toolbar md-scroll-shrink class="md-accent md-hue-3">
       <md-list flex>
         <div class="md-toolbar-tools">
           <span flex>Listado de Profesores</span>
-          <md-button class="md-icon-button" ng-click="ProfesorsCtrl.addPlace($event)" aria-label="Agregar Lugar">
+          <md-button class="md-icon-button" ng-click="ProfesorsCtrl.addProfesor($event)" aria-label="Agregar Lugar">
             <ng-md-icon icon="add"></ng-md-icon>
           </md-button>
         </div>
     </md-toolbar>
     <md-content flex>
       <md-list>
-        <md-list-item ng-click="ProfesorsCtrl.selectPlace(profesor.$id)" ng-repeat="profesor in ProfesorsCtrl.profesors | filter: ProfesorsCtrl.query | orderBy: 'name'">
+        <md-list-item ng-click="ProfesorsCtrl.selectProfesor(profesor.$id)" ng-repeat="profesor in ProfesorsCtrl.profesors | filter: ProfesorsCtrl.query | orderBy: 'name'">
           <ng-md-icon icon="school" class="avatar"></ng-md-icon>
           <p>{{profesor.name + ' ' + profesor.lastname}}, {{profesor.secciones.length}} secci{{profesor.secciones.length > 1 ? 'ones' : 'ón'}}</p>
           <ng-md-icon icon="delete" ng-click="ProfesorsCtrl.deleteProfesor(profesor.$id)" aria-label="Eliminar Profesor" class="md-secondary md-warn"></ng-md-icon>
@@ -30,9 +30,9 @@
       </md-list>
     </md-content>
   </section>
-  <div layout-fill flex="45" flex-offset="5">
+  <section layout-fill layout-padding flex="50" flex-xs="100" layout="column">
     <form name="ProfesorsCtrl.profesorForm" ng-submit="ProfesorsCtrl.changeMode()" class="md-padding">
-      <h3 class="md-subhead">Informacion Del Profesor</h3>
+      <h3>Informacion Del Profesor</h3>
       <md-card>
         <md-card-title>
           <md-card-title-text>
@@ -63,14 +63,17 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-actions layout="row" layout-align="start center">
-          <small flex ng-if="ProfesorsCtrl.currentProfesor.creatorFullName">Creado Por: <em>{{ProfesorsCtrl.currentProfesor.creatorFullName}}</em></small>
-          <md-button aria-label="{{ProfesorsCtrl.modeCancelMessage}} Lugar" ng-click="ProfesorsCtrl.cancelMode()" class="md-warn md-icon-button" ng-disabled="!(ProfesorsCtrl.currentProfesor.capacity || ProfesorsCtrl.editing)">
+          <md-button ng-click="ProfesorsCtrl.openSections($event, ProfesoresCtrl.currentProfesor.$id)" ng-if="ProfesorsCtrl.currentProfesor.secciones">{{ProfesorsCtrl.currentProfesor.secciones.length}} secci{{ProfesorsCtrl.currentProfesor.secciones.length > 1 ? 'ones activas' : 'ón activa'}}</md-button>
+          <span flex></span>
+          <!-- Cancel Button -->
+          <md-button aria-label="{{ProfesorsCtrl.modeCancelMessage}} Profesor" ng-click="ProfesorsCtrl.cancelMode()" class="md-warn md-icon-button" ng-disabled="!(ProfesorsCtrl.currentProfesor || ProfesorsCtrl.editing)">
             <md-tooltip md-direction="top">
               {{ProfesorsCtrl.modeCancelMessage}}
             </md-tooltip>
             <ng-md-icon icon="{{ProfesorsCtrl.currentCancelIcon}}" class="md-warn"></ng-md-icon>
           </md-button>
-          <md-button aria-label="{{ProfesorsCtrl.modeSaveMessage}} Lugar" class="md-icon-button md-primary" type="submit" ng-disabled="!(ProfesorsCtrl.currentProfesor && !ProfesorsCtrl.profesorForm.$invalid || ProfesorsCtrl.editing)">
+          <!-- Save button -->
+          <md-button aria-label="{{ProfesorsCtrl.modeSaveMessage}} Profesor" class="md-icon-button md-primary" type="submit" ng-disabled="!(ProfesorsCtrl.currentProfesor && !ProfesorsCtrl.profesorForm.$invalid || !ProfesorsCtrl.editing)">
             <md-tooltip md-direction="top">
               {{ProfesorsCtrl.modeSaveMessage}}
             </md-tooltip>
@@ -80,5 +83,5 @@
         </md-card-actions>
       </md-card>
     </form>
-  </div>
+  </section>
 </md-content>

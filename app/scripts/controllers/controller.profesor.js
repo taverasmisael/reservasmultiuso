@@ -28,7 +28,7 @@ class ProfesorsController {
     this.modeSaveMessage = 'Editar';
     this.modeCancelMessage = 'Eliminar';
     this.currentCancelIcon = 'delete';
-    this.currentProfesor = {};
+    this.currentProfesor = undefined;
   }
 
    @autobind
@@ -38,14 +38,30 @@ class ProfesorsController {
       this.savePlace(this.currentProfesor);
     } else if (!(this.editing && this.creating)) {
       if (this.editing) {
-        this.editPlace(this.currentProfesor.$id, this.currentProfesor);
+        this.editProfesor(this.currentProfesor.$id, this.currentProfesor);
       }
       this.editing = !this.editing;
+      this.modeCancelMessage = 'Cancelar edicion de';
+      this.currentCancelIcon = 'cancel';
+      this.currentSaveIcon = 'save';
+      this.modeSaveMessage = 'Guardar';
     }
   }
 
   @autobind
-  selectPlace(profesorId) {
+  addProfesor(event) {
+    console.log(event);
+    this.currentSaveIcon = 'save';
+    this.modeSaveMessage = 'Guardar';
+    this.currentCancelIcon = 'cancel';
+    this.modeCancelMessage = 'Cancelar edicion de';
+    this.editing = true;
+    this.creating = true;
+    this.currentProfesor = {};
+  }
+
+  @autobind
+  selectProfesor(profesorId) {
     console.info(profesorId);
     this.Profesores.get(profesorId)
       .then(profesor => this.currentProfesor = profesor)
