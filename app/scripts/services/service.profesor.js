@@ -19,7 +19,7 @@ class Profesores {
 
   @autobind
   create(profesorData) {
-    this.profesores.$add(profesorData);
+    return this.profesores.$add(profesorData);
   }
 
   @autobind
@@ -30,7 +30,30 @@ class Profesores {
 
   @autobind
   get(profesorId) {
-    return firebaseObject.get(this)(REF.get(this).child('profesores').child(profesorId)).$loaded();
+    return firebaseObject.get(this)(REF.get(this).child('profesores')
+            .child(profesorId)).$loaded();
+  }
+
+  @autobind
+  edit(profesorId, newData) {
+    let profesor = REF.get(this).child('profesores').child(profesorId);
+    console.log(profesor);
+    let {cedula, lastname, name} = newData;
+    let toSave = {
+      name: name,
+      lastname: lastname,
+      cedula: cedula
+    };
+
+    return profesor.update(toSave);
+  }
+
+  @autobind
+  remove(profesorId) {
+    let profesor = firebaseObject.get(this)(REF.get(this)
+                .child('profesores').child(profesorId));
+
+    return profesor.$remove();
   }
 }
 
