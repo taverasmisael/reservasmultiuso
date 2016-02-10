@@ -1,0 +1,63 @@
+<md-dialog layout="column" aria-label="Creacion/Edicion de Usuarios" ng-cloak>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Listado de Secciones</h2>
+      <span flex></span>
+      <md-button class="md-raised" ng-click="SectionsDialogCtrl.creationMode()">
+          {{SectionsDialogCtrl.modeMessage}}
+      </md-button>
+      <md-button href="#" class="md-icon-button" ng-click="SectionsDialogCtrl.cancelDialog('Accion Abortada')">
+        <ng-md-icon icon="close" aria-label="Cerrar Dialogo"></ng-md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column" layout-align="center center">
+    <md-content md-theme="docs-dark" layout-gt-sm="row" ng-if="SectionsDialogCtrl.creatingNew">
+      <form name="SectionsDialgoCtrl.newSectionForm" ng-submit="SectionsDialogCtrl.addSection(SectionsDialogCtrl.newSection)" layout="row" layout-align="center center">
+        <md-input-container>
+          <label>Número de Sección</label>
+          <input name="sectionNumber" ng-model="SectionsDialogCtrl.newSection.id" type="text" required g-pattern="/^\d+$/" required md-minlength="4" minlength="4" md-maxlength="4" maxlength="4">
+          <div ng-messages="SectionsDialogCtrl.newSectionForm.sectionNumber.$error">
+            <div ng-message="minlength">Las seccinoes llevan 4 digitos</div>
+            <div ng-message="pattern">El campo es solo numerico.</div>
+          </div>
+        </md-input-container>
+        <md-input-container>
+          <label>Materia</label>
+          <input name="sectionSubject" ng-model="SectionsDialogCtrl.newSection.materia" type="text" required md-minlength="2" minlength="2">
+        </md-input-container>
+        <md-input-container>
+          <label>Capacidad</label>
+          <input name="sectinoQuantity" ng-model="SectionsDialogCtrl.newSection.estudiantes" type="text" ng-pattern="/^\d+$/" required md-minlength="2" minlength="2" md-maxlength="4" maxlength="4">
+          <div ng-messages="SectionsDialogCtrl.newSectionForm.estudiantes.$error">
+            <div ng-message="minlength">Use cifras de 2 digitos</div>
+            <div ng-message="pattern">El campo es solo numerico.</div>
+          </div>
+        </md-input-container>
+        <md-button class="md-primary" type="submit" ng-disabled="SectionsDialgoCtrl.newSectionForm.$invalid">Agregar</md-button>
+      </form>
+    </md-content>
+    <md-table-container layout-fill>
+      <table md-table>
+        <thead md-head md-order="SectionsDialogCtrl.tableOrder" md-on-reorder="SectionsDialogCtrl.arrangeTable">
+          <tr md-row>
+            <th md-column name="Id" md-order-by="id">Id</th>
+            <th md-column name="materia" md-order-by="materia">Materia</th>
+            <th md-column name="estudiantes" md-order-by="estudiantes">Estudiantes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr md-row md-auto-select ng-repeat="seccion in SectionsDialogCtrl.secciones | orderBy: SectionsDialogCtrl.tableOrder">
+            <td md-cell>{{seccion.id}}</td>
+            <td md-cell>{{seccion.materia}}</td>
+            <td md-cell>{{seccion.estudiantes}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-table-container>
+  </md-dialog-content>
+  <md-dialog-actions flex-order="2" layout="row">
+    <span flex></span>
+    <md-button href="#" class="md-raised" ng-click="SectionsDialogCtrl.saveDialog('No se hicieron Cambios')">Ok</md-button>
+  </md-dialog-actions>
+</md-dialog>
