@@ -11,7 +11,6 @@ class ProfesorsController {
 
     this.active();
     this.profesors = Profesores.all();
-    console.info(Profesores);
   }
 
   active() {
@@ -35,7 +34,7 @@ class ProfesorsController {
   changeMode() {
     if (this.creating) {
       // If is Saving/Inactive
-      this.savePlace(this.currentProfesor);
+      this.saveProfesor(this.currentProfesor);
     } else if (!(this.editing && this.creating)) {
       if (this.editing) {
         this.editProfesor(this.currentProfesor.$id, this.currentProfesor);
@@ -62,7 +61,6 @@ class ProfesorsController {
 
   @autobind
   selectProfesor(profesorId) {
-    console.info(profesorId);
     this.Profesores.get(profesorId)
       .then(profesor => this.currentProfesor = profesor)
       .catch(console.error.bind(console));
@@ -71,11 +69,51 @@ class ProfesorsController {
   cancelMode() {
     if (this.modeCancelMessage === 'Eliminar') {
       // If is Saving/Inactive
-      this.deletePlace(this.currentProfesor.$id);
+      this.deleteProfesor(this.currentProfesor.$id);
     } else {
       // If is active
       this.resetModes();
     }
+  }
+
+  @autobind
+  editProfesor(pid, pinfo) {
+    this.Profesores.edit(pid, pinfo)
+      .then(() => {
+        this.$mdToast.show(
+          this.$mdToast.simple()
+          .content(`Profesor ${pinfo.name} editado`)
+          .position('right bottom'));
+      })
+      .catch(console.error.bind(console));
+  }
+
+  @autobind
+  saveProfesor(pinfo) {
+    this.Profesores.create(pinfo)
+      .then(ref => {
+        this.$mdToast.show(
+          this.$mdToast.simple()
+          .content(`Profesor ${ref.key()} creado`)
+          .position('right bottom')
+        );
+        this.resetModes();
+      })
+      .catch(console.error.bind(console));
+  }
+
+  @autobind
+  deleteProfesor(pid) {
+    this.Profesores.remove(pid)
+      .then(() => {
+        this.$mdToast.show(
+          this.$mdToast.simple()
+          .content(`${pid} Elminado`)
+          .position('right bottom')
+        );
+        this.resetModes();
+      })
+      .catch(console.error.bind(console));
   }
 }
 

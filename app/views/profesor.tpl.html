@@ -23,9 +23,8 @@
     <md-content flex>
       <md-list>
         <md-list-item ng-click="ProfesorsCtrl.selectProfesor(profesor.$id)" ng-repeat="profesor in ProfesorsCtrl.profesors | filter: ProfesorsCtrl.query | orderBy: 'name'">
-          <ng-md-icon icon="school" class="avatar"></ng-md-icon>
+          <ng-md-icon icon="people" class="avatar"></ng-md-icon>
           <p>{{profesor.name + ' ' + profesor.lastname}}, {{profesor.secciones.length}} secci{{profesor.secciones.length > 1 ? 'ones' : 'ón'}}</p>
-          <ng-md-icon icon="delete" ng-click="ProfesorsCtrl.deleteProfesor(profesor.$id)" aria-label="Eliminar Profesor" class="md-secondary md-warn"></ng-md-icon>
         </md-list-item>
       </md-list>
     </md-content>
@@ -38,21 +37,20 @@
           <md-card-title-text>
             <div layout="row">
               <md-input-container md-no-float class="md-block md-headline special-case">
-                <input type="text" name="nombreDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.name" required md-minlength="6" minlength="6" placeholder="Nombre" ng-disabled="!ProfesorsCtrl.editing">
+                <input type="text" name="nombreDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.name" required md-minlength="2" minlength="2" placeholder="Nombre" ng-disabled="!ProfesorsCtrl.editing">
                 <div ng-messages="ProfesorsCtrl.profesorForm.nombreDelProfesor.$error">
-                  <div ng-message="minlength">El nombre debe tener 6 cáracteres minimo</div>
+                  <div ng-message="minlength">El nombre debe tener 2 cáracteres minimo</div>
                 </div>
               </md-input-container>
               <md-input-container md-no-float class="md-block md-headline special-case">
-                <input type="text" name="apellidoDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.lastname" required md-minlength="6" minlength="6" placeholder="Apellido del Profesor" ng-disabled="!ProfesorsCtrl.editing">
+                <input type="text" name="apellidoDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.lastname" required md-minlength="2" minlength="2" placeholder="Apellido del Profesor" ng-disabled="!ProfesorsCtrl.editing">
                 <div ng-messages="ProfesorsCtrl.profesorForm.apellidoDelProfesor.$error">
-                  <div ng-message="minlength">El nombre debe tener 6 cáracteres minimo</div>
+                  <div ng-message="minlength">El nombre debe tener 2 cáracteres minimo</div>
                 </div>
               </md-input-container>
             </div>
             <div layout="row" class="md-subhead">
               <md-input-container md-no-float class="md-block special-case">
-                <ng-md-icon icon="school"></ng-md-icon>
                 <input type="text" name="cedulaDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.cedula" required md-minlength="11" minlength="11" md-maxlength="11" maxlength="11" placeholder="Cedula" ng-disabled="!ProfesorsCtrl.editing">
                 <div ng-messages="ProfesorsCtrl.profesorForm.cedulaDelProfesor.$error">
                   <div ng-message="minlength">Use cifras de 2 digitos</div>
@@ -63,7 +61,7 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-actions layout="row" layout-align="start center">
-          <md-button ng-click="ProfesorsCtrl.openSections($event, ProfesoresCtrl.currentProfesor.$id)" ng-if="ProfesorsCtrl.currentProfesor.secciones">{{ProfesorsCtrl.currentProfesor.secciones.length}} secci{{ProfesorsCtrl.currentProfesor.secciones.length > 1 ? 'ones activas' : 'ón activa'}}</md-button>
+          <md-button ng-click="ProfesorsCtrl.openSections($event, ProfesoresCtrl.currentProfesor.$id)" ng-if="ProfesorsCtrl.currentProfesor">Admin. Secciones ({{ProfesorsCtrl.currentProfesor.secciones.length}})</md-button>
           <span flex></span>
           <!-- Cancel Button -->
           <md-button aria-label="{{ProfesorsCtrl.modeCancelMessage}} Profesor" ng-click="ProfesorsCtrl.cancelMode()" class="md-warn md-icon-button" ng-disabled="!(ProfesorsCtrl.currentProfesor || ProfesorsCtrl.editing)">
