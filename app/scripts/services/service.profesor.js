@@ -37,7 +37,6 @@ class Profesores {
   @autobind
   edit(profesorId, newData) {
     let profesor = REF.get(this).child('profesores').child(profesorId);
-    console.log(profesor);
     let {cedula, lastname, name} = newData;
     let toSave = {
       name: name,
@@ -61,8 +60,6 @@ class Profesores {
     let {$id} = profesorInfo;
     let profesor = REF.get(this).child('profesores').child($id);
     let secciones = firebaseArray.get(this)(profesor.child('secciones'));
-
-    console.log(secciones);
 
     return secciones.$add(sectionInfo);
   }

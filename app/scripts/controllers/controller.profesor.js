@@ -3,8 +3,17 @@ import {
 }
 from 'core-decorators';
 
+const dialogOptions = {
+  controller: 'SectionsDialogController',
+  controllerAs: 'SectionsDialogCtrl',
+  templateUrl: 'views/dialogs/sections.dlg.html',
+  clickOutsideToClose: false,
+  parent: angular.element(document.body)
+};
+
 class ProfesorsController {
-  constructor($mdToast, Profesores, Auth) {
+  constructor($mdDialog, $mdToast, Profesores, Auth) {
+    this.$mdDialog = $mdDialog;
     this.$mdToast = $mdToast;
     this.Profesores = Profesores;
     this.Auth = Auth;
@@ -14,7 +23,7 @@ class ProfesorsController {
   }
 
   active() {
-    console.log('Teaching');
+    console.log('Teaching...');
     this.resetModes();
   }
 
@@ -30,7 +39,7 @@ class ProfesorsController {
     this.currentProfesor = undefined;
   }
 
-   @autobind
+  @autobind
   changeMode() {
     if (this.creating) {
       // If is Saving/Inactive
@@ -49,7 +58,6 @@ class ProfesorsController {
 
   @autobind
   addProfesor(event) {
-    console.log(event);
     this.currentSaveIcon = 'save';
     this.modeSaveMessage = 'Guardar';
     this.currentCancelIcon = 'cancel';
@@ -65,6 +73,7 @@ class ProfesorsController {
       .then(profesor => this.currentProfesor = profesor)
       .catch(console.error.bind(console));
   }
+
   @autobind
   cancelMode() {
     if (this.modeCancelMessage === 'Eliminar') {
@@ -115,8 +124,32 @@ class ProfesorsController {
       })
       .catch(console.error.bind(console));
   }
+
+  @autobind
+  openSections(event, pid) {
+    this.Profesores.get(pid)
+      .then(pinfo => {
+        let config = {
+          event: event,
+          profesor: pinfo,
+          secciones: this.Profesores.getSections(pid)
+        };
+
+        let createDialog = Object.assign(config, dialogOptions);
+
+        this.$mdDialog.show(createDialog)
+          .then(message => {
+            this.$mdToast.show(
+              this.$mdToast.simple()
+              .content(message)
+              .position('right bottom')
+            );
+          })
+          .catch(console.error.bind(console));
+      }).catch(console.error.bind(console));
+  }
 }
 
-ProfesorsController.$inject = ['$mdToast', 'Profesores', 'Auth'];
+ProfesorsController.$inject = ['$mdDialog', '$mdToast', 'Profesores', 'Auth'];
 
 export default ProfesorsController;

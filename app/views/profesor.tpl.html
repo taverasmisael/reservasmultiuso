@@ -61,7 +61,7 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-actions layout="row" layout-align="start center">
-          <md-button ng-click="ProfesorsCtrl.openSections($event, ProfesoresCtrl.currentProfesor.$id)" ng-if="ProfesorsCtrl.currentProfesor">Admin. Secciones ({{ProfesorsCtrl.currentProfesor.secciones.length}})</md-button>
+          <md-button ng-click="ProfesorsCtrl.openSections($event, ProfesorsCtrl.currentProfesor.$id)" aria-label="Administrar Secciones" ng-if="ProfesorsCtrl.currentProfesor">Admin. Secciones</md-button>
           <span flex></span>
           <!-- Cancel Button -->
           <md-button aria-label="{{ProfesorsCtrl.modeCancelMessage}} Profesor" ng-click="ProfesorsCtrl.cancelMode()" class="md-warn md-icon-button" ng-disabled="!(ProfesorsCtrl.currentProfesor || ProfesorsCtrl.editing)">
