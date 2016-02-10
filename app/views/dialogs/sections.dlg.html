@@ -12,7 +12,7 @@
     </div>
   </md-toolbar>
   <md-dialog-content layout="column" layout-align="center center">
-    <md-content md-theme="docs-dark" layout-gt-sm="row" ng-if="SectionsDialogCtrl.creatingNew">
+    <md-content md-theme="docs-dark" layout-gt-sm="row" ng-if="SectionsDialogCtrl.creatingNew" class="add-section">
       <form name="SectionsDialgoCtrl.newSectionForm" ng-submit="SectionsDialogCtrl.addSection(SectionsDialogCtrl.newSection)" layout="row" layout-align="center center">
         <md-input-container>
           <label>Número de Sección</label>
@@ -58,6 +58,6 @@
   </md-dialog-content>
   <md-dialog-actions flex-order="2" layout="row">
     <span flex></span>
-    <md-button href="#" class="md-raised" ng-click="SectionsDialogCtrl.saveDialog('No se hicieron Cambios')">Ok</md-button>
+    <md-button href="#"ng-click="SectionsDialogCtrl.saveDialog('No se hicieron Cambios')">Ok</md-button>
   </md-dialog-actions>
 </md-dialog>
