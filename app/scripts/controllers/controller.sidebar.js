@@ -17,7 +17,7 @@ class SidebarController {
       icon: 'place',
       restriction: false,
       state: 'places'
-    },{
+    }, {
       displayName: 'Profesores',
       icon: 'people',
       restriction: true,

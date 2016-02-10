@@ -1,6 +1,7 @@
 import AdminController from './controller.admin';
 import AuthController from './controller.auth';
-import DialogController from './controller.dialog';
+import SectionsDialogController from './controller.dialogSections';
+import UserDialogController from './controller.dialogUser';
 import HelpController from './controller.help';
 import HomeController from './controller.home';
 import NavbarController from './controller.navbar';
@@ -15,7 +16,8 @@ let moduleName = 'ControllersReservaciones';
 angular.module(moduleName, [])
   .controller('AdminController', AdminController)
   .controller('AuthController', AuthController)
-  .controller('DialogController', DialogController)
+  .controller('UserDialogController', UserDialogController)
+  .controller('SectionsDialogController', SectionsDialogController)
   .controller('HelpController', HelpController)
   .controller('HomeController', HomeController)
   .controller('NavbarController', NavbarController)
