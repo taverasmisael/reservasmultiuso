@@ -16,6 +16,9 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
     .theme('default')
     .primaryPalette('blue')
     .accentPalette('teal');
+  $mdThemingProvider.theme('docs-dark', 'default')
+      .primaryPalette('blue-grey')
+      .dark();
 
   $stateProvider
     .state('home', {
