@@ -24,7 +24,7 @@ class Profesores {
 
   @autobind
   getSections(pofesorID) {
-    return firebaseObject.get(this)(REF.get(this).child('profesores')
+    return firebaseArray.get(this)(REF.get(this).child('profesores')
       .child(pofesorID).child('secciones'));
   }
 
@@ -54,6 +54,17 @@ class Profesores {
                 .child('profesores').child(profesorId));
 
     return profesor.$remove();
+  }
+
+  @autobind
+  addSectionTo(profesorInfo, sectionInfo) {
+    let {$id} = profesorInfo;
+    let profesor = REF.get(this).child('profesores').child($id);
+    let secciones = firebaseArray.get(this)(profesor.child('secciones'));
+
+    console.log(secciones);
+
+    return secciones.$add(sectionInfo);
   }
 }
 
