@@ -18,6 +18,11 @@ class SidebarController {
       restriction: false,
       state: 'places'
     }, {
+      displayName: 'Profesores',
+      icon: 'people',
+      restriction: true,
+      state: 'profesor'
+    }, {
       displayName: 'Crear',
       icon: 'add',
       restriction: true,

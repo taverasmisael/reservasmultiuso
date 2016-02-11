@@ -1,5 +1,5 @@
 import {autobind} from 'core-decorators';
-class DialogController {
+class UserDialogController {
   constructor($mdDialog, currentUser, Auth, state) {
     this.$mdDialog = $mdDialog;
     this.currentUser = currentUser;
@@ -50,6 +50,6 @@ class DialogController {
   }
 }
 
-DialogController.$inject = ['$mdDialog', 'currentUser', 'Auth', 'state'];
+UserDialogController.$inject = ['$mdDialog', 'currentUser', 'Auth', 'state'];
 
-export default DialogController;
+export default UserDialogController;

@@ -3,8 +3,8 @@ import {
 }
 from 'core-decorators';
 const dialogOptions = {
-  controller: 'DialogController',
-  controllerAs: 'DialogCtrl',
+  controller: 'UserDialogController',
+  controllerAs: 'UserDialogCtrl',
   templateUrl: 'views/dialogs/users.dlg.html',
   clickOutsideToClose: false,
   parent: angular.element(document.body)
@@ -24,7 +24,7 @@ class UsersController {
 
   @autobind
   active() {
-    console.log('Pie... What were you waiting for?');
+    console.log('Maneging Users...');
     this.profiles = this.profiles;
   }
 

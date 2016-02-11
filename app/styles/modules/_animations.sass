@@ -1,11 +1,4 @@
-md-content[ui-view].ng-enter
-  animation: fadeInUp 1s ease-out
-
-@keyframes fadeInUp
-  from
-    opacity: 0
-    transform: translate3d(0, 100%, 0)
-  100%
-    opacity: 1
-    transform: none
-
+.add-section.ng-enter
+  animation: slideInDown 700ms
+.add-section.ng-leave
+  animation: slideOutUp 700ms

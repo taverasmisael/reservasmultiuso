@@ -19,13 +19,49 @@ class Profesores {
 
   @autobind
   create(profesorData) {
-    this.profesores.$add(profesorData);
+    return this.profesores.$add(profesorData);
   }
 
   @autobind
   getSections(pofesorID) {
-    return firebaseObject.get(this)(REF.get(this).child('profesores')
+    return firebaseArray.get(this)(REF.get(this).child('profesores')
       .child(pofesorID).child('secciones'));
+  }
+
+  @autobind
+  get(profesorId) {
+    return firebaseObject.get(this)(REF.get(this).child('profesores')
+            .child(profesorId)).$loaded();
+  }
+
+  @autobind
+  edit(profesorId, newData) {
+    let profesor = REF.get(this).child('profesores').child(profesorId);
+    let {cedula, lastname, name} = newData;
+    let toSave = {
+      name: name,
+      lastname: lastname,
+      cedula: cedula
+    };
+
+    return profesor.update(toSave);
+  }
+
+  @autobind
+  remove(profesorId) {
+    let profesor = firebaseObject.get(this)(REF.get(this)
+                .child('profesores').child(profesorId));
+
+    return profesor.$remove();
+  }
+
+  @autobind
+  addSectionTo(profesorInfo, sectionInfo) {
+    let {$id} = profesorInfo;
+    let profesor = REF.get(this).child('profesores').child($id);
+    let secciones = firebaseArray.get(this)(profesor.child('secciones'));
+
+    return secciones.$add(sectionInfo);
   }
 }
 

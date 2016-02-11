@@ -10,30 +10,35 @@
   </div>
 </md-toolbar>
 <md-content class="md-padding" layout-xs="column" layout="row">
-  <div layout-fill flex="45">
-    <md-list flex>
-      <md-subheader>
-        <span flex>Lista de lugares</span>
-        <md-button class="md-icon-button" ng-click="PlacesCtrl.addPlace($event)" aria-label="Agregar Lugar">
-          <ng-md-icon icon="add"></ng-md-icon>
-        </md-button>
-      </md-subheader>
-      <md-list-item ng-click="PlacesCtrl.selectPlace(place.$id)" ng-repeat="place in PlacesCtrl.places | filter: PlacesCtrl.query">
-        <ng-md-icon icon="store" class="avatar"></ng-md-icon>
-        <p>{{place.name}}</p>
-        <ng-md-icon icon="delete" ng-click="PlacesCtrl.deletePlace(place.$id)" aria-label="Eliminar Lugar" class="md-secondary md-warn"></ng-md-icon>
-      </md-list-item>
-    </md-list>
-  </div>
+  <section flex="45" layout="column" style="overflow:hidden;height:50vh">
+    <md-toolbar md-scroll-shrink class="md-accent md-hue-3">
+      <md-list flex>
+        <div class="md-toolbar-tools">
+          <span flex>Lista de lugares</span>
+          <md-button class="md-icon-button" ng-click="PlacesCtrl.addPlace($event)" aria-label="Agregar Lugar">
+            <ng-md-icon icon="add"></ng-md-icon>
+          </md-button>
+        </div>
+    </md-toolbar>
+    <md-content flex>
+      <md-list>
+        <md-list-item ng-click="PlacesCtrl.selectPlace(place.$id)" ng-repeat="place in PlacesCtrl.places | filter: PlacesCtrl.query | orderBy: 'name'">
+          <ng-md-icon icon="store" class="avatar"></ng-md-icon>
+          <p>{{place.name}}</p>
+          <ng-md-icon icon="delete" ng-click="PlacesCtrl.deletePlace(place.$id)" aria-label="Eliminar Lugar" class="md-secondary md-warn"></ng-md-icon>
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </section>
   <div layout-fill flex="45" flex-offset="5">
     <form name="PlacesCtrl.placeForm" ng-submit="PlacesCtrl.changeMode()" class="md-padding">
       <md-card>
         <md-card-title>
           <md-card-title-text>
             <md-input-container md-no-float class="md-block md-headline special-case">
-              <input type="text" name="nombreDelLugar" ng-model="PlacesCtrl.currentPlace.name" required md-minlength="10" minlength="10" placeholder="Nombre del Lugar" ng-disabled="!PlacesCtrl.editing">
+              <input type="text" name="nombreDelLugar" ng-model="PlacesCtrl.currentPlace.name" required md-minlength="6" minlength="6" placeholder="Nombre del Lugar" ng-disabled="!PlacesCtrl.editing">
               <div ng-messages="PlacesCtrl.placeForm.nombreDelLugar.$error">
-                <div ng-message="minlength">El nombre debe tener 10 cáracteres minimo</div>
+                <div ng-message="minlength">El nombre debe tener 6 cáracteres minimo</div>
               </div>
             </md-input-container>
             <div layout="row" class="md-subhead">

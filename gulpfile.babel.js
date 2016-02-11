@@ -137,7 +137,10 @@ GULP.task('clean', `Remove Files from 'dist'`, (cb)=> {
           });
 });
 
-GULP.task('open', `Simplies open http://localhost:${config.options.connect.port}`, () => opn(`http://localhost:${config.options.connect.port}`));
+GULP.task('open', `Simplies open http://localhost:${config.options.connect.port}`, (cb) => {
+  opn(`http://localhost:${config.options.connect.port}`);
+  return cb;
+});
 
 GULP.task('default', `runSequence('clean', 'styles', 'scripts', 'watch', 'serve', cb)`, (cb)=> {
    return runSequence('clean', 'styles', 'scripts', 'watch', 'reload', 'serve', 'open', cb);

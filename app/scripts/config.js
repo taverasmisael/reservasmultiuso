@@ -16,6 +16,9 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
     .theme('default')
     .primaryPalette('blue')
     .accentPalette('teal');
+  $mdThemingProvider.theme('docs-dark', 'default')
+      .primaryPalette('blue-grey')
+      .dark();
 
   $stateProvider
     .state('home', {
@@ -35,6 +38,12 @@ export function configuration($stateProvider, $urlRouterProvider, $locationProvi
       templateUrl: TPLDIR + 'places.tpl.html',
       controller: 'PlacesController',
       controllerAs: 'PlacesCtrl'
+    })
+    .state('profesor', {
+      url: '/profesor/',
+      templateUrl: TPLDIR + 'profesor.tpl.html',
+      controller: 'ProfesorsController',
+      controllerAs: 'ProfesorsCtrl'
     })
     .state('create', {
       url: '/create/',

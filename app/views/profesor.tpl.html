@@ -1,0 +1,85 @@
+<md-toolbar layout-fill>
+  <div layout-fill layout="row" layout-align="center center" class="md-toolbar-tools">
+    <md-input-container layout-fill md-no-float class="md-block big-search">
+      <ng-md-icon icon="search"></ng-md-icon>
+      <input ng-model="ProfesorsCtrl.query.name" type="search" placeholder="Buscar Profesor...">
+    </md-input-container>
+    <md-button ng-click="ProfesorsCtrl.query = {}" aria-label="Reiniciar Busqueda" class="md-icon-button clear-search">
+      <ng-md-icon flex icon="close"></ng-md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+<md-content class="md-padding" layout-xs="column" layout="row">
+  <section layout-fill layout-padding flex="50" flex-xs="100" layout="column" style="overflow:hidden;height:50vh">
+    <md-toolbar md-scroll-shrink class="md-accent md-hue-3">
+      <md-list flex>
+        <div class="md-toolbar-tools">
+          <span flex>Listado de Profesores</span>
+          <md-button class="md-icon-button" ng-click="ProfesorsCtrl.addProfesor($event)" aria-label="Agregar Lugar">
+            <ng-md-icon icon="add"></ng-md-icon>
+          </md-button>
+        </div>
+    </md-toolbar>
+    <md-content flex>
+      <md-list>
+        <md-list-item ng-click="ProfesorsCtrl.selectProfesor(profesor.$id)" ng-repeat="profesor in ProfesorsCtrl.profesors | filter: ProfesorsCtrl.query | orderBy: 'name'">
+          <ng-md-icon icon="people" class="avatar"></ng-md-icon>
+          <p>{{profesor.name + ' ' + profesor.lastname}}
+        </md-list-item>
+      </md-list>
+    </md-content>
+  </section>
+  <section layout-fill layout-padding flex="50" flex-xs="100" layout="column">
+    <form name="ProfesorsCtrl.profesorForm" ng-submit="ProfesorsCtrl.changeMode()" class="md-padding">
+      <h3>Informacion Del Profesor</h3>
+      <md-card>
+        <md-card-title>
+          <md-card-title-text>
+            <div layout="row">
+              <md-input-container md-no-float class="md-block md-headline special-case">
+                <input type="text" name="nombreDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.name" required md-minlength="2" minlength="2" placeholder="Nombre" ng-disabled="!ProfesorsCtrl.editing">
+                <div ng-messages="ProfesorsCtrl.profesorForm.nombreDelProfesor.$error">
+                  <div ng-message="minlength">El nombre debe tener 2 cáracteres minimo</div>
+                </div>
+              </md-input-container>
+              <md-input-container md-no-float class="md-block md-headline special-case">
+                <input type="text" name="apellidoDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.lastname" required md-minlength="2" minlength="2" placeholder="Apellido del Profesor" ng-disabled="!ProfesorsCtrl.editing">
+                <div ng-messages="ProfesorsCtrl.profesorForm.apellidoDelProfesor.$error">
+                  <div ng-message="minlength">El nombre debe tener 2 cáracteres minimo</div>
+                </div>
+              </md-input-container>
+            </div>
+            <div layout="row" class="md-subhead">
+              <md-input-container md-no-float class="md-block special-case">
+                <input type="text" name="cedulaDelProfesor" ng-model="ProfesorsCtrl.currentProfesor.cedula" required md-minlength="11" minlength="11" md-maxlength="11" maxlength="11" placeholder="Cedula" ng-disabled="!ProfesorsCtrl.editing">
+                <div ng-messages="ProfesorsCtrl.profesorForm.cedulaDelProfesor.$error">
+                  <div ng-message="minlength">Use cifras de 2 digitos</div>
+                  <div ng-message="pattern">El campo es solo numerico.</div>
+                </div>
+              </md-input-container>
+            </div>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-actions layout="row" layout-align="start center">
+          <md-button ng-click="ProfesorsCtrl.openSections($event, ProfesorsCtrl.currentProfesor.$id)" aria-label="Administrar Secciones" ng-if="ProfesorsCtrl.currentProfesor">Admin. Secciones</md-button>
+          <span flex></span>
+          <!-- Cancel Button -->
+          <md-button aria-label="{{ProfesorsCtrl.modeCancelMessage}} Profesor" ng-click="ProfesorsCtrl.cancelMode()" class="md-warn md-icon-button" ng-disabled="!(ProfesorsCtrl.currentProfesor || ProfesorsCtrl.editing)">
+            <md-tooltip md-direction="top">
+              {{ProfesorsCtrl.modeCancelMessage}}
+            </md-tooltip>
+            <ng-md-icon icon="{{ProfesorsCtrl.currentCancelIcon}}" class="md-warn"></ng-md-icon>
+          </md-button>
+          <!-- Save button -->
+          <md-button aria-label="{{ProfesorsCtrl.modeSaveMessage}} Profesor" class="md-icon-button md-primary" type="submit" ng-disabled="!(ProfesorsCtrl.currentProfesor && !ProfesorsCtrl.profesorForm.$invalid || !ProfesorsCtrl.editing)">
+            <md-tooltip md-direction="top">
+              {{ProfesorsCtrl.modeSaveMessage}}
+            </md-tooltip>
+            <ng-md-icon icon="{{ProfesorsCtrl.currentSaveIcon}}" options='{"duration": 375}' class="md-primary"></ng-md-icon>
+          </md-button>
+          </md-button>
+        </md-card-actions>
+      </md-card>
+    </form>
+  </section>
+</md-content>

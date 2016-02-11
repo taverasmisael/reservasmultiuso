@@ -72,7 +72,8 @@ class AdminController {
   fillSections() {
     if (this.nrd && this.nrd.profesor) {
       this.newReservationData.section = '';
-      this.availableSections = this.nrd.profesor.secciones;
+      let {$id} = this.nrd.profesor;
+      this.availableSections = this.Profesores.getSections($id);
     }
   }
 
