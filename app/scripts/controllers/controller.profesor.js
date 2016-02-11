@@ -11,6 +11,7 @@ const dialogOptions = {
   parent: angular.element(document.body)
 };
 
+@autobind
 class ProfesorsController {
   constructor($mdDialog, $mdToast, Profesores, Auth) {
     this.$mdDialog = $mdDialog;
@@ -27,7 +28,6 @@ class ProfesorsController {
     this.resetModes();
   }
 
-  @autobind
   resetModes() {
     console.info('Reseting Modes...');
     this.editing = false;
@@ -39,7 +39,6 @@ class ProfesorsController {
     this.currentProfesor = undefined;
   }
 
-  @autobind
   changeMode() {
     if (this.creating) {
       // If is Saving/Inactive
@@ -56,7 +55,6 @@ class ProfesorsController {
     }
   }
 
-  @autobind
   addProfesor() {
     this.currentSaveIcon = 'save';
     this.modeSaveMessage = 'Guardar';
@@ -67,14 +65,12 @@ class ProfesorsController {
     this.currentProfesor = {};
   }
 
-  @autobind
   selectProfesor(profesorId) {
     this.Profesores.get(profesorId)
       .then(profesor => this.currentProfesor = profesor)
       .catch(console.error.bind(console));
   }
 
-  @autobind
   cancelMode() {
     if (this.modeCancelMessage === 'Eliminar') {
       // If is Saving/Inactive
@@ -85,7 +81,6 @@ class ProfesorsController {
     }
   }
 
-  @autobind
   editProfesor(pid, pinfo) {
     this.Profesores.edit(pid, pinfo)
       .then(() => {
@@ -97,7 +92,6 @@ class ProfesorsController {
       .catch(console.error.bind(console));
   }
 
-  @autobind
   saveProfesor(pinfo) {
     this.Profesores.create(pinfo)
       .then(ref => {
@@ -111,7 +105,6 @@ class ProfesorsController {
       .catch(console.error.bind(console));
   }
 
-  @autobind
   deleteProfesor(pid) {
     this.Profesores.remove(pid)
       .then(() => {
@@ -125,7 +118,6 @@ class ProfesorsController {
       .catch(console.error.bind(console));
   }
 
-  @autobind
   openSections(event, pid) {
     this.Profesores.get(pid)
       .then(pinfo => {

@@ -1,9 +1,13 @@
-import {autobind} from 'core-decorators';
+import {
+  autobind
+}
+from 'core-decorators';
 
 const REF = new WeakMap();
 const firebaseObject = new WeakMap();
 const firebaseArray = new WeakMap();
 
+@autobind
 class Profesores {
   constructor($firebaseObject, $firebaseArray, FURL) {
     REF.set(this, new Firebase(FURL));
@@ -12,32 +16,29 @@ class Profesores {
     this.profesores = $firebaseArray(REF.get(this).child('profesores'));
   }
 
-  @autobind
   all() {
     return this.profesores;
   }
 
-  @autobind
   create(profesorData) {
     return this.profesores.$add(profesorData);
   }
 
-  @autobind
   getSections(pofesorID) {
     return firebaseArray.get(this)(REF.get(this).child('profesores')
       .child(pofesorID).child('secciones'));
   }
 
-  @autobind
   get(profesorId) {
     return firebaseObject.get(this)(REF.get(this).child('profesores')
-            .child(profesorId)).$loaded();
+      .child(profesorId)).$loaded();
   }
 
-  @autobind
   edit(profesorId, newData) {
     let profesor = REF.get(this).child('profesores').child(profesorId);
-    let {cedula, lastname, name} = newData;
+    let {
+      cedula, lastname, name
+    } = newData;
     let toSave = {
       name: name,
       lastname: lastname,
@@ -47,17 +48,17 @@ class Profesores {
     return profesor.update(toSave);
   }
 
-  @autobind
   remove(profesorId) {
     let profesor = firebaseObject.get(this)(REF.get(this)
-                .child('profesores').child(profesorId));
+      .child('profesores').child(profesorId));
 
     return profesor.$remove();
   }
 
-  @autobind
   addSectionTo(profesorInfo, sectionInfo) {
-    let {$id} = profesorInfo;
+    let {
+      $id
+    } = profesorInfo;
     let profesor = REF.get(this).child('profesores').child($id);
     let secciones = firebaseArray.get(this)(profesor.child('secciones'));
 

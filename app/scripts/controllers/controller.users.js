@@ -9,6 +9,8 @@ const dialogOptions = {
   clickOutsideToClose: false,
   parent: angular.element(document.body)
 };
+
+@autobind
 class UsersController {
   constructor($mdMedia, $mdToast, $mdDialog, Auth, profiles) {
     this.$mdMedia = $mdMedia;
@@ -22,13 +24,11 @@ class UsersController {
     this.active();
   }
 
-  @autobind
   active() {
     console.log('Maneging Users...');
     this.profiles = this.profiles;
   }
 
-  @autobind
   editProfile(event, profileId) {
     console.log('Editemos');
     this.Auth.getProfile(profileId).$loaded()
@@ -48,7 +48,6 @@ class UsersController {
       }).catch(err => console.error(err));
   }
 
-  @autobind
   createUser(event) {
     let config = {
       event: event,
@@ -64,7 +63,6 @@ class UsersController {
       .catch(this._dialogAbort);
   }
 
-  @autobind
   deleteUser(event, uid) {
     let warning = {
       title: '¡Atención!',
@@ -85,12 +83,10 @@ class UsersController {
       .catch(err => console.error(err));
   }
 
-  @autobind
   arrangeTable(order) {
     this.tableOrder = order;
   }
 
-  @autobind
   _dialogComplete(respuesta) {
     this.$mdToast.show(
       this.$mdToast.simple()
@@ -99,7 +95,6 @@ class UsersController {
     );
   }
 
-  @autobind
   _dialogAbort(err) {
     this.$mdToast.show(
       this.$mdToast.simple()
@@ -110,6 +105,7 @@ class UsersController {
   }
 }
 
-UsersController.$inject = ['$mdMedia', '$mdToast', '$mdDialog', 'Auth', 'profiles'];
+UsersController.$inject = ['$mdMedia', '$mdToast',
+  '$mdDialog', 'Auth', 'profiles'];
 
 export default UsersController;

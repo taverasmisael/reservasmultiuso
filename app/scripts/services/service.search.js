@@ -5,6 +5,7 @@ const firebaseArray = new WeakMap();
 const RESERVREF = new WeakMap();
 const PROFEREF = new WeakMap();
 
+@autobind
 class Search {
   constructor($firebaseObject, $firebaseArray, Utilities, FURL) {
     let baseref = new Firebase(FURL);
@@ -15,18 +16,15 @@ class Search {
     PROFEREF.set(this, baseref.child('profesores'));
   }
 
-  @autobind
   searchProfesorById(profesorId) {
     return firebaseObject.get(this)(PROFEREF.get(this).child(profesorId));
   }
 
-  @autobind
   searchProfesorByCedula(cedula) {
     return firebaseObject.get(this)(PROFEREF.get(this)
           .orderByChild('cedula').equalTo(cedula)).$loaded();
   }
 
-  @autobind
   searchSectionsOf(profesorId) {
     let sections = new Promise((resolve, reject) => {
       this.searchProfesorById(profesorId).$loaded()
@@ -40,7 +38,6 @@ class Search {
     return sections;
   }
 
-  @autobind
   searchProfesorInMonth(profesorId, date) {
     let start = this.Utilities.fixDate(moment(date).date(1)._d);
     let nextMes = start.month() + 1;
@@ -64,19 +61,16 @@ class Search {
     return reservacionesEnMes;
   }
 
-  @autobind
   searchReservacionById(reservacionId) {
     return firebaseObject.get(this)(RESERVREF.get(this).child(reservacionId));
   }
 
-  @autobind
   searchReservacionByDate(date) {
     let fixedDate = this.Utilities.fixDate(date).valueOf();
     return firebaseArray.get(this)(RESERVREF.get(this)
         .orderByChild('date').equalTo(fixedDate)).$loaded();
   }
 
-  @autobind
   searchReservacionByPeriod(start, end) {
     let fixedStart = this.Utilities.fixDate(start).valueOf();
     let fixedEnd = this.Utilities.fixDate(end).valueOf();
@@ -85,13 +79,11 @@ class Search {
         .orderByChild('date').startAt(fixedStart).endAt(fixedEnd)).$loaded();
   }
 
-  @autobind
   searchReservationsOf(profesorId) {
     return firebaseArray.get(this)(RESERVREF.get(this)
         .orderByChild('profesor').equalTo(profesorId)).$loaded();
   }
 
-  @autobind
   searchReservacionByPlace(placeId) {
     return firebaseArray.get(this)(RESERVREF.get(this)
           .orderByChild('place').equalTo(placeId)).$loaded();

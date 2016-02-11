@@ -4,6 +4,7 @@ const REF = new WeakMap();
 const firebaseObject = new WeakMap();
 const firebaseArray = new WeakMap();
 
+@autobind
 class Reservaciones {
   constructor($firebaseObject, $firebaseArray, Auth, Utilities, Search, FURL) {
     firebaseObject.set(this, $firebaseObject);
@@ -68,19 +69,16 @@ class Reservaciones {
     };
   }
 
-  @autobind
   all() {
     return this.reservaciones;
   }
 
-  @autobind
   today() {
     return firebaseArray.get(this)(REF.get(this)
       .child('reservaciones').orderByChild('date')
       .equalTo(this.hoy.valueOf())).$loaded();
   }
 
-  @autobind
   getCommingSoon() {
     const tomorrow = moment(this.hoy).add(1, 'day')._d.valueOf();
 
@@ -88,13 +86,11 @@ class Reservaciones {
       .child('reservaciones').orderByChild('date').startAt(tomorrow)).$loaded();
   }
 
-  @autobind
   findById(reservacionID) {
     return firebaseObject.get(this)(REF.get(this)
       .child('reservaciones').child(reservacionID)).$loaded();
   }
 
-  @autobind
   remove(reservacionID) {
     this.findById(reservacionID).then(reserv => {
       reserv.status = 'disabled';
@@ -102,12 +98,10 @@ class Reservaciones {
     });
   }
 
-  @autobind
   isActive(reservacion) {
     return reservacion.status === 'active';
   }
 
-  @autobind
   create(reservacion, profesor) {
     let resevCopy = Object.assign({}, reservacion);
     let nuevaReservacion = this.setReservationData(resevCopy);
@@ -115,7 +109,6 @@ class Reservaciones {
     return this.makeReservation(nuevaReservacion, profesor);
   }
 
-  @autobind
   createWithException(reservacion, profesor) {
     let nuevaReservacion = this.setReservationData(reservacion);
     let {

@@ -3,6 +3,7 @@ import {
 }
 from 'core-decorators';
 
+@autobind
 class SectionsDialogController {
   constructor($mdToast, $mdDialog, Auth, Profesores, profesor, secciones) {
     this.$mdToast = $mdToast;
@@ -23,7 +24,6 @@ class SectionsDialogController {
     console.log('Administrating sections...');
   }
 
-  @autobind
   creationMode() {
     if (this.creatingNew) {
       this.creatingNew = false;
@@ -34,32 +34,28 @@ class SectionsDialogController {
     }
   }
 
-  @autobind
   cancelDialog(reason) {
     this.$mdDialog.cancel(reason);
   }
 
-  @autobind
   saveDialog(reason) {
     this.$mdDialog.hide(reason);
   }
 
-  @autobind
   addSection(sectionInfo) {
     this.Profesores.addSectionTo(this.profesorInfo, sectionInfo)
-    .then(() => {
-      this.$mdToast.show(
+      .then(() => {
+        this.$mdToast.show(
           this.$mdToast.simple()
           .content(`${sectionInfo.materia} Agregada`)
           .position('right bottom')
         );
-      this.newSection = {};
-      this.creationMode();
-    })
-    .catch(console.error.bind(console));
+        this.newSection = {};
+        this.creationMode();
+      })
+      .catch(console.error.bind(console));
   }
 
-  @autobind
   arrangeTable(order) {
     this.tableOrder = order;
   }
@@ -67,6 +63,7 @@ class SectionsDialogController {
 }
 
 SectionsDialogController.$inject = ['$mdToast', '$mdDialog',
-  'Auth', 'Profesores', 'profesor', 'secciones'];
+  'Auth', 'Profesores', 'profesor', 'secciones'
+];
 
 export default SectionsDialogController;

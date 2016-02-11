@@ -1,10 +1,14 @@
-import {autobind} from 'core-decorators';
+import {
+  autobind
+}
+from 'core-decorators';
 
 const firebaseArray = new WeakMap();
 const firebaseObject = new WeakMap();
 const REF = new WeakMap();
 const AUTH = new WeakMap();
 
+@autobind
 class Auth {
   constructor($firebaseAuth, $firebaseObject, $firebaseArray, FURL) {
     this.user = {
@@ -28,17 +32,14 @@ class Auth {
     });
   }
 
-  @autobind
   createProfile(uid, user) {
     return REF.get(this).child(uid).set(user);
   }
 
-  @autobind
   updateProfile(newinfo) {
     return newinfo.$save();
   }
 
-  @autobind
   usernameAvailable(username) {
     const USESREXISTS = {
       name: 'USERNAME_EXIST',
@@ -48,7 +49,7 @@ class Auth {
 
     let promise = new Promise((resolve, reject) => {
       firebaseArray.get(this)(REF.get(this).orderByChild('username')
-        .equalTo(username)).$loaded()
+          .equalTo(username)).$loaded()
         .then(data => {
           return data.length ? reject(USESREXISTS) : resolve(USERFREE);
         }).catch(e => console.error(e));
@@ -57,9 +58,10 @@ class Auth {
     return promise;
   }
 
-  @autobind
   register(user) {
-    let {email, password} = user;
+    let {
+      email, password
+    } = user;
     let usuario = {
       email: email,
       password: password
@@ -70,7 +72,6 @@ class Auth {
       .then(data => this.createProfile(data.uid, user));
   }
 
-  @autobind
   login(user) {
     let {
       username, password
@@ -83,7 +84,7 @@ class Auth {
     };
 
     return firebaseArray.get(this)(REF.get(this)
-      .orderByChild('username').equalTo(username))
+        .orderByChild('username').equalTo(username))
       .$loaded()
       .then(data => {
         if (data.length >= 1) {
@@ -98,22 +99,18 @@ class Auth {
       });
   }
 
-  @autobind
   removeUser(uid) {
     return firebaseObject.get(this)(REF.get(this).child(uid)).$remove();
   }
 
-  @autobind
   loadProfiles() {
     return firebaseArray.get(this)(REF.get(this)).$loaded();
   }
 
-  @autobind
   getProfile(uid) {
     return firebaseObject.get(this)(REF.get(this).child(uid));
   }
 
-  @autobind
   changePassword(user) {
     return AUTH.get(this).$changePassword({
       email: this.user.profile.email,
@@ -122,17 +119,14 @@ class Auth {
     });
   }
 
-  @autobind
   isAdmin() {
     return this.user.profile && this.user.profile.isAdmin;
   }
 
-  @autobind
   logout() {
     AUTH.get(this).$unauth();
   }
 
-  @autobind
   signedIn() {
     return Boolean(AUTH.get(this).$getAuth());
   }
