@@ -24,7 +24,7 @@
       <md-list>
         <md-list-item ng-click="ProfesorsCtrl.selectProfesor(profesor.$id)" ng-repeat="profesor in ProfesorsCtrl.profesors | filter: ProfesorsCtrl.query | orderBy: 'name'">
           <ng-md-icon icon="people" class="avatar"></ng-md-icon>
-          <p>{{profesor.name + ' ' + profesor.lastname}}, {{profesor.secciones.length}} secci{{profesor.secciones.length > 1 ? 'ones' : 'ón'}}</p>
+          <p>{{profesor.name + ' ' + profesor.lastname}}
         </md-list-item>
       </md-list>
     </md-content>
