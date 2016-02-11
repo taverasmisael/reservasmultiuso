@@ -3,6 +3,7 @@ import {
 }
 from 'core-decorators';
 
+@autobind
 class PlacesController {
   constructor($mdToast, Places, Auth) {
     this.$mdToast = $mdToast;
@@ -16,7 +17,6 @@ class PlacesController {
     this.active();
   }
 
-  @autobind
   resetModes() {
     console.info('Reseting Modes...');
     this.editing = false;
@@ -28,13 +28,12 @@ class PlacesController {
     this.currentPlace = {};
   }
 
-  @autobind
   active() {
     console.log('Placing...');
     this.Places.all().then(lugares => {
-      this.places = lugares;
-    })
-    .catch(console.error.bind(console));
+        this.places = lugares;
+      })
+      .catch(console.error.bind(console));
     this.resetModes();
     let checkProfile = setInterval(() => {
       this.user = this.Auth.user;
@@ -44,7 +43,6 @@ class PlacesController {
     }, 500);
   }
 
-  @autobind
   addPlace(event) {
     console.log(event);
     this.currentSaveIcon = 'save';
@@ -56,7 +54,6 @@ class PlacesController {
     this.currentPlace = {};
   }
 
-  @autobind
   changeMode() {
     if (this.creating) {
       // If is Saving/Inactive
@@ -69,7 +66,6 @@ class PlacesController {
     }
   }
 
-  @autobind
   savePlace(placeInfo) {
     this.Places.create(placeInfo)
       .then(ref => {
@@ -83,7 +79,6 @@ class PlacesController {
       .catch(console.error.bind(console));
   }
 
-  @autobind
   selectPlace(placeId) {
     console.info(placeId);
     this.Places.get(placeId)
@@ -91,7 +86,6 @@ class PlacesController {
       .catch(console.error.bind(console));
   }
 
-  @autobind
   editPlace(placeId, newData) {
     this.Places.edit(placeId, newData)
       .then(() => {
@@ -103,7 +97,6 @@ class PlacesController {
       .catch(console.error.bind(console));
   }
 
-   @autobind
   cancelMode() {
     if (this.modeCancelMessage === 'Eliminar') {
       // If is Saving/Inactive
@@ -114,7 +107,6 @@ class PlacesController {
     }
   }
 
-  @autobind
   deletePlace(placeId) {
     this.Places.remove(placeId)
       .then(() => {

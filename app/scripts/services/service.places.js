@@ -9,6 +9,7 @@ const REF = new WeakMap();
 const AUTH = new WeakMap();
 const SEARCH = new WeakMap();
 
+@autobind
 class Places {
   constructor($firebaseArray, $firebaseObject, Utilities, Auth, Search, FURL) {
     let baseref = new Firebase(FURL);
@@ -22,14 +23,12 @@ class Places {
     this.places = $firebaseArray(REF.get(this));
   }
 
-  @autobind
   all() {
     let activePlaces = firebaseArray.get(this)(REF.get(this)
       .orderByChild('status').equalTo('active'));
     return activePlaces.$loaded();
   }
 
-  @autobind
   checkPlace(placeId, date, start, end) {
     let errMessage = {
       name: '',
@@ -75,12 +74,10 @@ class Places {
     return response;
   }
 
-  @autobind
   get(placeId) {
     return firebaseObject.get(this)(REF.get(this).child(placeId)).$loaded();
   }
 
-  @autobind
   create(placeInfo) {
     let {
       name, lastname
@@ -93,7 +90,6 @@ class Places {
     return this.places.$add(placeInfo);
   }
 
-  @autobind
   edit(placeId, newInfo) {
     let place = REF.get(this).child(placeId);
     let {
@@ -110,7 +106,6 @@ class Places {
   }
 
   // Removes don't really removes only set place.status to 'disabled'
-  @autobind
   remove(placeId) {
     let place = REF.get(this).child(placeId);
     return place.update({
@@ -120,6 +115,7 @@ class Places {
 }
 
 Places.$inject = ['$firebaseArray', '$firebaseObject',
-  'Utilities', 'Auth', 'Search', 'FURL'];
+  'Utilities', 'Auth', 'Search', 'FURL'
+];
 
 export default Places;

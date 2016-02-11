@@ -1,4 +1,9 @@
-import {autobind} from 'core-decorators';
+import {
+  autobind
+}
+from 'core-decorators';
+
+@autobind
 class UserDialogController {
   constructor($mdDialog, currentUser, Auth, state) {
     this.$mdDialog = $mdDialog;
@@ -12,13 +17,11 @@ class UserDialogController {
     this.active();
   }
 
-  @autobind
   active() {
     console.log('Dialoging...');
     this.selectedUser = this.currentUser;
   }
 
-  @autobind
   saveUser(user2save) {
     let username = user2save.username;
 
@@ -39,12 +42,10 @@ class UserDialogController {
     }
   }
 
-  @autobind
   cancelDialog(reason) {
     this.$mdDialog.cancel(reason);
   }
 
-  @autobind
   saveDialog(reason) {
     this.$mdDialog.hide(reason);
   }
