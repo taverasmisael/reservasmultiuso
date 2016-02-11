@@ -57,7 +57,7 @@ class ProfesorsController {
   }
 
   @autobind
-  addProfesor(event) {
+  addProfesor() {
     this.currentSaveIcon = 'save';
     this.modeSaveMessage = 'Guardar';
     this.currentCancelIcon = 'cancel';
