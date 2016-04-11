@@ -174,8 +174,8 @@ function makeBundle (isWatching) {
                   })
                 .pipe(source(config.output.build))
                 .pipe(buffer())
-                .pipe($.sourcemaps.init({loadMaps: true}))
-                .pipe($.sourcemaps.write())
+                .pipe($.sourcemaps.init())
+                .pipe($.sourcemaps.write('.'))
                 .pipe(gulp.dest(config.temp.scripts))
                 .pipe($.connect.reload())
                 .pipe($.size({
